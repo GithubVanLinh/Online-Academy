@@ -1,0 +1,33 @@
+{
+  "name": "online-academy",
+  "version": "1.0.0",
+  "description": "This is a online academy, Back-end is Nodejs, Front-End is ReactJs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GithubVanLinh/Online-Academy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GithubVanLinh/Online-Academy/issues"
+  },
+  "homepage": "https://github.com/GithubVanLinh/Online-Academy#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.7"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}
