@@ -4,7 +4,7 @@
   "description": "This is a online academy, Back-end is Nodejs, Front-End is ReactJs",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha 'tests/*.js'",
     "start": "node ./app.js",
     "dev": "nodemon ./app.js"
   },
@@ -28,6 +28,7 @@
     "express": "^4.17.1",
     "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^8.4.0",
     "mongoose": "^5.12.12",
     "morgan": "^1.10.0",
     "nodemailer": "^6.6.1",

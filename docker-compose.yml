@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  onlineacademy:
+    image: onlineacademy
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+      MONGODB_URL: mongodb+srv://vvladmin:rvNaWTLiV7nt8FL@cluster0.hacck.mongodb.net/Academy?retryWrites=true&w=majority
+      SECRECT_KEY: "qwertyuioplkjhgfdsazxcvbnm1234567890"
+      GMAIL_NAME: online.academy.hcmus@gmail.com
+      GMAIL_PASSWORD: threeperson
+    ports:
+      - 3000:3000
