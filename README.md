@@ -20,10 +20,12 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
   {
     "username": "string",
     "password": "string",
-    "full_name":"string",
     "email": "string",
-    "phone_number": "string",
-    "date_of_birth":"Date string",
+    "avatar": "url(string)",
+    "phone": "number",
+    "status": "PENDING | ACTIVE | DELETED",
+    "address": "string",
+    "fullName": "string"
   }
   ```
 
@@ -31,11 +33,17 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
 
   ```json
   {
+    "_id": "string",
     "username": "string",
-    "full_name":"string",
     "email": "string",
-    "phone_number": "string",
-    "date_of_birth":"Date string",
+    "avatar": "url(string)",
+    "phone": "string",
+    "status": "PENDING | ACTIVE | DELETED",
+    "createdAt": "date",
+    "updatedAt": "date",
+    "type": "STUDENT",
+    "address": "string",
+    "fullName": "string"
   }
   ```
 
@@ -43,6 +51,6 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
 
   ```json
   {
-    "error": "error string",
+    "error": "error string"
   }
   ```

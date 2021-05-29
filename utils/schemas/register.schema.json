@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "properties": {
+    "username": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "avatar": {
+      "type": "string",
+      "format": "uri"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PENDING", "ACTIVE", "DELETED"]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["STUDENT", "LECTURER"]
+    },
+    "address": {
+      "type": "string"
+    },
+    "fullName": {
+      "type": "string"
+    }
+  },
+  "required": ["username", "password", "fullName"],
+  "additionalProperties": false
+}
