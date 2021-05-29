@@ -2,7 +2,7 @@ const ajv = require("../configs/ajv.config");
 
 module.exports = {
   validateRegisterBody: (req, res, next) =>{
-    const validate = ajv.getSchema("register");
+    const validate = ajv.getSchema("register_student");
 
     valid = validate(req.body);
 

@@ -1,10 +1,6 @@
 {
   "type": "object",
   "properties": {
-    "_id": {
-      "type": "string",
-      "format": "uuid"
-    },
     "username": {
       "type": "string"
     },
@@ -26,18 +22,6 @@
       "type": "string",
       "enum": ["PENDING", "ACTIVE", "DELETED"]
     },
-    "createdAt": {
-      "type": "number",
-      "format": "date-time"
-    },
-    "updatedAt": {
-      "type": "number",
-      "format": "date-time"
-    },
-    "type": {
-      "type": "string",
-      "enum": ["STUDENT", "LECTURER"]
-    },
     "address": {
       "type": "string"
     },
@@ -45,6 +29,6 @@
       "type": "string"
     }
   },
-  "required": ["username", "email", "createdAt", "updatedAt", "type", "status"],
+  "required": ["username", "email", "password", "fullName"],
   "additionalProperties": false
 }

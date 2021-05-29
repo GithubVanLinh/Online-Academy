@@ -33,6 +33,6 @@
       "type": "string"
     }
   },
-  "required": ["username", "password", "fullName"],
+  "required": ["username", "email"],
   "additionalProperties": false
 }
