@@ -1,0 +1,76 @@
+// const cryptoRandomString = require("crypto-random-string");
+const randomstring = require("randomstring");
+
+const transport = require("../configs/email.config");
+const VerifyModel = require("../models/verify.model");
+
+module.exports = {
+  createNewValidateRequest: async (email) => {
+    const validator = await checkEmailValidateRequestIsExists(email);
+    let key;
+    if (validator) {
+      key = validator.key;
+    } else {
+      key = generateVerifyCode(10);
+    }
+    const succ = await sendVerifyMail(email, key);
+    if (!succ) {
+      console.log("send verify email failed");
+      return null;
+    }
+
+    const result = await VerifyModel.create({
+      email: email,
+      key: key,
+    });
+    return result;
+  },
+};
+
+/**
+ * generate random string
+ * @param {int} num length of string
+ * @return {string} random string
+ */
+function generateVerifyCode(num) {
+  // return cryptoRandomString(num);
+  return randomstring.generate(num);
+}
+
+/**
+ * send verify email
+ * @param {string} desMail to email
+ * @param {string} key content email
+ * @return {bool} sent
+ */
+async function sendVerifyMail(desMail, key) {
+  return new Promise((resolve, reject)=>{
+    const mailOptions = {
+      from: process.env.GMAIL_NAME,
+      to: desMail,
+      subject: "verify user",
+      text: `verify code: ${key}`,
+    };
+    transport.sendMail(mailOptions, (error, response) => {
+      if (error) {
+        console.log(error);
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+}
+
+/**
+ * Check if validate request is exists
+ * @param {string} email mail need verify
+ * @return {object} return object validate if exists esle return null
+ */
+async function checkEmailValidateRequestIsExists(email) {
+  const filter = {
+    email: email,
+  };
+  const result = await VerifyModel.findOne(filter);
+  return result;
+}

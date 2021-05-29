@@ -1,11 +1,11 @@
 // const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const transport = require("../configs/mail.config");
 
 const ajv = require("../configs/ajv.config");
 
 const UserModel = require("../models/user.model");
 const CONST = require("../models/constrainst");
+const VerifySevice = require("./verify.service");
 
 module.exports = {
   /**
@@ -21,14 +21,18 @@ module.exports = {
 
     const validEmail = await checkValidEmail(user);
     if (!validEmail) {
-      console.log("Not valid");
+      console.log("email is not valid");
       return null;
     }
 
-    verifyMail(user.email);
+    const result = await VerifySevice.createNewValidateRequest(user.email);
+    if (result === null) {
+      return null;
+    }
 
     const sercuredUser = makeSecurityPassword(newuser);
     const res = await UserModel.create(sercuredUser);
+
     return res;
   },
 };
@@ -104,40 +108,4 @@ async function checkValidEmail(user) {
     return true;
   }
   return false;
-}
-
-/**
- * init verify mail
- * @param {string} mail email want send
- * @return {bool}
- */
-function verifyMail(mail) {
-  // TODO: add verfify to database and send mail
-  sendVerifyMail(mail, "test email");
-  return true;
-}
-
-/**
- * send verify mail
- * @param {string} desMail to mail
- * @param {string} content content mail
- * @return {bool} sended
- */
-function sendVerifyMail(desMail, content) {
-  const mailOptions = {
-    from: process.env.GMAIL_NAME,
-    to: desMail,
-    subject: "verify user",
-    text: content,
-  };
-  let result;
-  transport.sendMail(mailOptions, (error, response) => {
-    if (error) {
-      console.log(error);
-      result = false;
-    } else {
-      result = true;
-    }
-  });
-  return result;
 }
