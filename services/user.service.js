@@ -6,6 +6,7 @@ const ajv = require("../configs/ajv.config");
 const UserModel = require("../models/user.model");
 const CONST = require("../models/constrainst");
 const VerifySevice = require("./verify.service");
+const constrainst = require("../models/constrainst");
 
 module.exports = {
   /**
@@ -34,6 +35,21 @@ module.exports = {
     const res = await UserModel.create(sercuredUser);
 
     return res;
+  },
+  verifyUser: async (email, key) => {
+    const valid = VerifySevice.validateUser(email, key);
+    if (!valid) {
+      return false;
+    }
+
+    const filter = {
+      email: email,
+    };
+    const updateInfo = {
+      status: constrainst.STATUS_ACTIVE,
+    };
+    await UserModel.findOneAndUpdate(filter, updateInfo);
+    return true;
   },
 };
 

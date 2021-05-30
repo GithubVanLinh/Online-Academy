@@ -16,6 +16,8 @@ app.use(morgan("dev"));
 // define routing
 const guestRouter = require("./routes/guest.route");
 const userRouter = require("./routes/user.route");
+const authRouter = require("./routes/auth.route");
+app.use("/auth", authRouter);
 app.use("/:userId", userRouter);
 app.use(guestRouter);
 

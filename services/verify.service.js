@@ -25,6 +25,22 @@ module.exports = {
     });
     return result;
   },
+
+  validateUser: async (email, key) => {
+    if (checkKeyValidUser(email, key)) {
+      const filter = {
+        email: email,
+        key: key,
+      };
+
+      const result = await VerifyModel.findOneAndDelete(filter);
+      if (result == null) {
+        return false;
+      }
+
+      return true;
+    }
+  },
 };
 
 /**
@@ -44,7 +60,7 @@ function generateVerifyCode(num) {
  * @return {bool} sent
  */
 async function sendVerifyMail(desMail, key) {
-  return new Promise((resolve, reject)=>{
+  return new Promise((resolve, reject) => {
     const mailOptions = {
       from: process.env.GMAIL_NAME,
       to: desMail,
@@ -73,4 +89,19 @@ async function checkEmailValidateRequestIsExists(email) {
   };
   const result = await VerifyModel.findOne(filter);
   return result;
+}
+
+/**
+ * check if verify code is valid
+ * @param {string} email email
+ * @param {string} key code verify
+ * @return {bool}
+ */
+async function checkKeyValidUser(email, key) {
+  const validator = await checkEmailValidateRequestIsExists(email);
+  if (validator && key == validator.key) {
+    return true;
+  } else {
+    return false;
+  }
 }

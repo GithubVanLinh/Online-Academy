@@ -11,6 +11,6 @@ router.get("/", (req, res, next) => {
   });
 });
 
-router.post("/", Validator.validateRegisterBody, UserController.createNewStudent);
+router.post("/", Validator.validateRequestBody("register_student"), UserController.createNewStudent);
 
 module.exports = router;

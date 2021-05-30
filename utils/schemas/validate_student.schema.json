@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "key": {
+      "type": "string",
+      "maxLength": 10
+    }
+  },
+  "required": ["email", "key"],
+  "additionalProperties": false
+}
