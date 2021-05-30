@@ -37,7 +37,7 @@ module.exports = {
     return res;
   },
   verifyUser: async (email, key) => {
-    const valid = VerifySevice.validateUser(email, key);
+    const valid = await VerifySevice.validateUser(email, key);
     if (!valid) {
       return false;
     }
