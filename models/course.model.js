@@ -1,5 +1,6 @@
 "use strict";
 const mongoose = require("mongoose");
+const mongoosePaginate = require('mongoose-paginate-v2');
 const Config = require("../configs/constrainst");
 
 const Course = new mongoose.Schema({
@@ -83,5 +84,5 @@ const Course = new mongoose.Schema({
     }
   ]
 });
-
+Course.plugin(mongoosePaginate);
 module.exports = mongoose.model(Config.COLLECTION_NAME.COURSE, Course);
