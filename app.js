@@ -12,7 +12,6 @@ const server = http.createServer(app);
 app.use(express.json());
 app.use(morgan("dev"));
 
-
 // define routing
 const guestRouter = require("./routes/guest.route");
 const userRouter = require("./routes/user.route");
