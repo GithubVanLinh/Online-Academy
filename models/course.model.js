@@ -1,3 +1,4 @@
+"use strict";
 const mongoose = require("mongoose");
 const Config = require("../configs/constrainst");
 
@@ -36,7 +37,7 @@ const Course = new mongoose.Schema({
     default: ""
   },
   detailDescription: {
-    type: String, 
+    type: String,
     default: ""
   },
   soldNumber: {
@@ -62,8 +63,8 @@ const Course = new mongoose.Schema({
   status: {
     type: String,
     enum: [
-      Config.COURSE_STATUS.INCOMPLETE, 
-      Config.COURSE_STATUS.COMPLETED, 
+      Config.COURSE_STATUS.INCOMPLETE,
+      Config.COURSE_STATUS.COMPLETED,
       Config.COURSE_STATUS.DELETED
     ],
     default: Config.COURSE_STATUS.INCOMPLETE

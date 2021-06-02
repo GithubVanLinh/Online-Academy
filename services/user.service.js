@@ -1,4 +1,5 @@
 // const jwt = require("jsonwebtoken");
+"use strict";
 const bcrypt = require("bcrypt");
 
 const ajv = require("../configs/ajv.config");
@@ -43,14 +44,14 @@ module.exports = {
     }
 
     const filter = {
-      email: email,
+      email: email
     };
     const updateInfo = {
-      status: constrainst.STATUS_ACTIVE,
+      status: constrainst.STATUS_ACTIVE
     };
     await UserModel.findOneAndUpdate(filter, updateInfo);
     return true;
-  },
+  }
 };
 
 /**
@@ -91,7 +92,7 @@ function validateUserObject(user) {
     console.log(validate.errors);
     console.log({
       error: "input error",
-      detail: validate.errors,
+      detail: validate.errors
     });
     return false;
   }
@@ -117,7 +118,7 @@ function makeSecurityPassword(user) {
  */
 async function checkValidEmail(user) {
   const filter = {
-    email: user.email,
+    email: user.email
   };
   const result = await UserModel.findOne(filter);
   if (result === null) {
