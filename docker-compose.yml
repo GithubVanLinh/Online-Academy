@@ -13,4 +13,4 @@ services:
       GMAIL_NAME: online.academy.hcmus@gmail.com
       GMAIL_PASSWORD: threeperson
     ports:
-      - 3000:3000
+      - 8080:8080
