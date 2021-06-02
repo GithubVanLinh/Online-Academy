@@ -68,14 +68,11 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
 
   ```json
   {
-    "_id": { "$oid": "60b5b8d325c3608c61d1794f" },
+    "_id": "60b5b8d325c3608c61d1794f",
     "courseName": "Lập trình di động với React Native",
     "courseImage": "url(string)",
-    "courseLecturers": [
-      { "$oid": "000000000000000000000000" },
-      { "$oid": "111111111111111111111111" }
-    ],
-    "category": { "$oid": "60b61000183b6963bcb401e6" },
+    "courseLecturers": ["000000000000000000000000", "111111111111111111111111"],
+    "category": "60b61000183b6963bcb401e6",
     "price": "number",
     "promotionalPrice": "number",
     "briefDescription": "string",
@@ -88,10 +85,7 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
     "status": "INCOMPLETE | COMPLETED | DELETED",
     "createdAt": "date",
     "updatedAt": "date",
-    "feedbacks": [
-      { "$oid": "000000000000000000000000" },
-      { "$oid": "111111111111111111111111" }
-    ]
+    "feedbacks": ["000000000000000000000000", "111111111111111111111111"]
   }
   ```
 
