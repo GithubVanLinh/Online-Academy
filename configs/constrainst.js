@@ -1,20 +1,21 @@
+"use strict";
 module.exports = {
 
   ACCOUNT_STATUS: {
     PENDING: "PENDING",
     ACTIVE: "ACTIVE",
-    DELETED: "DELETED",
+    DELETED: "DELETED"
   },
 
   ACCOUNT_TYPE: {
     STUDENT: "STUDENT",
-    LECTURER: "LECTURER",
+    LECTURER: "LECTURER"
   },
 
   COURSE_STATUS: {
     INCOMPLETE: "INCOMPLETE",
     COMPLETED: "COMPLETED",
-    DELETED: "DELETED",
+    DELETED: "DELETED"
   },
 
   CATEGORY_LEVEL: {

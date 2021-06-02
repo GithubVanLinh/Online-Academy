@@ -1,9 +1,10 @@
+"use strict";
 const mongoose = require("mongoose");
 
 const url = process.env.MONGODB_URL;
 mongoose.connect(url, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: true
 });
 
 const db = mongoose.connection;

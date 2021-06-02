@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
   STATUS_PENDING: "PENDING",
   STATUS_ACTIVE: "ACTIVE",

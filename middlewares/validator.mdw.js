@@ -1,3 +1,4 @@
+"use strict";
 const ajv = require("../configs/ajv.config");
 
 module.exports = {
@@ -10,10 +11,10 @@ module.exports = {
       console.log(validate.errors);
       res.status(400).json({
         error: "input error",
-        detail: validate.errors,
+        detail: validate.errors
       });
       return;
     }
     return next();
-  },
+  }
 };

@@ -1,4 +1,5 @@
 // const cryptoRandomString = require("crypto-random-string");
+"use strict";
 const randomstring = require("randomstring");
 
 const transport = require("../configs/email.config");
@@ -21,7 +22,7 @@ module.exports = {
 
     const result = await VerifyModel.create({
       email: email,
-      key: key,
+      key: key
     });
     return result;
   },
@@ -30,7 +31,7 @@ module.exports = {
     if (checkKeyValidUser(email, key)) {
       const filter = {
         email: email,
-        key: key,
+        key: key
       };
 
       const result = await VerifyModel.findOneAndDelete(filter);
@@ -40,7 +41,7 @@ module.exports = {
 
       return true;
     }
-  },
+  }
 };
 
 /**
@@ -65,7 +66,7 @@ async function sendVerifyMail(desMail, key) {
       from: process.env.GMAIL_NAME,
       to: desMail,
       subject: "verify user",
-      text: `verify code: ${key}`,
+      text: `verify code: ${key}`
     };
     transport.sendMail(mailOptions, (error, response) => {
       if (error) {
@@ -85,7 +86,7 @@ async function sendVerifyMail(desMail, key) {
  */
 async function checkEmailValidateRequestIsExists(email) {
   const filter = {
-    email: email,
+    email: email
   };
   const result = await VerifyModel.findOne(filter);
   return result;
