@@ -15,7 +15,7 @@ const Category = new mongoose.Schema({
     ],
     require: true
   },
-  idDeleted: {
+  isDeleted: {
     type: Boolean,
     default: false
   },
