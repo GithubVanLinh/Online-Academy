@@ -11,7 +11,7 @@ const User = new mongoose.Schema({
   updatedAt: Date,
   type: String,
   address: String,
-  fullName: String,
+  fullName: String
 });
 
 module.exports = mongoose.model("User", User);
