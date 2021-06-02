@@ -1,6 +1,7 @@
 "use strict";
 const express = require("express");
 const morgan = require("morgan");
+require("express-async-errors");
 const dotenv = require("dotenv");
 dotenv.config();
 require("./configs/db.config");
