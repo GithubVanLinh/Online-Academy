@@ -54,3 +54,16 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
     "error": "error string"
   }
   ```
+### Search API
+#### By course name
+- Method: `GET /search`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Params:
+  - keyword
+- Sample:  
+  ```
+  localhost:8080/search?keyword=react
+  ```
+
