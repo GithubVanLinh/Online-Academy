@@ -24,14 +24,14 @@ app.use(guestRouter);
 // define error route handler
 app.use((req, res, next) => {
   res.status(404).json({
-    error: "checking your url!",
+    error: "checking your url!"
   });
 });
 // define error hander
 app.use((err, req, res, next) => {
   console.log("Server Error: ", err);
   res.status(500).json({
-    error: "Server Error, please try again",
+    error: "Server Error, please try again"
   });
 });
 const PORT = process.env.PORT || 3000;
