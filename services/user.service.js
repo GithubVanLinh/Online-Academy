@@ -69,7 +69,6 @@ function createUserTemplate(rawuser) {
   user.createdAt = rawuser.createdAt || Date.now();
   user.updatedAt = Date.now();
   user.status = rawuser.status || CONST.STATUS_PENDING;
-  user.type = rawuser.type || CONST.TYPE_STUDENT;
   user.avatar = rawuser.avatar || "";
   user.phone = rawuser.phone || "";
 

@@ -1,3 +1,4 @@
+"use strict";
 const UserService = require("../services/user.service");
 module.exports = {
   createNewStudent: async (req, res, next) => {
@@ -5,9 +6,9 @@ module.exports = {
     const user = await UserService.createUser(body);
     if (user === null) {
       return res.status(400).json({
-        error: "cannot create user",
+        error: "cannot create user"
       });
     }
     return res.status(200).json(user);
-  },
+  }
 };

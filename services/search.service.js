@@ -42,7 +42,7 @@ module.exports = {
     }
     const categoriesQuery = await CategoryModel.paginate(cateQuery, {select: ["_id"]});
     const cateIds = categoriesQuery.docs.reduce((result, cate) => result = [...result, cate._id], []);
-
+    
     const query = {};
     query.category = {$in: cateIds}
     const options = {
@@ -59,6 +59,7 @@ module.exports = {
       }
     }
     let courses = [];
+
     try {
       const result = await CourseModel.paginate(query, options);
       courses = [...result.docs];

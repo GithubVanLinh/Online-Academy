@@ -1,3 +1,4 @@
+"use strict";
 const searchService = require("../services/search.service");
 module.exports = {
   getCourses: async (req, res, next) => {

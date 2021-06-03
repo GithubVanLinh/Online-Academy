@@ -52,10 +52,12 @@ const Lecturer = new mongoose.Schema({
     type: String,
     require: true
   },
-  teachingCourses: [{
-    type: mongoose.Types.ObjectId,
-    ref: Config.COLLECTION_NAME.COURSE
-  }]
+  teachingCourses: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: Config.COLLECTION_NAME.COURSE
+    }
+  ]
 });
 
 module.exports = mongoose.model(Config.COLLECTION_NAME.LECTURER, Lecturer);

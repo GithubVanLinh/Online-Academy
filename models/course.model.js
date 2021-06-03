@@ -1,6 +1,6 @@
 "use strict";
 const mongoose = require("mongoose");
-const mongoosePaginate = require('mongoose-paginate-v2');
+const mongoosePaginate = require("mongoose-paginate-v2");
 const Config = require("../configs/constrainst");
 
 const Course = new mongoose.Schema({
@@ -80,9 +80,14 @@ const Course = new mongoose.Schema({
   },
   feedbacks: [
     {
-      type: mongoose.Types.ObjectId
+      type: mongoose.Types.ObjectId,
+      ref: Config.COLLECTION_NAME.FEEDBACK
     }
-  ]
+  ],
+  view: {
+    type: Number,
+    default: 0
+  }
 });
 Course.plugin(mongoosePaginate);
 module.exports = mongoose.model(Config.COLLECTION_NAME.COURSE, Course);

@@ -15,16 +15,19 @@ const server = http.createServer(app);
 app.use(express.json());
 app.use(morgan("dev"));
 
-
 // define routing
-const guestRouter = require("./routes/guest.route");
+// const guestRouter = require("./routes/guest.route");
 const userRouter = require("./routes/user.route");
 const authRouter = require("./routes/auth.route");
+
+const courseRouter = require("./routes/course.route");
+const categoryRouter = require("./routes/category.route");
 const searchRouter = require("./routes/search.route");
-app.use("/auth", authRouter);
-app.use("/:userId", userRouter);
 app.use("/api/search", searchRouter);
-app.use(guestRouter);
+app.use("/auth", authRouter);
+app.use("/users", userRouter);
+app.use("/courses", courseRouter);
+app.use("/categories", categoryRouter);
 
 // define error route handler
 app.use((req, res, next) => {
