@@ -1,6 +1,5 @@
 "use strict";
 module.exports = {
-
   ACCOUNT_STATUS: {
     PENDING: "PENDING",
     ACTIVE: "ACTIVE",
@@ -35,6 +34,7 @@ module.exports = {
   },
 
   URL: {
-    DEFAULT_AVATAR: "https://img-premium.flaticon.com/png/512/149/149071.png?token=exp=1622634972~hmac=abeb6e76f5b579bcb8a5ec046189b41e"
+    DEFAULT_AVATAR:
+      "https://img-premium.flaticon.com/png/512/149/149071.png?token=exp=1622634972~hmac=abeb6e76f5b579bcb8a5ec046189b41e"
   }
 };

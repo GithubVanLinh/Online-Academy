@@ -10,7 +10,6 @@ const User = new mongoose.Schema({
   status: String,
   createdAt: Date,
   updatedAt: Date,
-  type: String,
   address: String,
   fullName: String
 });

@@ -5,6 +5,7 @@ require("express-async-errors");
 const dotenv = require("dotenv");
 dotenv.config();
 require("./configs/db.config");
+require("./configs/model.config");
 
 const http = require("http");
 const app = express();
@@ -18,8 +19,10 @@ app.use(morgan("dev"));
 const guestRouter = require("./routes/guest.route");
 const userRouter = require("./routes/user.route");
 const authRouter = require("./routes/auth.route");
+const courseRouter = require("./routes/course.route");
 app.use("/auth", authRouter);
-app.use("/:userId", userRouter);
+app.use("/users", userRouter);
+app.use("/courses", courseRouter);
 app.use(guestRouter);
 
 // define error route handler
