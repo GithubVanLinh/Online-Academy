@@ -36,18 +36,19 @@ module.exports = {
     return feedbacks;
   },
 
-  getCourses: async () => {
-    const resl = await mGetCourses();
+  getCourses: async (page) => {
+    const resl = await mGetCourses(page);
     return resl;
   },
 
   /**
    * get Course by category
    * @param {string} categoryId id of category
+   * @param {Number} page paginate
    * @return {Promise<object>}
    */
-  getCoursesByCategory: async (categoryId) => {
-    const resl = await mGetCoursesByFilter("category", categoryId);
+  getCoursesByCategory: async (categoryId, page) => {
+    const resl = await mGetCoursesByFilter("category", categoryId, page);
     return resl;
   },
   getTenNewestCourses: async () => {
@@ -68,8 +69,7 @@ module.exports = {
     }
     return courses;
   }
-
-},
+};
 
 /**
  * get Course object member
@@ -78,36 +78,71 @@ module.exports = {
  */
 async function mGetCourseByCourseId(courseId) {
   const resl = await CourseModel.findById(courseId)
-    .populate("courseLecturers")
+    .populate({
+      path: "courseLecturers",
+      select: [
+        "avatar",
+        "username",
+        "fullName",
+        "email",
+        "address",
+        "phone",
+        "description"
+      ]
+    })
     .populate("feedbacks")
     .populate("category");
   return resl;
 }
 
 /** get all courses
+ * @param {Number} page paginate
  * @param {string} filter condition query
  * @return {Promise<[object]>} list course
  */
-async function mGetCourses(filter) {
-  const resl = await CourseModel.find(filter)
-    .populate("courseLecturers")
-    .populate("feedbacks")
-    .populate("category");
+async function mGetCourses(page, filter) {
+  const options = {
+    limit: 5,
+    populate: [
+      {
+        path: "courseLecturers",
+        select: [
+          "avatar",
+          "username",
+          "fullName",
+          "email",
+          "address",
+          "phone",
+          "description"
+        ]
+      },
+      "feedbacks",
+      "category"
+    ],
+    page: page
+  };
+  const resl = await CourseModel.paginate(filter, options);
   return resl;
+  // const resl = await CourseModel.find(filter)
+  //   .populate("courseLecturers")
+  //   .populate("feedbacks")
+  //   .populate("category");
+  // return resl;
 }
 
 /**
  * get Courses with specitific condition
  * @param {string} type "category"|"lecturer"
  * @param {string} condition id
+ * @param {Number} page paginate
  */
-async function mGetCoursesByFilter(type, condition) {
+async function mGetCoursesByFilter(type, condition, page) {
   switch (type) {
     case "category":
       const filter = {
-        "category": condition
+        category: condition
       };
-      const resl = await mGetCourses(filter);
+      const resl = await mGetCourses(page, filter);
       return resl;
       break;
 
