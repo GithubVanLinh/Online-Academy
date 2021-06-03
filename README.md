@@ -56,14 +56,29 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
   ```
 ### Search API
 #### By course name
-- Method: `GET /search`
+- Method: `GET /api/search/course`
 - Status Code:
   - Success: `200`
   - Failure: `400`
 - Params:
   - keyword
+  - page
+  - sortBy: ratingDesc / priceAsc
 - Sample:  
   ```
-  localhost:8080/search?keyword=react
+  localhost:8080/api/search/course/?keyword=react
+  ```
+#### By category 
+- Method: `GET /api/search/byCategory`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Params:
+  - keyword
+  - page
+  - sortBy: ratingDesc / priceAsc
+- Sample:
+  ```
+  http://localhost:8080/api/search/byCategory?keyword=react
   ```
 

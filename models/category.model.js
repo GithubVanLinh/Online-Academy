@@ -1,6 +1,6 @@
 "use strict";
 const mongoose = require("mongoose");
-
+const mongoosePaginate = require("mongoose-paginate-v2");
 const Config = require("../configs/constrainst");
 
 const Category = new mongoose.Schema({
@@ -29,5 +29,5 @@ const Category = new mongoose.Schema({
     default: Date.now
   }
 });
-
+Category.plugin(mongoosePaginate);
 module.exports = mongoose.model(Config.COLLECTION_NAME.CATEGORY, Category);
