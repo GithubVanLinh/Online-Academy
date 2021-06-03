@@ -2,6 +2,9 @@
 
 const CourseModel = require("../models/course.model");
 const Config = require("../configs/constrainst");
+const enrollmentModel = require("../models/enrollment.model");
+const courseModel = require("../models/course.model");
+// const userModel = require("../models/user.model");
 
 module.exports = {
   /**
@@ -66,7 +69,29 @@ module.exports = {
             Config.COURSE_STATUS.COMPLETED
           ]
         }
-      }).sort({ createdAt: "desc" }).limit(10);
+      })
+        .sort({ createdAt: "desc" })
+        .limit(10)
+        .populate([
+          {
+            path: "category",
+            select: "categoryName"
+          },
+          {
+            path: "courseLecturers",
+            select: "fullName"
+          }
+        ])
+        .select([
+          "courseName",
+          "category",
+          "courseLecturers",
+          "ratingPoint",
+          "ratedNumber",
+          "courseImage",
+          "price",
+          "promotionalPrice"
+        ]);
     } catch (error) {
       throw Error(error);
     }
@@ -86,12 +111,127 @@ module.exports = {
             Config.COURSE_STATUS.COMPLETED
           ]
         }
-      }).sort({ view: "desc" }).limit(10);
+      })
+        .sort({ view: "desc" })
+        .limit(10)
+        .populate([
+          {
+            path: "category",
+            select: "categoryName"
+          },
+          {
+            path: "courseLecturers",
+            select: "fullName"
+          }
+        ])
+        .select([
+          "courseName",
+          "category",
+          "courseLecturers",
+          "ratingPoint",
+          "ratedNumber",
+          "courseImage",
+          "price",
+          "promotionalPrice",
+          "view"
+        ]);
       return courses;
     } catch (error) {
       throw new Error(error);
     }
+  },
+
+  getTopFeaturedCourses: async () => {
+    const aWeek = 7 * 24 * 60 * 60 * 1000;
+    const startDate = new Date(Date.now() - aWeek);
+
+    try {
+      const enrollments = await enrollmentModel.find({
+        registeredTime: {
+          $gte: startDate
+        }
+      }).populate({
+        path: "courseId",
+        select: [
+          "courseName",
+          "category",
+          "courseLecturers",
+          "ratingPoint",
+          "ratedNumber",
+          "courseImage",
+          "price",
+          "promotionalPrice"
+        ]
+      });
+
+      const courses = enrollments.map(enroll => enroll.courseId);
+      // console.log(courses);
+
+      const result = {};
+      for (const course of courses) {
+        if (course._id in result) {
+          result[course._id].count++;
+        } else {
+          result[course._id] = {
+            content: course,
+            count: 1
+          };
+        }
+      }
+      // console.log(result);
+
+      const arr = []
+      // eslint-disable-next-line guard-for-in
+      for (const prop in result) {
+        arr.push(result[prop]);
+      }
+
+      arr.sort(function (a, b) {
+        if (a.count < b.count) {
+          return 1;
+        }
+        if (a.count > b.count) {
+          return -1;
+        }
+        return 0;
+      })
+
+      arr.length = 3; // top 3 featured courses
+      const Ids = arr.map(e => e.content._id);
+
+      const ret = await courseModel.find({
+        _id: {
+          $in: Ids
+        }
+      }).populate([
+        {
+          path: "courseLecturers",
+          select: "fullName"
+        },
+        {
+          path: "category",
+          select: "categoryName"
+        }
+      ]).select([
+        "courseName",
+        "category",
+        "courseLecturers",
+        "ratingPoint",
+        "ratedNumber",
+        "courseImage",
+        "price",
+        "promotionalPrice"
+      ]);
+
+      console.log(arr);
+      // console.log(ret);
+
+      return ret;
+    } catch (error) {
+      throw Error(error);
+    }
   }
+
 };
 
 /**

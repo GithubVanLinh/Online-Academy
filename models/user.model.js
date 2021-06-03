@@ -53,15 +53,6 @@ const User = new mongoose.Schema({
       type: mongoose.Types.ObjectId,
       ref: Config.COLLECTION_NAME.COURSE
     }
-  ],
-  registeredList: [
-    {
-      courseId: {
-        type: mongoose.Types.ObjectId,
-        ref: Config.COLLECTION_NAME.COURSE
-      },
-      registeredTime: Date
-    }
   ]
 });
 

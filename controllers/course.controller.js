@@ -36,5 +36,9 @@ module.exports = {
   getMostViewdCourses: async (req, res, next) => {
     const mostViewdCourses = await CourseService.getTenMostViewedCourse();
     res.json(mostViewdCourses);
+  },
+  getFeaturedCourses: async (req, res, next) => {
+    const featuredCourses = await CourseService.getTopFeaturedCourses();
+    res.json(featuredCourses);
   }
 };

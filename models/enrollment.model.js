@@ -5,10 +5,12 @@ const Config = require("../configs/constrainst");
 const Enrollment = new mongoose.Schema({
   userId: {
     type: mongoose.Types.ObjectId,
+    ref: Config.COLLECTION_NAME.USER,
     require: true
   },
   courseId: {
     type: mongoose.Types.ObjectId,
+    ref: Config.COLLECTION_NAME.COURSE,
     require: true
   },
   registeredTime: {
