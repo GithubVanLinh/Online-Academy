@@ -65,8 +65,8 @@ async function sendVerifyMail(desMail, key) {
     const mailOptions = {
       from: process.env.GMAIL_NAME,
       to: desMail,
-      subject: "verify user",
-      text: `verify code: ${key}`
+      subject: "Online Academy - Your Verify Code",
+      text: `Your Verify Code: ${key}`
     };
     transport.sendMail(mailOptions, (error, response) => {
       if (error) {

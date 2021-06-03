@@ -19,7 +19,6 @@ app.use(morgan("dev"));
 // const guestRouter = require("./routes/guest.route");
 const userRouter = require("./routes/user.route");
 const authRouter = require("./routes/auth.route");
-
 const courseRouter = require("./routes/course.route");
 const categoryRouter = require("./routes/category.route");
 const searchRouter = require("./routes/search.route");
@@ -41,7 +40,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.log("Server Error: ", err);
   res.status(500).json({
-    error: "Something broke"
+    error_message: "Something broke"
   });
 });
 const PORT = process.env.PORT || 3000;

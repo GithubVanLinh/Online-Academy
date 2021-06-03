@@ -12,11 +12,11 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
 - [Get List Lecturer Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-lecturer-of-course)
 - [Get List Feedback Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-feedback-of-course)
 
-### Sign In
+### Sign Up
 
 - Method: `POST /users`
 - Status Code:
-  - Success: `200`
+  - Success: `201`
   - Failure: `400`
 - Body
 

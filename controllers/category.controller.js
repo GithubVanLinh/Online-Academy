@@ -1,6 +1,6 @@
 "use strict";
 const categoryService = require("../services/category.service");
-const Config = require("../configs/constrainst");
+const Config = require("../configs/constraints");
 
 module.exports = {
   getAllCategory: async (req, res) => {

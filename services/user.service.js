@@ -5,9 +5,11 @@ const bcrypt = require("bcryptjs");
 const ajv = require("../configs/ajv.config");
 
 const UserModel = require("../models/user.model");
-const CONST = require("../models/constrainst");
-const VerifySevice = require("./verify.service");
-const constrainst = require("../models/constrainst");
+const CONST = require("../models/constraint");
+const VerifyService = require("./verify.service");
+
+const salt = bcrypt.genSaltSync(10);
+
 
 module.exports = {
   /**
@@ -16,8 +18,8 @@ module.exports = {
    * @return {object} user
    */
   createUser: async (user) => {
-    const newuser = createUserTemplate(user);
-    if (newuser === null) {
+    const newUser = createUserTemplate(user);
+    if (newUser === null) {
       return null;
     }
 
@@ -27,18 +29,19 @@ module.exports = {
       return null;
     }
 
-    const result = await VerifySevice.createNewValidateRequest(user.email);
+    const result = await VerifyService.createNewValidateRequest(user.email);
     if (result === null) {
       return null;
     }
 
-    const sercuredUser = makeSecurityPassword(newuser);
-    const res = await UserModel.create(sercuredUser);
-
-    return res;
+    newUser.password = bcrypt.hashSync(newUser.password, salt);
+    // const securedUser = makeSecurityPassword(newUser);
+    await UserModel.create(newUser);
+    delete newUser.password;
+    return newUser;
   },
   verifyUser: async (email, key) => {
-    const valid = await VerifySevice.validateUser(email, key);
+    const valid = await VerifyService.validateUser(email, key);
     if (!valid) {
       return false;
     }
@@ -47,7 +50,7 @@ module.exports = {
       email: email
     };
     const updateInfo = {
-      status: constrainst.STATUS_ACTIVE
+      status: CONST.STATUS_ACTIVE
     };
     await UserModel.findOneAndUpdate(filter, updateInfo);
     return true;
@@ -56,23 +59,23 @@ module.exports = {
 
 /**
  * create user from raw infomation
- * @param {object} rawuser user information
+ * @param {object} rawUser user information
  * @return {object} valid user
  */
-function createUserTemplate(rawuser) {
-  const user = rawuser;
-  user.username = rawuser.username || "";
-  user.password = rawuser.password || "";
-  user.fullName = rawuser.fullName || "";
-  user.address = rawuser.address || "";
-  user.email = rawuser.email || "";
-  user.createdAt = rawuser.createdAt || Date.now();
+function createUserTemplate(rawUser) {
+  const user = rawUser;
+  user.username = rawUser.username || "";
+  user.password = rawUser.password || "";
+  user.fullName = rawUser.fullName || "";
+  user.address = rawUser.address || "";
+  user.email = rawUser.email || "";
+  user.createdAt = rawUser.createdAt || Date.now();
   user.updatedAt = Date.now();
-  user.status = rawuser.status || CONST.STATUS_PENDING;
-  user.avatar = rawuser.avatar || "";
-  user.phone = rawuser.phone || "";
-  user.wishList = rawuser.wishList || [];
-  user.registeredList = rawuser.registeredList || [];
+  user.status = rawUser.status || CONST.STATUS_PENDING;
+  user.avatar = rawUser.avatar || CONST.URL.DEFAULT_AVATAR;
+  user.phone = rawUser.phone || "";
+  user.wishList = rawUser.wishList || [];
+  user.registeredList = rawUser.registeredList || [];
 
   const valid = validateUserObject(user);
   if (!valid) {
@@ -105,12 +108,12 @@ function validateUserObject(user) {
  * @param {object} user user object
  * @return {object} new user
  */
-function makeSecurityPassword(user) {
-  const newPassword = bcrypt.hashSync(user.password, 10);
-  const result = user;
-  result.password = newPassword;
-  return result;
-}
+// function makeSecurityPassword(user) {
+//   const newPassword = bcrypt.hashSync(user.password, 10);
+//   const result = user;
+//   result.password = newPassword;
+//   return result;
+// }
 
 /**
  * Check email is valid or not
