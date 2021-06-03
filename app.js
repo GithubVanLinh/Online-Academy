@@ -36,7 +36,7 @@ app.use((req, res, next) => {
     error_message: "Endpoint not found!"
   });
 });
-// define error hander
+// define error handler
 app.use((err, req, res, next) => {
   console.log("Server Error: ", err);
   res.status(500).json({

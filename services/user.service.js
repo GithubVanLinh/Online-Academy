@@ -7,6 +7,9 @@ const ajv = require("../configs/ajv.config");
 const UserModel = require("../models/user.model");
 const CONST = require("../models/constraint");
 const VerifyService = require("./verify.service");
+const jwt = require("jsonwebtoken");
+const randomstring = require("randomstring");
+
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -54,6 +57,28 @@ module.exports = {
     };
     await UserModel.findOneAndUpdate(filter, updateInfo);
     return true;
+  },
+
+  logIn: async (loginInfo) => {
+    const user = await UserModel.findOne({username: loginInfo.username}).exec();
+    if ((user === null) || !bcrypt.compareSync(loginInfo.password, user.password)) {
+      return { authenticated: false };
+    }
+    const payload = {
+      userId: user._id
+    }
+    const opts = {
+      expiresIn: 10 * 60 // seconds
+    }
+    const accessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
+
+    const refreshToken = randomstring.generate(80);
+    await UserModel.findByIdAndUpdate(user._id, {rfToken: refreshToken});
+    return {
+      authenticated: true,
+      accessToken,
+      refreshToken,
+    }
   }
 };
 

@@ -1,7 +1,7 @@
 "use strict";
 
 const CourseModel = require("../models/course.model");
-const Config = require("../configs/constrainst");
+const Config = require("../configs/constraints");
 const enrollmentModel = require("../models/enrollment.model");
 const courseModel = require("../models/course.model");
 // const userModel = require("../models/user.model");
@@ -56,7 +56,7 @@ module.exports = {
   },
 
   /**
- * 
+ *
  * @return {Array} top 10 newest courses of the week
  */
   getTenNewestCourses: async () => {
@@ -99,7 +99,7 @@ module.exports = {
   },
 
   /**
- * 
+ *
  * @return {Array} most viewed courses
  */
   getTenMostViewedCourse: async () => {

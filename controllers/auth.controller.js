@@ -14,5 +14,18 @@ module.exports = {
         error: "invalid info"
       });
     }
+  },
+
+  login: async (req,res,next)=>{
+    const loginInfo = req.body;
+    const result = await UserService.logIn(loginInfo);
+    if(!result){
+      return res.status(400).json({
+        message: "log in failed"
+      })
+    } else {
+      return res.json(result);
+    }
   }
+
 };
