@@ -32,5 +32,13 @@ module.exports = {
   getNewestCourses: async (req, res, next) => {
     const tenNewestCourses = await CourseService.getTenNewestCourses();
     res.json(tenNewestCourses);
+  },
+  getCourseSameCourseId: async (req, res, next) => {
+    const courseId = req.params.courseId;
+
+    const course = await CourseService.getCourseByCourseId(courseId);
+    const categoryId = course.category._id;
+    const resl = await CourseService.getCoursesSortBySoldNumber(categoryId)
+    res.json(resl.docs);
   }
 };
