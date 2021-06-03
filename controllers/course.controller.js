@@ -17,5 +17,9 @@ module.exports = {
     const courseId = req.params.courseId;
     const feedbacks = await CourseService.getFeedbacksByCourseId(courseId);
     res.json(feedbacks);
+  },
+  getNewestCourses: async (req, res, next) => {
+    const tenNewestCourses = await CourseService.getTenNewestCourses();
+    res.json(tenNewestCourses);
   }
 };
