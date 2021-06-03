@@ -17,5 +17,15 @@ module.exports = {
     const courseId = req.params.courseId;
     const feedbacks = await CourseService.getFeedbacksByCourseId(courseId);
     res.json(feedbacks);
+  },
+  getCourses: async (req, res, next) => {
+    const {categoryId} = req.query;
+    if (categoryId) {
+      const resl = await CourseService.getCoursesByCategory(categoryId);
+      return res.json(resl);
+    } else {
+      const resl = await CourseService.getCourses();
+      return res.json(resl);
+    }
   }
 };

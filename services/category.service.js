@@ -8,5 +8,9 @@ module.exports = {
    */
   getAll: async () => {
     return await categoryModel.find({});
+  },
+
+  getCategoryByCategoryId: async (categoryId) => {
+    return await categoryModel.findById(categoryId);
   }
 };
