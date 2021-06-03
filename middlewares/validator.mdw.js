@@ -5,7 +5,7 @@ module.exports = {
   validateRequestBody: (type) => (req, res, next) => {
     const validate = ajv.getSchema(type);
 
-    valid = validate(req.body);
+    const valid = validate(req.body);
 
     if (!valid) {
       console.log(validate.errors);

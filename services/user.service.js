@@ -71,8 +71,10 @@ function createUserTemplate(rawuser) {
   user.status = rawuser.status || CONST.STATUS_PENDING;
   user.avatar = rawuser.avatar || "";
   user.phone = rawuser.phone || "";
+  user.wishList = rawuser.wishList || [];
+  user.registeredList = rawuser.registeredList || [];
 
-  valid = validateUserObject(user);
+  const valid = validateUserObject(user);
   if (!valid) {
     return null;
   }
@@ -86,7 +88,7 @@ function createUserTemplate(rawuser) {
  */
 function validateUserObject(user) {
   const validate = ajv.getSchema("user");
-  valid = validate(user);
+  const valid = validate(user);
   if (!valid) {
     console.log(validate.errors);
     console.log({

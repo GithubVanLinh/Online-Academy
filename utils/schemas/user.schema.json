@@ -34,17 +34,19 @@
       "type": "number",
       "format": "date-time"
     },
-    "type": {
-      "type": "string",
-      "enum": ["STUDENT", "LECTURER"]
-    },
     "address": {
       "type": "string"
     },
     "fullName": {
       "type": "string"
+    },
+    "wishList": {
+      "type": "array"
+    },
+    "registeredList": {
+      "type": "array"
     }
   },
-  "required": ["username", "email", "createdAt", "updatedAt", "type", "status"],
+  "required": ["username", "email", "createdAt", "updatedAt", "status"],
   "additionalProperties": false
 }
