@@ -469,3 +469,59 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
     }
   ]
   ```
+#### Get 3 featured course of the week
+
+- Method: `GET /courses/featuredCourses`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+
+  ```code
+  http://localhost:8080/courses/featuredCourses
+  ```
+- Success response:
+  ```json
+  [
+    {
+      "courseLecturers": [
+        {
+          "_id": "60b754e4a651451b6f25b382",
+          "fullName": "Jonas Schmedtmann"
+        }
+      ],
+      "ratedNumber": 0,
+      "ratingPoint": 0,
+      "_id": "60b759f3a651451b6f25b38e",
+      "courseName": "Build Responsive Real World Websites with HTML5 and CSS3",
+      "courseImage": "url(string)",
+      "category": {
+        "_id": "60b73962a651451b6f25b375",
+        "categoryName": "CSS"
+      },
+      "price": 0,
+      "promotionalPrice": 0
+    }
+  ]
+  ```
+
+#### Get list of featured category of the week
+
+- Method: `GET /categories/featuredCategories`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+
+  ```code
+  http://localhost:8080/categories/featuredCategories
+  ```
+- Success response:
+  ```json
+  [
+    {
+      "_id": "60b73923a651451b6f25b374",
+      "categoryName": "React"
+    }
+  ]
+  ```
