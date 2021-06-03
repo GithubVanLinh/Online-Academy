@@ -12,11 +12,11 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
 - [Get List Lecturer Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-lecturer-of-course)
 - [Get List Feedback Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-feedback-of-course)
 
-### Sign In
+### Sign Up
 
 - Method: `POST /users`
 - Status Code:
-  - Success: `200`
+  - Success: `201`
   - Failure: `400`
 - Body
 
@@ -351,6 +351,7 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
 ### Search API
 
 #### By course name
+
 - Method: `GET /api/search/course`
 
 - Status Code:
@@ -361,10 +362,13 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
   - page
   - sortBy: ratingDesc / priceAsc
 - Sample:  
-  ```
+
+  ```code
   localhost:8080/api/search/course/?keyword=react
   ```
-#### By category 
+
+#### By category
+
 - Method: `GET /api/search/byCategory`
 - Status Code:
   - Success: `200`
@@ -374,7 +378,8 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
   - page
   - sortBy: ratingDesc / priceAsc
 - Sample:
-  ```
+
+  ```code
   http://localhost:8080/api/search/byCategory?keyword=react
 
   ```

@@ -230,6 +230,11 @@ module.exports = {
     } catch (error) {
       throw Error(error);
     }
+  },
+
+  getCoursesSortBySoldNumber: async (categoryId) => {
+    const resl = await mGetCoursesByFilter("category", categoryId, 1, "-soldNumer");
+    return resl;
   }
 
 };
@@ -261,11 +266,13 @@ async function mGetCourseByCourseId(courseId) {
 /** get all courses
  * @param {Number} page paginate
  * @param {string} filter condition query
+ * @param {string} sort sort string
  * @return {Promise<[object]>} list course
  */
-async function mGetCourses(page, filter) {
+async function mGetCourses(page, filter, sort) {
   const options = {
     limit: 5,
+    sort: sort,
     populate: [
       {
         path: "courseLecturers",
@@ -298,14 +305,15 @@ async function mGetCourses(page, filter) {
  * @param {string} type "category"|"lecturer"
  * @param {string} condition id
  * @param {Number} page paginate
+ * @param {string} sort sort string
  */
-async function mGetCoursesByFilter(type, condition, page) {
+async function mGetCoursesByFilter(type, condition, page, sort) {
   switch (type) {
     case "category":
       const filter = {
         category: condition
       };
-      const resl = await mGetCourses(page, filter);
+      const resl = await mGetCourses(page, filter, sort);
       return resl;
       break;
 

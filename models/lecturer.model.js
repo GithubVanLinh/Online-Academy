@@ -1,6 +1,6 @@
 "use strict";
 const mongoose = require("mongoose");
-const Config = require("../configs/constrainst");
+const Config = require("../configs/constraints");
 
 const Lecturer = new mongoose.Schema({
   username: {

@@ -1,7 +1,7 @@
 "use strict";
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
-const Config = require("../configs/constrainst");
+const Config = require("../configs/constraints");
 
 const Category = new mongoose.Schema({
   categoryName: {

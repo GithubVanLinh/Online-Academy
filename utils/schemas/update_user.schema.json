@@ -22,15 +22,17 @@
       "type": "string",
       "enum": ["PENDING", "ACTIVE", "DELETED"]
     },
-    "type": {
-      "type": "string",
-      "enum": ["STUDENT", "LECTURER"]
-    },
     "address": {
       "type": "string"
     },
     "fullName": {
       "type": "string"
+    },
+    "wishList": {
+      "type": "array"
+    },
+    "registeredList": {
+      "type": "array"
     }
   },
   "required": ["username", "email"],

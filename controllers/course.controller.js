@@ -40,5 +40,13 @@ module.exports = {
   getFeaturedCourses: async (req, res, next) => {
     const featuredCourses = await CourseService.getTopFeaturedCourses();
     res.json(featuredCourses);
+  },
+  getCourseSameCourseId: async (req, res, next) => {
+    const courseId = req.params.courseId;
+
+    const course = await CourseService.getCourseByCourseId(courseId);
+    const categoryId = course.category._id;
+    const resl = await CourseService.getCoursesSortBySoldNumber(categoryId)
+    res.json(resl.docs);
   }
-};
+}
