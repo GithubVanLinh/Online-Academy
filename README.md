@@ -8,6 +8,9 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
 
 - [Sign In](https://github.com/GithubVanLinh/Online-Academy#sign-in)
 - [Get Course Infomation](https://github.com/GithubVanLinh/Online-Academy#get-course-infomation)
+- [Get Top 5 Are Same With Course](https://github.com/GithubVanLinh/Online-Academy#get-top-5-are-same-with-course)
+- [Get List Lecturer Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-lecturer-of-course)
+- [Get List Feedback Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-feedback-of-course)
 
 ### Sign In
 
@@ -236,4 +239,18 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
 
   ```code
   localhost:8080/search?keyword=react
+  ```
+
+### Category API
+
+#### Get all categories
+
+- Method: `GET /categories`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+
+  ```code
+  http://localhost:8080/categories
   ```
