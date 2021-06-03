@@ -1,7 +1,7 @@
 "use strict";
 
 const CourseModel = require("../models/course.model");
-// const Constrainst = require("../configs/constrainst");
+const Config = require("../configs/constrainst");
 
 module.exports = {
   /**
@@ -51,23 +51,46 @@ module.exports = {
     const resl = await mGetCoursesByFilter("category", categoryId, page);
     return resl;
   },
-  getTenNewestCourses: async () => {
-    const aWeek = 7 * 24 * 60 * 60 * 1000;
-    const now = Date.now();
-    const startDate = new Date(now - aWeek);
-    console.log(startDate);
 
+  /**
+ * 
+ * @return {Array} top 10 newest courses of the week
+ */
+  getTenNewestCourses: async () => {
     let courses = [];
     try {
       courses = await CourseModel.find({
-        createdAt: {
-          $gte: startDate
+        status: {
+          $in: [
+            Config.COURSE_STATUS.INCOMPLETE,
+            Config.COURSE_STATUS.COMPLETED
+          ]
         }
-      });
+      }).sort({ createdAt: "desc" }).limit(10);
     } catch (error) {
       throw Error(error);
     }
     return courses;
+  },
+
+  /**
+ * 
+ * @return {Array} most viewed courses
+ */
+  getTenMostViewedCourse: async () => {
+    try {
+      const courses = await CourseModel.find({
+        status: {
+          $in: [
+            Config.COURSE_STATUS.INCOMPLETE,
+            Config.COURSE_STATUS.COMPLETED
+          ]
+        }
+      }).sort({ view: "desc" }).limit(10);
+      return courses;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 };
 

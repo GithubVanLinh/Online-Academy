@@ -392,3 +392,80 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
   ```code
   http://localhost:8080/categories
   ```
+
+### Course API
+
+#### Get 10 newest courses
+
+- Method: `GET /courses/newestCourses`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+
+  ```code
+  http://localhost:8080/courses/newestCourses
+  ```
+- Success response:
+  ```json
+  [
+    {
+      "_id": "60b5b8d325c3608c61d1794f",
+      "courseName": "Lập trình di động với React Native",
+      "courseImage": "url(string)",
+      "courseLecturers": ["000000000000000000000000"],
+      "category": "60b61000183b6963bcb401e6",
+      "price": "number",
+      "promotionalPrice": "number",
+      "briefDescription": "string",
+      "detailDescription": "string",
+      "soldNumber": "number",
+      "ratedNumber": "number",
+      "lessionNumber": "number",
+      "totalHours": "number",
+      "ratingPoint": "number",
+      "status": "INCOMPLETE | COMPLETED | DELETED",
+      "createdAt": "date",
+      "updatedAt": "date",
+      "feedbacks": ["000000000000000000000000"],
+      "view": 0
+    }
+  ]
+  ```
+#### Get 10 most viewed courses
+
+- Method: `GET /courses/mostViewedCourses`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+
+  ```code
+  http://localhost:8080/courses/mostViewedCourses
+  ```
+- Success response:
+  ```json
+  [
+    {
+      "_id": "60b5b8d325c3608c61d1794f",
+      "courseName": "Lập trình di động với React Native",
+      "courseImage": "url(string)",
+      "courseLecturers": ["000000000000000000000000"],
+      "category": "60b61000183b6963bcb401e6",
+      "price": "number",
+      "promotionalPrice": "number",
+      "briefDescription": "string",
+      "detailDescription": "string",
+      "soldNumber": "number",
+      "ratedNumber": "number",
+      "lessionNumber": "number",
+      "totalHours": "number",
+      "ratingPoint": "number",
+      "status": "INCOMPLETE | COMPLETED | DELETED",
+      "createdAt": "date",
+      "updatedAt": "date",
+      "feedbacks": ["000000000000000000000000"],
+      "view": 0
+    }
+  ]
+  ```

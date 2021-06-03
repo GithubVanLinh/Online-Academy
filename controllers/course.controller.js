@@ -32,5 +32,9 @@ module.exports = {
   getNewestCourses: async (req, res, next) => {
     const tenNewestCourses = await CourseService.getTenNewestCourses();
     res.json(tenNewestCourses);
+  },
+  getMostViewdCourses: async (req, res, next) => {
+    const mostViewdCourses = await CourseService.getTenMostViewedCourse();
+    res.json(mostViewdCourses);
   }
 };
