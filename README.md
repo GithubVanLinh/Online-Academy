@@ -237,3 +237,16 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
   ```code
   localhost:8080/search?keyword=react
   ```
+
+###  Category API
+#### Get all categories
+
+- Method: `GET /categories`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+
+  ```code
+  http://localhost:8080/categories
+  ```
