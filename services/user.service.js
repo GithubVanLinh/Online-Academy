@@ -1,6 +1,6 @@
 // const jwt = require("jsonwebtoken");
 "use strict";
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const ajv = require("../configs/ajv.config");
 
