@@ -1,4 +1,6 @@
+"use strict";
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 const Config = require("../configs/constrainst");
 
 const Course = new mongoose.Schema({
@@ -36,7 +38,7 @@ const Course = new mongoose.Schema({
     default: ""
   },
   detailDescription: {
-    type: String, 
+    type: String,
     default: ""
   },
   soldNumber: {
@@ -62,8 +64,8 @@ const Course = new mongoose.Schema({
   status: {
     type: String,
     enum: [
-      Config.COURSE_STATUS.INCOMPLETE, 
-      Config.COURSE_STATUS.COMPLETED, 
+      Config.COURSE_STATUS.INCOMPLETE,
+      Config.COURSE_STATUS.COMPLETED,
       Config.COURSE_STATUS.DELETED
     ],
     default: Config.COURSE_STATUS.INCOMPLETE
@@ -78,7 +80,8 @@ const Course = new mongoose.Schema({
   },
   feedbacks: [
     {
-      type: mongoose.Types.ObjectId
+      type: mongoose.Types.ObjectId,
+      ref: Config.COLLECTION_NAME.FEEDBACK
     }
   ],
   view: {
@@ -86,5 +89,5 @@ const Course = new mongoose.Schema({
     default: 0
   }
 });
-
+Course.plugin(mongoosePaginate);
 module.exports = mongoose.model(Config.COLLECTION_NAME.COURSE, Course);

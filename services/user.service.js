@@ -1,4 +1,5 @@
 // const jwt = require("jsonwebtoken");
+"use strict";
 const bcrypt = require("bcrypt");
 
 const ajv = require("../configs/ajv.config");
@@ -43,14 +44,14 @@ module.exports = {
     }
 
     const filter = {
-      email: email,
+      email: email
     };
     const updateInfo = {
-      status: constrainst.STATUS_ACTIVE,
+      status: constrainst.STATUS_ACTIVE
     };
     await UserModel.findOneAndUpdate(filter, updateInfo);
     return true;
-  },
+  }
 };
 
 /**
@@ -68,7 +69,6 @@ function createUserTemplate(rawuser) {
   user.createdAt = rawuser.createdAt || Date.now();
   user.updatedAt = Date.now();
   user.status = rawuser.status || CONST.STATUS_PENDING;
-  user.type = rawuser.type || CONST.TYPE_STUDENT;
   user.avatar = rawuser.avatar || "";
   user.phone = rawuser.phone || "";
 
@@ -91,7 +91,7 @@ function validateUserObject(user) {
     console.log(validate.errors);
     console.log({
       error: "input error",
-      detail: validate.errors,
+      detail: validate.errors
     });
     return false;
   }
@@ -117,7 +117,7 @@ function makeSecurityPassword(user) {
  */
 async function checkValidEmail(user) {
   const filter = {
-    email: user.email,
+    email: user.email
   };
   const result = await UserModel.findOne(filter);
   if (result === null) {

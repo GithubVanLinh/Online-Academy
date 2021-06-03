@@ -1,3 +1,4 @@
+"use strict";
 const mongoose = require("mongoose");
 
 const User = new mongoose.Schema({
@@ -9,9 +10,8 @@ const User = new mongoose.Schema({
   status: String,
   createdAt: Date,
   updatedAt: Date,
-  type: String,
   address: String,
-  fullName: String,
+  fullName: String
 });
 
 module.exports = mongoose.model("User", User);
