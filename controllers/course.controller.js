@@ -27,5 +27,9 @@ module.exports = {
       const resl = await CourseService.getCourses();
       return res.json(resl);
     }
+  },
+  getNewestCourses: async (req, res, next) => {
+    const tenNewestCourses = await CourseService.getTenNewestCourses();
+    res.json(tenNewestCourses);
   }
-};
+}

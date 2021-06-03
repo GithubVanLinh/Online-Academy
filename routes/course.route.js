@@ -10,6 +10,8 @@ const CourseController = require("../controllers/course.controller");
 
 router.get("/", queryValidate.checkCategoryId, CourseController.getCourses);
 router.use("/:courseId", paramsValidate.checkCourseId);
+router.get("/newestCourses", CourseController.getNewestCourses)
+
 router.get("/:courseId", CourseController.getCourseByCourseId);
 router.get("/:courseId/lecturers", CourseController.getLecturersOfCourse);
 router.get("/:courseId/feedbacks", CourseController.getFeedbacksOfCourse);

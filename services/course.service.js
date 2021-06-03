@@ -49,8 +49,27 @@ module.exports = {
   getCoursesByCategory: async (categoryId) => {
     const resl = await mGetCoursesByFilter("category", categoryId);
     return resl;
+  },
+  getTenNewestCourses: async () => {
+    const aWeek = 7 * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    const startDate = new Date(now - aWeek);
+    console.log(startDate);
+
+    let courses = [];
+    try {
+      courses = await CourseModel.find({
+        createdAt: {
+          $gte: startDate
+        }
+      });
+    } catch (error) {
+      throw Error(error);
+    }
+    return courses;
   }
-};
+
+},
 
 /**
  * get Course object member

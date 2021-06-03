@@ -83,7 +83,11 @@ const Course = new mongoose.Schema({
       type: mongoose.Types.ObjectId,
       ref: Config.COLLECTION_NAME.FEEDBACK
     }
-  ]
+  ],
+  view: {
+    type: Number,
+    default: 0
+  }
 });
 Course.plugin(mongoosePaginate);
 module.exports = mongoose.model(Config.COLLECTION_NAME.COURSE, Course);
