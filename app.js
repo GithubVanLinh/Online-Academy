@@ -19,9 +19,11 @@ app.use(morgan("dev"));
 // const guestRouter = require("./routes/guest.route");
 const userRouter = require("./routes/user.route");
 const authRouter = require("./routes/auth.route");
+
 const courseRouter = require("./routes/course.route");
 const categoryRouter = require("./routes/category.route");
-
+const searchRouter = require("./routes/search.route");
+app.use("/api/search", searchRouter);
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/courses", courseRouter);
@@ -30,17 +32,17 @@ app.use("/categories", categoryRouter);
 // define error route handler
 app.use((req, res, next) => {
   res.status(404).json({
-    error: "checking your url!"
+    error_message: "Endpoint not found!"
   });
 });
 // define error hander
 app.use((err, req, res, next) => {
   console.log("Server Error: ", err);
   res.status(500).json({
-    error: "Server Error, please try again"
+    error: "Something broke"
   });
 });
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log("app is listening on port: " + PORT);
+  console.log(`api is running at https://localhost:${PORT}`);
 });
