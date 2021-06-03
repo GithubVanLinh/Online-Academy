@@ -19,9 +19,10 @@ module.exports = {
     res.json(feedbacks);
   },
   getCourses: async (req, res, next) => {
-    const {categoryId} = req.query;
+    const { categoryId } = req.query;
+    const page = +req.query.page || 1;
     if (categoryId) {
-      const resl = await CourseService.getCoursesByCategory(categoryId);
+      const resl = await CourseService.getCoursesByCategory(categoryId, page);
       return res.json(resl);
     } else {
       const resl = await CourseService.getCourses();
@@ -32,4 +33,4 @@ module.exports = {
     const tenNewestCourses = await CourseService.getTenNewestCourses();
     res.json(tenNewestCourses);
   }
-}
+};

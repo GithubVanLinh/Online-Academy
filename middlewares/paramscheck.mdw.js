@@ -14,6 +14,7 @@ module.exports = {
         throw new Error("not found course");
       }
     } catch (error) {
+      console.error(error);
       return res.status(404).json({
         "error": "Invalid CourseId"
       })
