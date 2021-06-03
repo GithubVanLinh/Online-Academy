@@ -14,5 +14,9 @@ module.exports = {
       throw new Error(error);
     }
     res.json(result);
+  },
+  getFeaturedCategories: async (req, res, next) => {
+    const featuredCategories = await categoryService.getFeatured();
+    res.json(featuredCategories);
   }
 };

@@ -30,7 +30,8 @@ module.exports = {
     CATEGORY: "Category",
     SECTION: "Section",
     PROGRESS: "Progress",
-    USER: "User"
+    USER: "User",
+    ENROLLMENT: "Enrollment"
   },
 
   URL: {

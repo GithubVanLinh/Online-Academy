@@ -33,6 +33,14 @@ module.exports = {
     const tenNewestCourses = await CourseService.getTenNewestCourses();
     res.json(tenNewestCourses);
   },
+  getMostViewdCourses: async (req, res, next) => {
+    const mostViewdCourses = await CourseService.getTenMostViewedCourse();
+    res.json(mostViewdCourses);
+  },
+  getFeaturedCourses: async (req, res, next) => {
+    const featuredCourses = await CourseService.getTopFeaturedCourses();
+    res.json(featuredCourses);
+  },
   getCourseSameCourseId: async (req, res, next) => {
     const courseId = req.params.courseId;
 
@@ -41,4 +49,4 @@ module.exports = {
     const resl = await CourseService.getCoursesSortBySoldNumber(categoryId)
     res.json(resl.docs);
   }
-};
+}
