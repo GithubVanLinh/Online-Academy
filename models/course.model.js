@@ -80,7 +80,11 @@ const Course = new mongoose.Schema({
     {
       type: mongoose.Types.ObjectId
     }
-  ]
+  ],
+  view: {
+    type: Number,
+    default: 0
+  }
 });
 
 module.exports = mongoose.model(Config.COLLECTION_NAME.COURSE, Course);
