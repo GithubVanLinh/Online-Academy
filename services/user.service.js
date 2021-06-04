@@ -14,6 +14,38 @@ const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
   /**
+   * 
+   * @param {String} userId 
+   * @return {Object} user
+   */
+  findUserById: async (userId) => {
+    return await UserModel.findById(userId).exec();
+  },
+
+  /**
+   * 
+   * @param {String} userId 
+   * @param {Object} newInfo include {fullName, phone, address}
+   * @return {Object} new user info
+   */
+  updateUserInfo: async (userId, newInfo) => {
+    try {
+      return await UserModel.findOneAndUpdate(
+        { _id: userId },
+        { ...newInfo, updatedAt: Date.now() },
+        { new: true }
+      ).select([
+        "fullName",
+        "phone",
+        "address",
+        "updatedAt"
+      ]);
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  /**
    * Add an user to database
    * @param {object} user object user
    * @return {object} user

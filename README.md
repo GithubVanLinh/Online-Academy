@@ -601,3 +601,28 @@ Online Academy Project:
     }
   ]
   ```
+
+### User API
+#### Update user information
+
+- Method: `PATCH /users/:userId`
+- Params: 
+  - userId: a string contains 24 charaters
+- Status Code:
+  - Success: `200`
+  - No content:  `204`
+  - Failure: `400`, `500`
+- Sample:
+
+  ```code
+  http://localhost:8080/users/60b8d2958e620084208eb793
+  ```
+- Success response:
+  ```json
+  {
+    "fullName": "Phan Tan Khoa",
+    "phone": "0937646422",
+    "address": "TP Ho Chi Minh",
+    "updatedAt": "2021-06-03T13:01:03.808Z"
+  }
+  ```

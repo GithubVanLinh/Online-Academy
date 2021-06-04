@@ -8,5 +8,10 @@ const Validator = require("../middlewares/validator.mdw");
 
 
 router.post("/", Validator.validateRequestBody("register_student"), UserController.createNewStudent);
+router.patch("/:userId",
+  Validator.validateRequestBody("update_user_info"),
+  UserController.updateUserInfo
+);
+
 
 module.exports = router;
