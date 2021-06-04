@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const ajv = require("../configs/ajv.config");
 
 const UserModel = require("../models/user.model");
+const CourseModel = require("../models/course.model");
 const CONST = require("../models/constraint");
 const VerifyService = require("./verify.service");
 const jwt = require("jsonwebtoken");
@@ -101,6 +102,40 @@ module.exports = {
       throw Error(error);
     }
     return user;
+  },
+
+  getWishList: async (userId) => {
+    try {
+      const user = await UserModel.findById(userId)
+        .select("wishList").exec();
+      const courseIds = user.wishList;
+      const courses = await CourseModel.find({
+        _id: {
+          $in: courseIds
+        }
+      }).populate([
+        {
+          path: "category",
+          select: "categoryName"
+        },
+        {
+          path: "courseLecturers",
+          select: "fullName"
+        }
+      ]).select([
+        "courseName",
+        "category",
+        "courseLecturers",
+        "ratingPoint",
+        "ratedNumber",
+        "courseImage",
+        "price",
+        "promotionalPrice"
+      ])
+      return courses;
+    } catch (error) {
+      throw Error(error);
+    }
   },
 
   /**

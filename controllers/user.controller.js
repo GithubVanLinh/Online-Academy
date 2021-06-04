@@ -95,5 +95,16 @@ module.exports = {
     res.status(400).json({
       error: "incorrect email or key"
     })
+  },
+
+  getUserWishList: async (req, res, next) => {
+    const userId = req.params.userId;
+    const wishList = await UserService.getWishList(userId);
+    if (wishList) {
+      res.json(wishList);
+    }
+    res.status(400).json({
+      error: "user not found"
+    });
   }
 };

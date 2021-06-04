@@ -33,4 +33,7 @@ router.post("/:userId/verify",
   UserController.verifyAndUpdateEmail
 );
 
+// get wish list
+router.get("/:userId/wishList", UserController.getUserWishList);
+
 module.exports = router;
