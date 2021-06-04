@@ -9,6 +9,7 @@ module.exports = {
     console.log(userId, courseId);
     try {
       const user = await UserService.findUserById(userId);
+      console.log(user);
       const course = await CourseService.getCourseByCourseId(courseId);
       if (user && course) {
         const enrollment = await EnrollmentSevice.createEnrollment(userId, courseId);

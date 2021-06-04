@@ -114,7 +114,9 @@ module.exports = {
 
     const newWishList = await UserService.deleteCoursesFromWishList(userId, courseIds);
     if (newWishList) {
-      return res.json(newWishList);
+      return res.json({
+        wishList: newWishList.wishList
+      });
     }
     res.status(400).json({
       error: "user not found"

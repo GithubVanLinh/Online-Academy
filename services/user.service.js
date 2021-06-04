@@ -7,6 +7,7 @@ const ajv = require("../configs/ajv.config");
 const UserModel = require("../models/user.model");
 const CourseModel = require("../models/course.model");
 const EnrollmentModel = require("../models/enrollment.model");
+const Config = require("../configs/constraints");
 const CONST = require("../models/constraint");
 const VerifyService = require("./verify.service");
 const jwt = require("jsonwebtoken");
@@ -49,7 +50,10 @@ module.exports = {
    * @return {Object} user
    */
   findUserById: async (userId) => {
-    return await UserModel.findById(userId).exec();
+    return await UserModel.findOne({
+      _id: userId,
+      status: Config.ACCOUNT_STATUS.ACTIVE
+    }).exec();
   },
 
   /**
