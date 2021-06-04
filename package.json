@@ -4,7 +4,7 @@
   "description": "This is a online academy, Back-end is Nodejs, Front-End is ReactJs",
   "main": "app.js",
   "scripts": {
-    "test": "mocha 'tests/*.js'",
+    "test": "mocha 'tests/*.js' --timeout 10000",
     "start": "node ./app.js",
     "dev": "nodemon ./app.js",
     "eslint": "eslint ."
@@ -30,7 +30,6 @@
     "express-async-errors": "^3.1.1",
     "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "mocha": "^8.4.0",
     "mongoose": "^5.12.12",
     "mongoose-paginate-v2": "^1.3.18",
     "morgan": "^1.10.0",
@@ -39,8 +38,11 @@
     "randomstring": "^1.2.1"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "eslint": "^7.27.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^8.3.0"
+    "eslint-config-prettier": "^8.3.0",
+    "mocha": "^8.4.0"
   }
 }

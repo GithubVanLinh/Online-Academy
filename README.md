@@ -1,6 +1,9 @@
 # Online Academy
-## About:
-Online Academy Project: 
+
+## About
+
+Online Academy Project:
+
 - Advanced Web Applications Development's Final Project
 - Framework using:
   - Backend: Node.js
@@ -14,15 +17,37 @@ Online Academy Project:
 
 ## Fearture Of This Project
 
-- [Sign In](https://github.com/GithubVanLinh/Online-Academy#sign-in)
-- [Get Course Infomation](https://github.com/GithubVanLinh/Online-Academy#get-course-infomation)
-- [Get Top 5 Are Same With Course](https://github.com/GithubVanLinh/Online-Academy#get-top-5-are-same-with-course)
-- [Get List Lecturer Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-lecturer-of-course)
-- [Get List Feedback Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-feedback-of-course)
-- [Log In API](https://github.com/GithubVanLinh/Online-Academy#log-in-api)
-- [Search API](https://github.com/GithubVanLinh/Online-Academy#search-api)
+- [User API](https://github.com/GithubVanLinh/Online-Academy#user-api)
+  - [Sign In](https://github.com/GithubVanLinh/Online-Academy#sign-up)
+  - [User Log In](https://github.com/GithubVanLinh/Online-Academy#user-log-in)
+  - [User request new accessToken](https://github.com/GithubVanLinh/Online-Academy#user-request-new-accesstoken)
+  - [Update user information](https://github.com/GithubVanLinh/Online-Academy#update-user-information)
+  
+- [Lecturer API](https://github.com/GithubVanLinh/Online-Academy#lecturer-api)
+  - [Lecturer Log In](https://github.com/GithubVanLinh/Online-Academy#lecturer-log-in)
+  - [Lecturer request new accessToken](https://github.com/GithubVanLinh/Online-Academy#lecturer-request-new-accesstoken)
 
-### Sign Up
+- [Course API](https://github.com/GithubVanLinh/Online-Academy#course-api)
+  - [Get Courses](https://github.com/GithubVanLinh/Online-Academy#get-courses)
+  - [Get Courses By CategoryId](https://github.com/GithubVanLinh/Online-Academy#get-courses-by-categoryid)
+  - [Get Course Infomation](https://github.com/GithubVanLinh/Online-Academy#get-course-information)
+  - [Get List Lecturer Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-lecturer-of-course)
+  - [Get List Feedback Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-feedback-of-course)
+- [Search API](https://github.com/GithubVanLinh/Online-Academy#search-api)
+  - [Search By course name](https://github.com/GithubVanLinh/Online-Academy#search-by-course-name)
+  - [Search By category name](https://github.com/GithubVanLinh/Online-Academy#search-by-category-name)
+- [Category API](https://github.com/GithubVanLinh/Online-Academy#category-api)
+  - [Get all categories](https://github.com/GithubVanLinh/Online-Academy#get-all-categories)
+- [Statistic API](https://github.com/GithubVanLinh/Online-Academy#statistic-api)
+  - [Get Top 5 Are Same With Course](https://github.com/GithubVanLinh/Online-Academy#get-top-5-are-same-with-course)
+  - [Get 10 newest courses](https://github.com/GithubVanLinh/Online-Academy#get-10-newest-courses)
+  - [Get 10 most viewed courses](https://github.com/GithubVanLinh/Online-Academy#get-10-most-viewed-courses)
+  - [Get 3 featured course of the week](https://github.com/GithubVanLinh/Online-Academy#get-3-featured-course-of-the-week)
+  - [Get list of featured category of the week](https://github.com/GithubVanLinh/Online-Academy#get-list-of-featured-category-of-the-week)
+
+### User API
+
+#### Sign Up
 
 - Method: `POST /users`
 - Status Code:
@@ -65,13 +90,126 @@ Online Academy Project:
 
   ```json
   {
-    "error": "error string"
+    "error-string": "error string"
   }
   ```
 
-### Get Courses
+#### User Log In
+
+- Method: `POST /auth/login`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - username
+  - password
+- Sample:
+
+  ```code
+  curl --location --request POST 'localhost:8080/auth/login'
+  --header 'Content-Type: application/json' 
+  --data-raw '{
+  "username":"<username>",
+  "password":"<password>"
+  }'
+  ```
+
+#### User request new accessToken
+
+- Method: `POST /auth/refresh`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - accessToken
+  - refreshToken
+- Sample:
+
+  ```code
+  curl --location --request POST 'localhost:8080/auth/refresh' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "accessToken":"<your-access-token>",
+  "refreshToken":"<your-refresh-token>"
+  }'
+  ```
+  
+#### Update user information
+
+- Method: `PATCH /users/:userId`
+- Params: 
+  - userId: a string contains 24 charaters
+- Status Code:
+  - Success: `200`
+  - No content:  `204`
+  - Failure: `400`, `500`
+- Sample:
+
+  ```code
+  http://localhost:8080/users/60b8d2958e620084208eb793
+  ```
+
+- Success response:
+
+  ```json
+  {
+    "fullName": "Phan Tan Khoa",
+    "phone": "0937646422",
+    "address": "TP Ho Chi Minh",
+    "updatedAt": "2021-06-03T13:01:03.808Z"
+  }
+  ```
+
+### Lecturer API
+
+#### Lecturer Log In
+
+- Method: `POST /lecturers/login`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - username
+  - password
+- Sample:
+
+  ```code
+  curl --location --request POST 'localhost:8080/lecturers/login' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "username": "robpercival",
+  "password": "123456"
+  }'
+  ```
+
+#### Lecturer request new accessToken
+
+- Method: `POST /lecturers/refresh`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - accessToken
+  - refreshToken
+- Sample:
+
+  ```code
+  curl --location --request POST 'localhost:8080/lecturers/refresh' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "accessToken":"<your-access-token>",
+  "refreshToken":"<your-refresh-token>"
+  }'
+  ```
+  
+### Course API
+
+#### Get Courses
 
 - Method: `GET /courses`
+- Query:
+  - `categoryId`: search course by categoryId
+  - `page`: page number. Eachpage limit 5 result
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -108,7 +246,15 @@ Online Academy Project:
   ]
   ```
 
-### Get Courses By CategoryId
+- Failure Response Body Example
+
+  ```json
+  {
+    "error-string": "error string"
+  }
+  ```
+
+#### Get Courses By CategoryId
 
 - Method: `GET /courses`
 - Query: `categoryId` = categoryId
@@ -192,7 +338,15 @@ Online Academy Project:
   }
   ```
 
-### Get Course Information
+- Failure Response Body Example
+
+  ```json
+  {
+    "error-string": "error string"
+  }
+  ```
+
+#### Get Course Information
 
 - Method: `Get /courses/:courseId`
 - Status Code:
@@ -229,14 +383,140 @@ Online Academy Project:
 
   ```json
   {
-    "error": "error string"
+    "error-string": "error string"
   }
   ```
 
-### Get Top 5 Are Same With Course
+#### Get List Lecturer Of Course
+
+- Method: `GET /courses/:courseId/lecturers`
+- Status Code:
+
+  - Success: `200`
+  - Failure: `400`
+
+- Success Response Body Example
+
+  ```json
+  [
+    {
+      "_id": "60b5f74bf17578e8c643fea3",
+      "username": "string",
+      "password": "string",
+      "fullName": "string",
+      "email": "string",
+      "avatar": "string (url)",
+      "address": "string",
+      "createdAt": { "$date": "2021-05-30T05:08:57.918Z" },
+      "updatedAt": { "$date": "2021-05-30T05:08:57.918Z" },
+      "status": "PENDING | ACTIVE | DELETED",
+      "phone": "string",
+      "description": "string -> about me",
+      "teachingCourses": [
+        { "_id": "000000000000000000000000" },
+        { "_id": "111111111111111111111111" }
+      ]
+    },
+    {
+      /*...*/
+    }
+  ]
+  ```
+
+- Failure Response Body Example
+
+  ```json
+  {
+    "error-string": "error string"
+  }
+  ```
+
+#### Get List Feedback Of Course
+
+- Method: `GET /courses/:courseId/feedbacks`
+- Status Code:
+
+  - Success: `200`
+  - Failure: `400`
+
+- Success Response Body Example
+
+  ```json
+  [
+    {
+      "_id": "60b5ba2925c3608c61d17954",
+      "userId": "111111111111111111111111",
+      "content": "string",
+      "ratingPoint": "integer",
+      "createdAt": "datetime"
+    },
+    {
+      /*...*/
+    }
+  ]
+  ```
+
+- Failure Response Body Example
+
+  ```json
+  {
+    "error-string": "error string"
+  }
+  ```
+
+### Search API
+
+#### Search By course name
+
+- Method: `GET /api/search/course`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Params:
+  - keyword
+  - page
+  - sortBy: ratingDesc / priceAsc
+- Sample:
+
+  ```code
+  curl --location --request GET 'localhost:8080/api/search/course?keyword=react'
+  ```
+
+#### Search By category name
+
+- Method: `GET /api/search/byCategory`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Params:
+  - keyword
+  - page
+  - sortBy: ratingDesc / priceAsc
+- Sample:
+
+  ```code
+  curl --location --request GET 'localhost:8080/api/search/byCategory?keyword=react'
+  ```
+
+### Category API
+
+#### Get all categories
+
+- Method: `GET /categories`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+
+  ```code
+  http://localhost:8080/categories
+  ```
+
+### Statistic API
+
+#### Get Top 5 Are Same With Course
 
 - Method: `GET /statistics/same-course/:courseId`
-- Query: `count`= 5
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -277,199 +557,9 @@ Online Academy Project:
 
   ```json
   {
-    "error": "error string"
+    "error-string": "error string"
   }
   ```
-
-### Get List Lecturer Of Course
-
-- Method: `GET /courses/:courseId/lecturers`
-- Status Code:
-
-  - Success: `200`
-  - Failure: `400`
-
-- Success Response Body Example
-
-  ```json
-  [
-    {
-      "_id": "60b5f74bf17578e8c643fea3",
-      "username": "string",
-      "password": "string",
-      "fullName": "string",
-      "email": "string",
-      "avatar": "string (url)",
-      "address": "string",
-      "createdAt": { "$date": "2021-05-30T05:08:57.918Z" },
-      "updatedAt": { "$date": "2021-05-30T05:08:57.918Z" },
-      "status": "PENDING | ACTIVE | DELETED",
-      "phone": "string",
-      "description": "string -> about me",
-      "teachingCourses": [
-        { "_id": "000000000000000000000000" },
-        { "_id": "111111111111111111111111" }
-      ]
-    },
-    {
-      /*...*/
-    }
-  ]
-  ```
-
-- Failure Response Body Example
-
-  ```json
-  {
-    "error": "error string"
-  }
-  ```
-
-### Get List Feedback Of Course
-
-- Method: `GET /courses/:courseId/feedbacks`
-- Status Code:
-
-  - Success: `200`
-  - Failure: `400`
-
-- Success Response Body Example
-
-  ```json
-  [
-    {
-      "_id": "60b5ba2925c3608c61d17954",
-      "userId": "111111111111111111111111",
-      "content": "string",
-      "ratingPoint": "integer",
-      "createdAt": "datetime"
-    },
-    {
-      /*...*/
-    }
-  ]
-  ```
-
-- Failure Response Body Example
-
-  ```json
-  {
-    "error": "error string"
-  }
-  ```
-### Log In API
-#### User Log In
-- Method: `POST /auth/login`
-- Status Code:
-  - Success: `200`
-  - Failure: `400`
-- Body:
-  - username
-  - password
-- Sample:
-  ```code
-  curl --location --request POST 'localhost:8080/auth/login'
-  --header 'Content-Type: application/json' 
-  --data-raw '{
-  "username":"<username>",
-  "password":"<password>"
-  }'
-  ```
-#### User request new accessToken
-- Method: `POST /auth/refresh`
-- Status Code:
-  - Success: `200`
-  - Failure: `400`
-- Body:
-  - accessToken
-  - refreshToken
-- Sample:
-  ```code
-  curl --location --request POST 'localhost:8080/auth/refresh' \
-  --header 'Content-Type: application/json' \
-  --data-raw '{
-  "accessToken":"<your-access-token>",
-  "refreshToken":"<your-refresh-token>"
-  }'
-  ```
-#### Lecturer Log In
-- Method: `POST /lecturers/login`
-- Status Code:
-  - Success: `200`
-  - Failure: `400`
-- Body:
-  - username
-  - password
-- Sample:
-  ```code
-  curl --location --request POST 'localhost:8080/lecturers/login' \
-  --header 'Content-Type: application/json' \
-  --data-raw '{
-  "username": "robpercival",
-  "password": "123456"
-  }'
-  ```
-#### Lecturer request new accessToken
-- Method: `POST /lecturers/refresh`
-- Status Code:
-  - Success: `200`
-  - Failure: `400`
-- Body:
-  - accessToken
-  - refreshToken
-- Sample:
-  ```code
-  curl --location --request POST 'localhost:8080/lecturers/refresh' \
-  --header 'Content-Type: application/json' \
-  --data-raw '{
-  "accessToken":"<your-access-token>",
-  "refreshToken":"<your-refresh-token>"
-  }'
-  ```
-
-### Search API
-#### By course name
-- Method: `GET /api/search/course`
-- Status Code:
-  - Success: `200`
-  - Failure: `400`
-- Params:
-  - keyword
-  - page
-  - sortBy: ratingDesc / priceAsc
-- Sample:
-  ```code
-  curl --location --request GET 'localhost:8080/api/search/course?keyword=react'
-  ```
-#### By category
-- Method: `GET /api/search/byCategory`
-- Status Code:
-  - Success: `200`
-  - Failure: `400`
-- Params:
-  - keyword
-  - page
-  - sortBy: ratingDesc / priceAsc
-- Sample:
-  ```code
-  curl --location --request GET 'localhost:8080/api/search/byCategory?keyword=react'
-  ```
-
-### Category API
-
-#### Get all categories
-
-- Method: `GET /categories`
-- Status Code:
-  - Success: `200`
-  - Failure: `400`
-- Sample:
-
-  ```code
-  http://localhost:8080/categories
-  ```
-
-### Course API
 
 #### Get 10 newest courses
 
@@ -482,7 +572,9 @@ Online Academy Project:
   ```code
   http://localhost:8080/courses/newestCourses
   ```
+
 - Success response:
+
   ```json
   [
     {
@@ -508,6 +600,7 @@ Online Academy Project:
     }
   ]
   ```
+
 #### Get 10 most viewed courses
 
 - Method: `GET /courses/mostViewedCourses`
@@ -519,7 +612,9 @@ Online Academy Project:
   ```code
   http://localhost:8080/courses/mostViewedCourses
   ```
+
 - Success response:
+  
   ```json
   [
     {
@@ -545,6 +640,7 @@ Online Academy Project:
     }
   ]
   ```
+
 #### Get 3 featured course of the week
 
 - Method: `GET /courses/featuredCourses`
@@ -556,7 +652,9 @@ Online Academy Project:
   ```code
   http://localhost:8080/courses/featuredCourses
   ```
+
 - Success response:
+
   ```json
   [
     {
@@ -592,7 +690,9 @@ Online Academy Project:
   ```code
   http://localhost:8080/categories/featuredCategories
   ```
+
 - Success response:
+
   ```json
   [
     {
