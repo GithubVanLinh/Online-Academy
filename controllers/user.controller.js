@@ -108,15 +108,27 @@ module.exports = {
     });
   },
 
-  deleteUserWishList: async (req, res, next) => {
+  deleteUserCoursesFromWishList: async (req, res, next) => {
     const userId = req.params.userId;
     const courseIds = req.body.courseIds;
 
-    const newWishList = await UserService.deleteWishList(userId, courseIds);
+    const newWishList = await UserService.deleteCoursesFromWishList(userId, courseIds);
     if (newWishList) {
-      res.json(newWishList);
+      return res.json(newWishList);
     }
-    return res.status(400).json({
+    res.status(400).json({
+      error: "user not found"
+    });
+  },
+
+  getUserRegisteredList: async (req, res, next) => {
+    const userId = req.params.userId;
+    const registeredList = await UserService.getRegisteredList(userId);
+    if (registeredList) {
+      const ret = registeredList.map(e => e.courseId);
+      return res.json(ret);
+    }
+    res.status(400).json({
       error: "user not found"
     });
   }
