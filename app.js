@@ -45,5 +45,7 @@ app.use((err, req, res, next) => {
 });
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`api is running at https://localhost:${PORT}`);
+  console.log(`${process.env.NODE_ENV} api is running at https://localhost:${PORT}`);
 });
+
+module.exports = app;
