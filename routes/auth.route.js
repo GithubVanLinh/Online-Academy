@@ -8,4 +8,5 @@ const AuthController = require("../controllers/auth.controller");
 
 router.post("/verify", Validator.validateRequestBody("validate_student"), AuthController.verifyUser);
 router.post("/login", Validator.validateRequestBody("login"), AuthController.login);
+router.post("/refresh", AuthController.refreshAcToken);
 module.exports = router;
