@@ -10,9 +10,7 @@ const VerifyService = require("./verify.service");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
 
-
 const salt = bcrypt.genSaltSync(10);
-
 
 module.exports = {
   /**

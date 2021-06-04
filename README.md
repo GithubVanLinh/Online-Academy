@@ -1,6 +1,14 @@
 # Online Academy
-
-This is a online academy, Back-end is Nodejs, Front-End is ReactJs
+## About:
+Online Academy Project: 
+- Advanced Web Applications Development's Final Project
+- Framework using:
+  - Backend: Node.js
+  - Frontend: React
+- Team members:
+  - 1712537 - Phan Tấn Khoa
+  - 1712541 - Đinh Gia Kiệt
+  - 1712565 - Võ Văn Lình
 
 ---
 
@@ -11,6 +19,8 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
 - [Get Top 5 Are Same With Course](https://github.com/GithubVanLinh/Online-Academy#get-top-5-are-same-with-course)
 - [Get List Lecturer Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-lecturer-of-course)
 - [Get List Feedback Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-feedback-of-course)
+- [Log In API](https://github.com/GithubVanLinh/Online-Academy#log-in-api)
+- [Search API](https://github.com/GithubVanLinh/Online-Academy#search-api)
 
 ### Sign Up
 
@@ -347,13 +357,79 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
     "error": "error string"
   }
   ```
+### Log In API
+#### User Log In
+- Method: `POST /auth/login`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - username
+  - password
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/auth/login'
+  --header 'Content-Type: application/json' 
+  --data-raw '{
+  "username":"<username>",
+  "password":"<password>"
+  }'
+  ```
+#### User request new accessToken
+- Method: `POST /auth/refresh`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - accessToken
+  - refreshToken
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/auth/refresh' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "accessToken":"<your-access-token>",
+  "refreshToken":"<your-refresh-token>"
+  }'
+  ```
+#### Lecturer Log In
+- Method: `POST /lecturers/login`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - username
+  - password
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/lecturers/login' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "username": "robpercival",
+  "password": "123456"
+  }'
+  ```
+#### Lecturer request new accessToken
+- Method: `POST /lecturers/refresh`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - accessToken
+  - refreshToken
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/lecturers/refresh' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "accessToken":"<your-access-token>",
+  "refreshToken":"<your-refresh-token>"
+  }'
+  ```
 
 ### Search API
-
 #### By course name
-
 - Method: `GET /api/search/course`
-
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -361,14 +437,11 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
   - keyword
   - page
   - sortBy: ratingDesc / priceAsc
-- Sample:  
-
+- Sample:
   ```code
-  localhost:8080/api/search/course/?keyword=react
+  curl --location --request GET 'localhost:8080/api/search/course?keyword=react'
   ```
-
 #### By category
-
 - Method: `GET /api/search/byCategory`
 - Status Code:
   - Success: `200`
@@ -378,10 +451,8 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
   - page
   - sortBy: ratingDesc / priceAsc
 - Sample:
-
   ```code
-  http://localhost:8080/api/search/byCategory?keyword=react
-
+  curl --location --request GET 'localhost:8080/api/search/byCategory?keyword=react'
   ```
 
 ### Category API
@@ -530,10 +601,11 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
     }
   ]
   ```
+
 ### User API
 #### Update user information
 
-- Method: `GET /users/:userId`
+- Method: `PATCH /users/:userId`
 - Params: 
   - userId: a string contains 24 charaters
 - Status Code:
