@@ -4,7 +4,7 @@
   "description": "This is a online academy, Back-end is Nodejs, Front-End is ReactJs",
   "main": "app.js",
   "scripts": {
-    "test": "mocha 'tests/*.js' --timeout 60000",
+    "test": "mocha 'tests/*.js' --delay --timeout 30000",
     "start": "node ./app.js",
     "dev": "nodemon ./app.js",
     "eslint": "eslint ."
