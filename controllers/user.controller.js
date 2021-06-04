@@ -45,7 +45,7 @@ module.exports = {
           return res.json(newUser);
         } else {
           return res.status(400).json({
-            error_message: "Incorrect password"
+            error: "Incorrect password"
           });
         }
       }
@@ -53,7 +53,47 @@ module.exports = {
       console.log(error);
     }
     res.status(400).json({
-      error_message: "User not found"
+      error: "User not found"
     });
+  },
+
+  makeEmailVerification: async (req, res, next) => {
+    const email = req.body.email;
+    const userId = req.params.userId;
+
+    try {
+      const user = await UserService.findUserById(userId);
+      console.log(user);
+      if (user) {
+        const verification = await UserService.makeChangeEmailVerification(email);
+        if (verification) {
+          return res.json({
+            message: "verify your email"
+          })
+        } else {
+          return res.status(400).json({
+            error: "email is already taken"
+          })
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({
+        error: "user not found"
+      })
+    }
+  },
+
+  verifyAndUpdateEmail: async (req, res, next) => {
+    const userId = req.params.userId;
+    const { email, key } = req.body;
+
+    const updatedUser = await UserService.verifyEmail(userId, email, key);
+    if (updatedUser) {
+      return res.json(updatedUser);
+    }
+    res.status(400).json({
+      error: "incorrect email or key"
+    })
   }
 };

@@ -21,4 +21,16 @@ router.patch("/:userId/password",
   UserController.updateUserPassword
 );
 
+// change user email
+router.post("/:userId/email",
+  Validator.validateRequestBody("update_user_email"),
+  UserController.makeEmailVerification
+);
+
+// verify change email
+router.post("/:userId/verify",
+  Validator.validateRequestBody("validate_student"),
+  UserController.verifyAndUpdateEmail
+);
+
 module.exports = router;

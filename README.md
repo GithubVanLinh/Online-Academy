@@ -650,3 +650,60 @@ Online Academy Project:
     "password": "$2a$10$f4CzzqFuHOJJkk6YrpigXuJEdswzj0U.XprYl.dmNEGn06abrqV3S"
   }
   ```
+#### Create change user email verification
+
+- Method: `POST /users/:userId/email`
+- Params: 
+  - userId: a string contains 24 charaters
+- Body: 
+  - email
+- Status Code:
+  - Success: `200`
+  - Failure: `400`, `500`
+- Sample:
+
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/email
+  ```
+- Success response:
+  ```json
+  {
+    "message": "verify your email"
+  }
+  ```
+- Failed response: 
+  ```json
+  {
+    "error": "email is already taken"
+  }
+  ```
+#### Verify email to change user email
+
+- Method: `POST /users/:userId/verify`
+- Params: 
+  - userId: a string contains 24 charaters
+- Body: 
+  - email
+  - key
+- Status Code:
+  - Success: `200`
+  - Failure: `400`, `500`
+- Sample:
+
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/verify
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60b9d65d0ab2a19495ec1211",
+    "email": "dinhtugl@gmail.com",
+    "updatedAt": "2021-06-04T09:54:05.215Z"
+  }
+  ```
+- Failed response: 
+  ```json
+  {
+    "error": "incorrect email or key"
+  }
+  ```

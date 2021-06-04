@@ -73,6 +73,36 @@ module.exports = {
     }
   },
 
+  makeChangeEmailVerification: async (newEmail) => {
+    try {
+      const isValidEmail = await checkEmailExists(newEmail);
+      if (isValidEmail) {
+        const verification = await VerifyService.createNewValidateRequestV2(newEmail);
+        return verification;
+      }
+      return null;
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  verifyEmail: async (userId, email, key) => {
+    let user = null;
+    try {
+      const result = await VerifyService.validateUser(email, key);
+      if (result === true) {
+        user = await UserModel.findOneAndUpdate(
+          { _id: userId },
+          { email: email, updatedAt: Date.now() },
+          { new: true }
+        ).select(["email", "updatedAt"]);
+      }
+    } catch (error) {
+      throw Error(error);
+    }
+    return user;
+  },
+
   /**
    * Add an user to database
    * @param {object} user object user
@@ -230,6 +260,24 @@ async function checkValidEmail(user) {
   }
   return false;
 }
+
+/**
+ * 
+ * @param {string} email 
+ * @return {bool}
+ */
+async function checkEmailExists(email) {
+  try {
+    const result = await UserModel.findOne({ email: email }).exec();
+    if (!result) {
+      return true;
+    }
+  } catch (error) {
+    throw Error(error);
+  }
+  return false
+}
+
 /**
  * Check valid rfToken by userId
  * @param {string} userId userId

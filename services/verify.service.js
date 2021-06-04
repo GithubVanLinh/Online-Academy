@@ -27,6 +27,28 @@ module.exports = {
     return result;
   },
 
+  createNewValidateRequestV2: async (email) => {
+    const validator = await checkEmailValidateRequestIsExists(email);
+    let key;
+    let result = null;
+    if (validator) {
+      key = validator.key;
+      result = {...validator};
+    } else {
+      key = generateVerifyCode(10);
+      result = await VerifyModel.create({
+        email: email,
+        key: key
+      });
+    }
+    const succ = await sendVerifyMail(email, key);
+    if (!succ) {
+      console.log("send verify email failed");
+      throw Error(`Can not send verify email to ${email}`);
+    }
+    return result;
+  },
+
   validateUser: async (email, key) => {
     if (checkKeyValidUser(email, key)) {
       const filter = {
