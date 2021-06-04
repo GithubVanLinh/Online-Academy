@@ -14,6 +14,34 @@ const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
   /**
+ * 
+ * @param {String} password text password
+ * @param {String} hashPassword hash password
+ * @return {Boolean} true or false
+ */
+  verifyPassword: async (password, hashPassword) => {
+    try {
+      return await bcrypt.compare(password, hashPassword);
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
+
+  updatePassword: async (userId, newPassword) => {
+    try {
+      const hashPassword = await bcrypt.hash(newPassword, salt);
+      return await UserModel.findOneAndUpdate(
+        { _id: userId },
+        { password: hashPassword, updatedAt: Date.now() },
+        { new: true }
+      ).select(["username", "password"]);
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  /**
    * 
    * @param {String} userId 
    * @return {Object} user
@@ -43,6 +71,36 @@ module.exports = {
     } catch (error) {
       throw Error(error);
     }
+  },
+
+  makeChangeEmailVerification: async (newEmail) => {
+    try {
+      const isValidEmail = await checkEmailExists(newEmail);
+      if (isValidEmail) {
+        const verification = await VerifyService.createNewValidateRequestV2(newEmail);
+        return verification;
+      }
+      return null;
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  verifyEmail: async (userId, email, key) => {
+    let user = null;
+    try {
+      const result = await VerifyService.validateUser(email, key);
+      if (result === true) {
+        user = await UserModel.findOneAndUpdate(
+          { _id: userId },
+          { email: email, updatedAt: Date.now() },
+          { new: true }
+        ).select(["email", "updatedAt"]);
+      }
+    } catch (error) {
+      throw Error(error);
+    }
+    return user;
   },
 
   /**
@@ -202,6 +260,24 @@ async function checkValidEmail(user) {
   }
   return false;
 }
+
+/**
+ * 
+ * @param {string} email 
+ * @return {bool}
+ */
+async function checkEmailExists(email) {
+  try {
+    const result = await UserModel.findOne({ email: email }).exec();
+    if (!result) {
+      return true;
+    }
+  } catch (error) {
+    throw Error(error);
+  }
+  return false
+}
+
 /**
  * Check valid rfToken by userId
  * @param {string} userId userId

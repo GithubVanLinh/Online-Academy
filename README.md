@@ -701,3 +701,109 @@ Online Academy Project:
     }
   ]
   ```
+
+### User API
+#### Update user information
+
+- Method: `PATCH /users/:userId`
+- Params: 
+  - userId: a string contains 24 charaters
+- Status Code:
+  - Success: `200`
+  - No content:  `204`
+  - Failure: `400`, `500`
+- Sample:
+
+  ```code
+  http://localhost:8080/users/60b8d2958e620084208eb793
+  ```
+- Success response:
+  ```json
+  {
+    "fullName": "Phan Tan Khoa",
+    "phone": "0937646422",
+    "address": "TP Ho Chi Minh",
+    "updatedAt": "2021-06-03T13:01:03.808Z"
+  }
+  ```
+#### Change user password
+
+- Method: `PATCH /users/:userId/password`
+- Params: 
+  - userId: a string contains 24 charaters
+- Body: 
+  - currentPassword
+  - newPassword
+- Status Code:
+  - Success: `200`
+  - Failure: `400`, `500`
+- Sample:
+
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/password
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60b9d65d0ab2a19495ec1211",
+    "username": "giakiet99",
+    "password": "$2a$10$f4CzzqFuHOJJkk6YrpigXuJEdswzj0U.XprYl.dmNEGn06abrqV3S"
+  }
+  ```
+#### Create change user email verification
+
+- Method: `POST /users/:userId/email`
+- Params: 
+  - userId: a string contains 24 charaters
+- Body: 
+  - email
+- Status Code:
+  - Success: `200`
+  - Failure: `400`, `500`
+- Sample:
+
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/email
+  ```
+- Success response:
+  ```json
+  {
+    "message": "verify your email"
+  }
+  ```
+- Failed response: 
+  ```json
+  {
+    "error": "email is already taken"
+  }
+  ```
+#### Verify email to change user email
+
+- Method: `POST /users/:userId/verify`
+- Params: 
+  - userId: a string contains 24 charaters
+- Body: 
+  - email
+  - key
+- Status Code:
+  - Success: `200`
+  - Failure: `400`, `500`
+- Sample:
+
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/verify
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60b9d65d0ab2a19495ec1211",
+    "email": "dinhtugl@gmail.com",
+    "updatedAt": "2021-06-04T09:54:05.215Z"
+  }
+  ```
+- Failed response: 
+  ```json
+  {
+    "error": "incorrect email or key"
+  }
+  ```

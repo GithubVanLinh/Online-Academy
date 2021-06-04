@@ -28,5 +28,72 @@ module.exports = {
       console.log(error);
     }
     res.status(204).end();
+  },
+
+  updateUserPassword: async (req, res, next) => {
+    const userId = req.params.userId;
+    const { currentPassword, newPassword } = req.body;
+    console.log("Current password: " + currentPassword);
+    console.log("New password: " + newPassword);
+
+    try {
+      const user = await UserService.findUserById(userId);
+      if (user) {
+        const ret = await UserService.verifyPassword(currentPassword, user.password);
+        if (ret) {
+          const newUser = await UserService.updatePassword(user._id, newPassword);
+          return res.json(newUser);
+        } else {
+          return res.status(400).json({
+            error: "Incorrect password"
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    res.status(400).json({
+      error: "User not found"
+    });
+  },
+
+  makeEmailVerification: async (req, res, next) => {
+    const email = req.body.email;
+    const userId = req.params.userId;
+
+    try {
+      const user = await UserService.findUserById(userId);
+      console.log(user);
+      if (user) {
+        const verification = await UserService.makeChangeEmailVerification(email);
+        if (verification) {
+          return res.json({
+            message: "verify your email"
+          })
+        } else {
+          return res.status(400).json({
+            error: "email is already taken"
+          })
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({
+        error: "user not found"
+      })
+    }
+  },
+
+  verifyAndUpdateEmail: async (req, res, next) => {
+    const userId = req.params.userId;
+    const { email, key } = req.body;
+
+    const updatedUser = await UserService.verifyEmail(userId, email, key);
+    if (updatedUser) {
+      return res.json(updatedUser);
+    }
+    res.status(400).json({
+      error: "incorrect email or key"
+    })
   }
 };
