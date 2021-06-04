@@ -14,15 +14,21 @@ Online Academy Project:
 
 ## Fearture Of This Project
 
-- [Sign In](https://github.com/GithubVanLinh/Online-Academy#sign-in)
-- [Get Course Infomation](https://github.com/GithubVanLinh/Online-Academy#get-course-infomation)
-- [Get Top 5 Are Same With Course](https://github.com/GithubVanLinh/Online-Academy#get-top-5-are-same-with-course)
-- [Get List Lecturer Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-lecturer-of-course)
-- [Get List Feedback Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-feedback-of-course)
-- [Log In API](https://github.com/GithubVanLinh/Online-Academy#log-in-api)
+- [User API](https://github.com/GithubVanLinh/Online-Academy#user-api)
+  - [Sign In](https://github.com/GithubVanLinh/Online-Academy#sign-up)
+  
+- [Course API](https://github.com/GithubVanLinh/Online-Academy#course-api)
+  - [Get Course Infomation](https://github.com/GithubVanLinh/Online-Academy#get-course-information)
+  - [Get List Lecturer Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-lecturer-of-course)
+  - [Get List Feedback Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-feedback-of-course)
+- [Statistic API](https://github.com/GithubVanLinh/Online-Academy#statistic-api)
+  - [Get Top 5 Are Same With Course](https://github.com/GithubVanLinh/Online-Academy#get-top-5-are-same-with-course)
 - [Search API](https://github.com/GithubVanLinh/Online-Academy#search-api)
+- [Category API](https://github.com/GithubVanLinh/Online-Academy#category-api)
 
-### Sign Up
+### User API
+
+#### Sign Up
 
 - Method: `POST /users`
 - Status Code:
@@ -65,11 +71,13 @@ Online Academy Project:
 
   ```json
   {
-    "error": "error string"
+    "error-string": "error string"
   }
   ```
 
-### Get Courses
+### Course API
+
+#### Get Courses
 
 - Method: `GET /courses`
 - Status Code:
@@ -108,7 +116,7 @@ Online Academy Project:
   ]
   ```
 
-### Get Courses By CategoryId
+#### Get Courses By CategoryId
 
 - Method: `GET /courses`
 - Query: `categoryId` = categoryId
@@ -192,7 +200,7 @@ Online Academy Project:
   }
   ```
 
-### Get Course Information
+#### Get Course Information
 
 - Method: `Get /courses/:courseId`
 - Status Code:
@@ -229,59 +237,11 @@ Online Academy Project:
 
   ```json
   {
-    "error": "error string"
+    "error-string": "error string"
   }
   ```
 
-### Get Top 5 Are Same With Course
-
-- Method: `GET /statistics/same-course/:courseId`
-- Query: `count`= 5
-- Status Code:
-  - Success: `200`
-  - Failure: `400`
-- Success Response Body Example
-
-  ```json
-  [
-    {
-      "_id": "60b5b8d325c3608c61d1794f",
-      "courseName": "Lập trình di động với React Native",
-      "courseImage": "url(string)",
-      "courseLecturers": [
-        "000000000000000000000000",
-        "111111111111111111111111"
-      ],
-      "category": "60b61000183b6963bcb401e6",
-      "price": "number",
-      "promotionalPrice": "number",
-      "briefDescription": "string",
-      "detailDescription": "string",
-      "soldNumber": "number",
-      "ratedNumber": "number",
-      "lessionNumber": "number",
-      "totalHours": "number",
-      "ratingPoint": "number",
-      "status": "INCOMPLETE | COMPLETED | DELETED",
-      "createdAt": "date",
-      "updatedAt": "date",
-      "feedbacks": ["000000000000000000000000", "111111111111111111111111"]
-    },
-    {
-      /*...*/
-    }
-  ]
-  ```
-
-- Failure Response Body Example
-
-  ```json
-  {
-    "error": "error string"
-  }
-  ```
-
-### Get List Lecturer Of Course
+#### Get List Lecturer Of Course
 
 - Method: `GET /courses/:courseId/lecturers`
 - Status Code:
@@ -321,11 +281,11 @@ Online Academy Project:
 
   ```json
   {
-    "error": "error string"
+    "error-string": "error string"
   }
   ```
 
-### Get List Feedback Of Course
+#### Get List Feedback Of Course
 
 - Method: `GET /courses/:courseId/feedbacks`
 - Status Code:
@@ -354,7 +314,7 @@ Online Academy Project:
 
   ```json
   {
-    "error": "error string"
+    "error-string": "error string"
   }
   ```
 ### Log In API
@@ -469,7 +429,54 @@ Online Academy Project:
   http://localhost:8080/categories
   ```
 
-### Course API
+### Statistic API
+
+#### Get Top 5 Are Same With Course
+
+- Method: `GET /statistics/same-course/:courseId`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Success Response Body Example
+
+  ```json
+  [
+    {
+      "_id": "60b5b8d325c3608c61d1794f",
+      "courseName": "Lập trình di động với React Native",
+      "courseImage": "url(string)",
+      "courseLecturers": [
+        "000000000000000000000000",
+        "111111111111111111111111"
+      ],
+      "category": "60b61000183b6963bcb401e6",
+      "price": "number",
+      "promotionalPrice": "number",
+      "briefDescription": "string",
+      "detailDescription": "string",
+      "soldNumber": "number",
+      "ratedNumber": "number",
+      "lessionNumber": "number",
+      "totalHours": "number",
+      "ratingPoint": "number",
+      "status": "INCOMPLETE | COMPLETED | DELETED",
+      "createdAt": "date",
+      "updatedAt": "date",
+      "feedbacks": ["000000000000000000000000", "111111111111111111111111"]
+    },
+    {
+      /*...*/
+    }
+  ]
+  ```
+
+- Failure Response Body Example
+
+  ```json
+  {
+    "error-string": "error string"
+  }
+  ```
 
 #### Get 10 newest courses
 
@@ -482,7 +489,9 @@ Online Academy Project:
   ```code
   http://localhost:8080/courses/newestCourses
   ```
+
 - Success response:
+
   ```json
   [
     {
@@ -508,6 +517,7 @@ Online Academy Project:
     }
   ]
   ```
+
 #### Get 10 most viewed courses
 
 - Method: `GET /courses/mostViewedCourses`
@@ -519,7 +529,9 @@ Online Academy Project:
   ```code
   http://localhost:8080/courses/mostViewedCourses
   ```
+
 - Success response:
+  
   ```json
   [
     {
@@ -545,6 +557,7 @@ Online Academy Project:
     }
   ]
   ```
+
 #### Get 3 featured course of the week
 
 - Method: `GET /courses/featuredCourses`
@@ -556,7 +569,9 @@ Online Academy Project:
   ```code
   http://localhost:8080/courses/featuredCourses
   ```
+
 - Success response:
+
   ```json
   [
     {
@@ -592,7 +607,9 @@ Online Academy Project:
   ```code
   http://localhost:8080/categories/featuredCategories
   ```
+
 - Success response:
+
   ```json
   [
     {
@@ -650,3 +667,4 @@ Online Academy Project:
     "password": "$2a$10$f4CzzqFuHOJJkk6YrpigXuJEdswzj0U.XprYl.dmNEGn06abrqV3S"
   }
   ```
+  

@@ -22,19 +22,24 @@ module.exports = {
 
   checkCategoryId: async (req, res, next) => {
     const categoryId = req.query.categoryId;
-    try {
-      const category = await CategoryService.getCategoryByCategoryId(
-        categoryId
-      );
-      if (category != null) {
-        return next();
-      } else {
-        throw new Error("not found category");
+    if (categoryId){
+      try {
+        const category = await CategoryService.getCategoryByCategoryId(
+          categoryId
+        );
+        if (category != null) {
+          return next();
+        } else {
+          throw new Error("not found category");
+        }
+      } catch (error) {
+        return res.status(404).json({
+          error: "Invalid categoryId"
+        });
       }
-    } catch (error) {
-      return res.status(404).json({
-        error: "Invalid categoryId"
-      });
+    } else {
+      return next();
     }
+    
   }
 };

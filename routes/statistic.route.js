@@ -7,6 +7,6 @@ const paramsValidate = require("../middlewares/paramscheck.mdw");
 
 const CourseController = require("../controllers/course.controller");
 
-router.get("/same/:courseId", paramsValidate.checkCourseId, CourseController.getCourseSameCourseId);
+router.get("/same-course/:courseId", paramsValidate.checkCourseId, CourseController.getCourseSameCourseId);
 
 module.exports = router;

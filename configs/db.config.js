@@ -1,7 +1,8 @@
 "use strict";
 const mongoose = require("mongoose");
 
-const url = process.env.MONGODB_URL;
+const url = (process.env.NODE_ENV != "test")?process.env.MONGODB_URL:process.env.TEST_MONGODB_URL
+
 mongoose.connect(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
