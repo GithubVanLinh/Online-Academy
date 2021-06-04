@@ -33,4 +33,13 @@ router.post("/:userId/verify",
   UserController.verifyAndUpdateEmail
 );
 
+// get wish list
+router.get("/:userId/wishList", UserController.getUserWishList);
+
+// delete wish list
+router.patch("/:userId/wishList", UserController.deleteUserCoursesFromWishList)
+
+// get registered courses
+router.get("/:userId/registeredList", UserController.getUserRegisteredList)
+
 module.exports = router;

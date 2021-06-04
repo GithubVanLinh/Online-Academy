@@ -5,6 +5,8 @@ const bcrypt = require("bcryptjs");
 const ajv = require("../configs/ajv.config");
 
 const UserModel = require("../models/user.model");
+const CourseModel = require("../models/course.model");
+const EnrollmentModel = require("../models/enrollment.model");
 const CONST = require("../models/constraint");
 const VerifyService = require("./verify.service");
 const jwt = require("jsonwebtoken");
@@ -73,6 +75,11 @@ module.exports = {
     }
   },
 
+  /**
+   * 
+   * @param {string} newEmail 
+   * @return {object}
+   */
   makeChangeEmailVerification: async (newEmail) => {
     try {
       const isValidEmail = await checkEmailExists(newEmail);
@@ -86,6 +93,13 @@ module.exports = {
     }
   },
 
+  /**
+   * 
+   * @param {string} userId 
+   * @param {string} email 
+   * @param {string} key 
+   * @return {object}
+   */
   verifyEmail: async (userId, email, key) => {
     let user = null;
     try {
@@ -99,6 +113,114 @@ module.exports = {
       }
     } catch (error) {
       throw Error(error);
+    }
+    return user;
+  },
+
+  /**
+   * 
+   * @param {string} userId 
+   * @return {object} wish list of user
+   */
+  getWishList: async (userId) => {
+    let user;
+    try {
+      user = await UserModel.findById(userId)
+        .select("wishList").exec();
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+    if (user) {
+      try {
+        const courseIds = user.wishList;
+        const courses = await CourseModel.find({
+          _id: {
+            $in: courseIds
+          }
+        }).populate([
+          {
+            path: "category",
+            select: "categoryName"
+          },
+          {
+            path: "courseLecturers",
+            select: "fullName"
+          }
+        ]).select([
+          "courseName",
+          "category",
+          "courseLecturers",
+          "ratingPoint",
+          "ratedNumber",
+          "courseImage",
+          "price",
+          "promotionalPrice"
+        ]);
+        return courses;
+      } catch (error) {
+        throw Error(error);
+      }
+    }
+    return null;
+  },
+
+  /**
+   * 
+   * @param {String} userId id of user
+   * @param {Array} courseIds list of course id
+   */
+  deleteCoursesFromWishList: async (userId, courseIds) => {
+    let user = null;
+    try {
+      user = await UserModel.findByIdAndUpdate(userId, {
+        $pull: {
+          wishList: {
+            $in: courseIds
+          }
+        }
+      }, { new: true })
+        .select("wishList").exec();
+    } catch (error) {
+      console.log(error);
+    }
+    return user;
+  },
+
+  /**
+   * 
+   * @param {String} userId id of user
+   */
+  getRegisteredList: async (userId) => {
+    let user = null;
+    try {
+      user = await EnrollmentModel.find({
+        userId: userId
+      }).populate({
+        path: "courseId",
+        populate: [
+          {
+            path: "category",
+            select: "categoryName"
+          },
+          {
+            path: "courseLecturers",
+            select: "fullName"
+          }
+        ],
+        select: [
+          "courseName",
+          "category",
+          "courseLecturers",
+          "ratingPoint",
+          "ratedNumber",
+          "courseImage",
+          "price",
+          "promotionalPrice"
+        ]
+      }).select("courseId");
+    } catch (error) {
+      console.log(error);
     }
     return user;
   },

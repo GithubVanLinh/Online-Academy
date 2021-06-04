@@ -95,5 +95,41 @@ module.exports = {
     res.status(400).json({
       error: "incorrect email or key"
     })
+  },
+
+  getUserWishList: async (req, res, next) => {
+    const userId = req.params.userId;
+    const wishList = await UserService.getWishList(userId);
+    if (wishList) {
+      res.json(wishList);
+    }
+    res.status(400).json({
+      error: "user not found"
+    });
+  },
+
+  deleteUserCoursesFromWishList: async (req, res, next) => {
+    const userId = req.params.userId;
+    const courseIds = req.body.courseIds;
+
+    const newWishList = await UserService.deleteCoursesFromWishList(userId, courseIds);
+    if (newWishList) {
+      return res.json(newWishList);
+    }
+    res.status(400).json({
+      error: "user not found"
+    });
+  },
+
+  getUserRegisteredList: async (req, res, next) => {
+    const userId = req.params.userId;
+    const registeredList = await UserService.getRegisteredList(userId);
+    if (registeredList) {
+      const ret = registeredList.map(e => e.courseId);
+      return res.json(ret);
+    }
+    res.status(400).json({
+      error: "user not found"
+    });
   }
 };
