@@ -14,6 +14,7 @@ const loginSchema = require("../utils/schemas/login.schema.json")
 const updateUserInfoSchema = require("../utils/schemas/update_user_info.schema.json");
 const updateUserPasswordSchema = require("../utils/schemas/update_user_password.schema.json");
 const updateUserEmail = require("../utils/schemas/update_user_email.schema.json");
+const enrollmentSchema = require("../utils/schemas/enrollment.schema.json");
 
 
 ajv.addSchema(registerSchema, "register_student");
@@ -23,5 +24,6 @@ ajv.addSchema(loginSchema, "login");
 ajv.addSchema(updateUserInfoSchema, "update_user_info");
 ajv.addSchema(updateUserPasswordSchema, "update_user_password");
 ajv.addSchema(updateUserEmail, "update_user_email");
+ajv.addSchema(enrollmentSchema, "enrollment");
 
 module.exports = ajv;

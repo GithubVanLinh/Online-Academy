@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string"
+    },
+    "courseId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "userId",
+    "courseId"
+  ],
+  "additionalProperties": false
+}
