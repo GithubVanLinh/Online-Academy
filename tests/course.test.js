@@ -144,6 +144,7 @@ describe("Courses", () => {
 
   describe("/GET ", () => {
     it("it should GET all the courses", async () => {
+      console.log(process.env.TEST_MONGODB_URL);
       const res = await chai.request(app).get("/courses");
 
       should.exist(res);
