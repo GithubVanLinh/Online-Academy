@@ -6,7 +6,6 @@ process.env.NODE_ENV = "test";
 // const Book = require("../app/models/book");
 const UserModel = require("../models/user.model");
 
-
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const app = require("../app");
@@ -15,14 +14,17 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 describe("Users", () => {
-  beforeEach((done) => {
-    UserModel.deleteMany({}, {}, (err) => {
-      done();
-    });
+  beforeEach(async () => {
+    await UserModel.deleteMany({}, {});
   });
+  // beforeEach((done) => {
+  //   UserModel.deleteMany({}, {}, (err) => {
+  //     done();
+  //   });
+  // });
 
   describe("/POST ", () => {
-    it("it should create a student", (done) => {
+    it("it should create a student", async () => {
       const user = {
         username: "abc",
         password: "abc",
@@ -30,20 +32,16 @@ describe("Users", () => {
         email: "vovanlinhleo1999@gmail.com",
         avatar: "http://abc.ch"
       };
-      chai
+      const res = await chai
         .request(app)
         .post("/users")
-        .send(user)
-        .end((err, res) => {
-          should.not.exist(err);
-          should.exist(res);
-          should.exist(res.body);
+        .send(user);
+      should.exist(res);
+      should.exist(res.body);
 
-          res.should.have.status(201);
-          res.body.should.be.a("object");
-          res.body.should.have.property("status").eql("PENDING");
-          done();
-        });
+      res.should.have.status(201);
+      res.body.should.be.a("object");
+      res.body.should.have.property("status").eql("PENDING");
     });
   });
   /*
