@@ -106,5 +106,18 @@ module.exports = {
     res.status(400).json({
       error: "user not found"
     });
+  },
+
+  deleteUserWishList: async (req, res, next) => {
+    const userId = req.params.userId;
+    const courseIds = req.body.courseIds;
+
+    const newWishList = await UserService.deleteWishList(userId, courseIds);
+    if (newWishList) {
+      res.json(newWishList);
+    }
+    return res.status(400).json({
+      error: "user not found"
+    });
   }
 };

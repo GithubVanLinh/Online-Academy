@@ -36,4 +36,7 @@ router.post("/:userId/verify",
 // get wish list
 router.get("/:userId/wishList", UserController.getUserWishList);
 
+// delete wish list
+router.patch("/:userId/wishList", UserController.deleteUserWishList)
+
 module.exports = router;
