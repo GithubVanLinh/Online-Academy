@@ -28,5 +28,32 @@ module.exports = {
       console.log(error);
     }
     res.status(204).end();
+  },
+
+  updateUserPassword: async (req, res, next) => {
+    const userId = req.params.userId;
+    const { currentPassword, newPassword } = req.body;
+    console.log("Current password: " + currentPassword);
+    console.log("New password: " + newPassword);
+
+    try {
+      const user = await UserService.findUserById(userId);
+      if (user) {
+        const ret = await UserService.verifyPassword(currentPassword, user.password);
+        if (ret) {
+          const newUser = await UserService.updatePassword(user._id, newPassword);
+          return res.json(newUser);
+        } else {
+          return res.status(400).json({
+            error_message: "Incorrect password"
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    res.status(400).json({
+      error_message: "User not found"
+    });
   }
 };

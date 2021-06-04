@@ -14,6 +14,34 @@ const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
   /**
+ * 
+ * @param {String} password text password
+ * @param {String} hashPassword hash password
+ * @return {Boolean} true or false
+ */
+  verifyPassword: async (password, hashPassword) => {
+    try {
+      return await bcrypt.compare(password, hashPassword);
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  },
+
+  updatePassword: async (userId, newPassword) => {
+    try {
+      const hashPassword = await bcrypt.hash(newPassword, salt);
+      return await UserModel.findOneAndUpdate(
+        { _id: userId },
+        { password: hashPassword, updatedAt: Date.now() },
+        { new: true }
+      ).select(["username", "password"]);
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  /**
    * 
    * @param {String} userId 
    * @return {Object} user

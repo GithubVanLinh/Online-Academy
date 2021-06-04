@@ -626,3 +626,27 @@ Online Academy Project:
     "updatedAt": "2021-06-03T13:01:03.808Z"
   }
   ```
+#### Change user password
+
+- Method: `PATCH /users/:userId/password`
+- Params: 
+  - userId: a string contains 24 charaters
+- Body: 
+  - currentPassword
+  - newPassword
+- Status Code:
+  - Success: `200`
+  - Failure: `400`, `500`
+- Sample:
+
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/password
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60b9d65d0ab2a19495ec1211",
+    "username": "giakiet99",
+    "password": "$2a$10$f4CzzqFuHOJJkk6YrpigXuJEdswzj0U.XprYl.dmNEGn06abrqV3S"
+  }
+  ```
