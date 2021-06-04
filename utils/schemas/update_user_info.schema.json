@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "properties": {
+    "fullName": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string",
+      "format": "phone"
+    },
+    "address": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "fullName",
+    "phone",
+    "address"
+  ],
+  "additionalProperties": false
+}
