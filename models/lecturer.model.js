@@ -57,7 +57,11 @@ const Lecturer = new mongoose.Schema({
       type: mongoose.Types.ObjectId,
       ref: Config.COLLECTION_NAME.COURSE
     }
-  ]
+  ],
+  rfToken:{
+    type: String,
+    default: ""
+  }
 });
 
 module.exports = mongoose.model(Config.COLLECTION_NAME.LECTURER, Lecturer);

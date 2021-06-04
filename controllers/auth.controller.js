@@ -16,13 +16,25 @@ module.exports = {
     }
   },
 
-  login: async (req,res,next)=>{
+  login: async (req, res, next) => {
     const loginInfo = req.body;
     const result = await UserService.logIn(loginInfo);
-    if(!result){
+    if (!result) {
       return res.status(400).json({
-        message: "log in failed"
-      })
+        message: "Log in failed!"
+      });
+    } else {
+      return res.json(result);
+    }
+  },
+
+  refreshAcToken: async (req, res, next) => {
+    const refreshInfo = req.body;
+    const result = await UserService.refreshAccessToken(refreshInfo);
+    if (!result) {
+      return res.status(400).json({
+        message: "Refresh token is revoked!"
+      });
     } else {
       return res.json(result);
     }

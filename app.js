@@ -23,12 +23,14 @@ const courseRouter = require("./routes/course.route");
 const categoryRouter = require("./routes/category.route");
 const searchRouter = require("./routes/search.route");
 const statisticRouter = require("./routes/statistic.route");
+const lecturerRouter = require("./routes/lecturer.route");
 app.use("/api/search", searchRouter);
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/courses", courseRouter);
 app.use("/categories", categoryRouter);
 app.use("/statistics", statisticRouter);
+app.use("/lecturers", lecturerRouter);
 
 // define error route handler
 app.use((req, res, next) => {

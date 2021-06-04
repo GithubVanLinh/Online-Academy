@@ -10,11 +10,41 @@ const VerifyService = require("./verify.service");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
 
-
 const salt = bcrypt.genSaltSync(10);
 
-
 module.exports = {
+  /**
+   * 
+   * @param {String} userId 
+   * @return {Object} user
+   */
+  findUserById: async (userId) => {
+    return await UserModel.findById(userId).exec();
+  },
+
+  /**
+   * 
+   * @param {String} userId 
+   * @param {Object} newInfo include {fullName, phone, address}
+   * @return {Object} new user info
+   */
+  updateUserInfo: async (userId, newInfo) => {
+    try {
+      return await UserModel.findOneAndUpdate(
+        { _id: userId },
+        { ...newInfo, updatedAt: Date.now() },
+        { new: true }
+      ).select([
+        "fullName",
+        "phone",
+        "address",
+        "updatedAt"
+      ]);
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
   /**
    * Add an user to database
    * @param {object} user object user
@@ -60,26 +90,43 @@ module.exports = {
   },
 
   logIn: async (loginInfo) => {
-    const user = await UserModel.findOne({username: loginInfo.username}).exec();
+    const user = await UserModel.findOne({ username: loginInfo.username }).exec();
     if ((user === null) || !bcrypt.compareSync(loginInfo.password, user.password)) {
       return { authenticated: false };
     }
     const payload = {
       userId: user._id
-    }
+    };
     const opts = {
       expiresIn: 10 * 60 // seconds
-    }
+    };
     const accessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
 
     const refreshToken = randomstring.generate(80);
-    await UserModel.findByIdAndUpdate(user._id, {rfToken: refreshToken});
+    await UserModel.findByIdAndUpdate(user._id, { rfToken: refreshToken });
     return {
       authenticated: true,
       accessToken,
-      refreshToken,
+      refreshToken
+    };
+  },
+
+  refreshAccessToken: async (refreshInfo) => {
+    const { accessToken, refreshToken } = refreshInfo;
+    const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
+      ignoreExpiration: true
+    });
+    const valid = await isValidRfToken(userId, refreshToken);
+    if (valid === true) {
+      const newAccessToken = jwt.sign({ userId }, process.env.NOT_A_SECRET_KEY, { expiresIn: 60 * 10 });
+      return {
+        accessToken: newAccessToken
+      };
     }
+    return null;
   }
+
+
 };
 
 /**
@@ -154,4 +201,18 @@ async function checkValidEmail(user) {
     return true;
   }
   return false;
+}
+/**
+ * Check valid rfToken by userId
+ * @param {string} userId userId
+ * @param {string} refreshToken refreshToken
+ * @return {bool}
+ */
+async function isValidRfToken(userId, refreshToken) {
+  const user = await UserModel.findById(userId).exec();
+  if (user.rfToken === refreshToken) {
+    return true;
+  } else {
+    return false;
+  }
 }

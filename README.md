@@ -1,6 +1,14 @@
 # Online Academy
-
-This is a online academy, Back-end is Nodejs, Front-End is ReactJs
+## About:
+Online Academy Project: 
+- Advanced Web Applications Development's Final Project
+- Framework using:
+  - Backend: Node.js
+  - Frontend: React
+- Team members:
+  - 1712537 - Phan Tấn Khoa
+  - 1712541 - Đinh Gia Kiệt
+  - 1712565 - Võ Văn Lình
 
 ---
 
@@ -309,13 +317,79 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
     "error-string": "error string"
   }
   ```
+### Log In API
+#### User Log In
+- Method: `POST /auth/login`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - username
+  - password
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/auth/login'
+  --header 'Content-Type: application/json' 
+  --data-raw '{
+  "username":"<username>",
+  "password":"<password>"
+  }'
+  ```
+#### User request new accessToken
+- Method: `POST /auth/refresh`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - accessToken
+  - refreshToken
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/auth/refresh' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "accessToken":"<your-access-token>",
+  "refreshToken":"<your-refresh-token>"
+  }'
+  ```
+#### Lecturer Log In
+- Method: `POST /lecturers/login`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - username
+  - password
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/lecturers/login' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "username": "robpercival",
+  "password": "123456"
+  }'
+  ```
+#### Lecturer request new accessToken
+- Method: `POST /lecturers/refresh`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body:
+  - accessToken
+  - refreshToken
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/lecturers/refresh' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "accessToken":"<your-access-token>",
+  "refreshToken":"<your-refresh-token>"
+  }'
+  ```
 
 ### Search API
-
 #### By course name
-
 - Method: `GET /api/search/course`
-
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -323,14 +397,11 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
   - keyword
   - page
   - sortBy: ratingDesc / priceAsc
-- Sample:  
-
+- Sample:
   ```code
-  localhost:8080/api/search/course/?keyword=react
+  curl --location --request GET 'localhost:8080/api/search/course?keyword=react'
   ```
-
 #### By category
-
 - Method: `GET /api/search/byCategory`
 - Status Code:
   - Success: `200`
@@ -340,10 +411,8 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
   - page
   - sortBy: ratingDesc / priceAsc
 - Sample:
-
   ```code
-  http://localhost:8080/api/search/byCategory?keyword=react
-
+  curl --location --request GET 'localhost:8080/api/search/byCategory?keyword=react'
   ```
 
 ### Category API
@@ -549,3 +618,31 @@ This is a online academy, Back-end is Nodejs, Front-End is ReactJs
     }
   ]
   ```
+<<<<<<< HEAD
+=======
+
+### User API
+#### Update user information
+
+- Method: `PATCH /users/:userId`
+- Params: 
+  - userId: a string contains 24 charaters
+- Status Code:
+  - Success: `200`
+  - No content:  `204`
+  - Failure: `400`, `500`
+- Sample:
+
+  ```code
+  http://localhost:8080/users/60b8d2958e620084208eb793
+  ```
+- Success response:
+  ```json
+  {
+    "fullName": "Phan Tan Khoa",
+    "phone": "0937646422",
+    "address": "TP Ho Chi Minh",
+    "updatedAt": "2021-06-03T13:01:03.808Z"
+  }
+  ```
+>>>>>>> 6f02397c0ec36aebc8fcfb553897891643c336da
