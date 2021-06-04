@@ -61,3 +61,4 @@ jobs:
         GMAIL_PASSWORD: ${{secrets.GMAIL_PASSWORD}}
         TEST_MONGODB_URL: ${{secrets.TEST_MONGODB_URL}}
         NOT_A_SECRET_KEY: ${{secrets.NOT_A_SECRET_KEY}}
+        NODE_ENV: 'test'
