@@ -5,8 +5,7 @@ const url = (process.env.NODE_ENV != "test")?process.env.MONGODB_URL:process.env
 
 mongoose.connect(url, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false
+  useUnifiedTopology: true
 });
 
 const db = mongoose.connection;
