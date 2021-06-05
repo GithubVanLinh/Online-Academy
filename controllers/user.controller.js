@@ -34,7 +34,7 @@ module.exports = {
 
   updateUserPassword: async (req, res, next) => {
     const userId = req.params.userId;
-    const { currentPassword, newPassword } = req.body;
+    const {currentPassword, newPassword} = req.body;
     console.log("Current password: " + currentPassword);
     console.log("New password: " + newPassword);
 
@@ -88,7 +88,7 @@ module.exports = {
 
   verifyAndUpdateEmail: async (req, res, next) => {
     const userId = req.params.userId;
-    const { email, key } = req.body;
+    const {email, key} = req.body;
 
     try {
       const user = await UserService.findUserById(userId);
@@ -114,7 +114,19 @@ module.exports = {
     const userId = req.params.userId;
     const wishList = await UserService.getWishList(userId);
     if (wishList) {
-      res.json(wishList);
+      return res.json(wishList);
+    }
+    res.status(400).json({
+      error: "user not found"
+    });
+  },
+
+  addCourseToWishList: async (req, res, next) => {
+    const userId = req.params.userId;
+    const courseId = req.body.courseId;
+    const wishList = await UserService.addToWishList(userId, courseId);
+    if (wishList) {
+      return res.json(wishList);
     }
     res.status(400).json({
       error: "user not found"

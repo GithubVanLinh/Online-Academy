@@ -17,11 +17,11 @@ const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
   /**
- * 
- * @param {String} password text password
- * @param {String} hashPassword hash password
- * @return {Boolean} true or false
- */
+   *
+   * @param {String} password text password
+   * @param {String} hashPassword hash password
+   * @return {Boolean} true or false
+   */
   verifyPassword: async (password, hashPassword) => {
     try {
       return await bcrypt.compare(password, hashPassword);
@@ -35,9 +35,9 @@ module.exports = {
     try {
       const hashPassword = await bcrypt.hash(newPassword, salt);
       return await UserModel.findOneAndUpdate(
-        { _id: userId },
-        { password: hashPassword, updatedAt: Date.now() },
-        { new: true }
+        {_id: userId},
+        {password: hashPassword, updatedAt: Date.now()},
+        {new: true}
       ).select(["username", "password"]);
     } catch (error) {
       throw Error(error);
@@ -45,8 +45,8 @@ module.exports = {
   },
 
   /**
-   * 
-   * @param {String} userId 
+   *
+   * @param {String} userId
    * @return {Object} user
    */
   findUserById: async (userId) => {
@@ -57,17 +57,17 @@ module.exports = {
   },
 
   /**
-   * 
-   * @param {String} userId 
+   *
+   * @param {String} userId
    * @param {Object} newInfo include {fullName, phone, address}
    * @return {Object} new user info
    */
   updateUserInfo: async (userId, newInfo) => {
     try {
       return await UserModel.findOneAndUpdate(
-        { _id: userId },
-        { ...newInfo, updatedAt: Date.now() },
-        { new: true }
+        {_id: userId},
+        {...newInfo, updatedAt: Date.now()},
+        {new: true}
       ).select([
         "fullName",
         "phone",
@@ -80,8 +80,8 @@ module.exports = {
   },
 
   /**
-   * 
-   * @param {string} newEmail 
+   *
+   * @param {string} newEmail
    * @return {object}
    */
   makeChangeEmailVerification: async (newEmail) => {
@@ -98,10 +98,10 @@ module.exports = {
   },
 
   /**
-   * 
-   * @param {string} userId 
-   * @param {string} email 
-   * @param {string} key 
+   *
+   * @param {string} userId
+   * @param {string} email
+   * @param {string} key
    * @return {object}
    */
   verifyEmail: async (userId, email, key) => {
@@ -110,9 +110,9 @@ module.exports = {
       const result = await VerifyService.validateUser(email, key);
       if (result === true) {
         user = await UserModel.findOneAndUpdate(
-          { _id: userId },
-          { email: email, updatedAt: Date.now() },
-          { new: true }
+          {_id: userId},
+          {email: email, updatedAt: Date.now()},
+          {new: true}
         ).select(["email", "updatedAt"]);
       }
     } catch (error) {
@@ -122,8 +122,8 @@ module.exports = {
   },
 
   /**
-   * 
-   * @param {string} userId 
+   *
+   * @param {string} userId
    * @return {object} wish list of user
    */
   getWishList: async (userId) => {
@@ -168,9 +168,27 @@ module.exports = {
     }
     return null;
   },
-
   /**
-   * 
+   *
+   * @param {String} userId id of user
+   * @param {String} courseId course id
+   */
+  addToWishList: async (userId, courseId) => {
+    try {
+      const user = await UserModel.findOneAndUpdate(
+        {_id: userId},
+        {$addToSet: {wishList: courseId}},
+        {new: true})
+        .select("wishList")
+        .exec();
+      console.log(user);
+      return user;
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  /**
+   *
    * @param {String} userId id of user
    * @param {Array} courseIds list of course id
    */
@@ -183,7 +201,7 @@ module.exports = {
             $in: courseIds
           }
         }
-      }, { new: true })
+      }, {new: true})
         .select("wishList").exec();
     } catch (error) {
       console.log(error);
@@ -192,7 +210,7 @@ module.exports = {
   },
 
   /**
-   * 
+   *
    * @param {String} userId id of user
    */
   getRegisteredList: async (userId) => {
@@ -274,9 +292,9 @@ module.exports = {
   },
 
   logIn: async (loginInfo) => {
-    const user = await UserModel.findOne({ username: loginInfo.username }).exec();
+    const user = await UserModel.findOne({username: loginInfo.username}).exec();
     if ((user === null) || !bcrypt.compareSync(loginInfo.password, user.password)) {
-      return { authenticated: false };
+      return {authenticated: false};
     }
     const payload = {
       userId: user._id
@@ -287,7 +305,7 @@ module.exports = {
     const accessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
 
     const refreshToken = randomstring.generate(80);
-    await UserModel.findByIdAndUpdate(user._id, { rfToken: refreshToken });
+    await UserModel.findByIdAndUpdate(user._id, {rfToken: refreshToken});
     return {
       authenticated: true,
       accessToken,
@@ -296,13 +314,13 @@ module.exports = {
   },
 
   refreshAccessToken: async (refreshInfo) => {
-    const { accessToken, refreshToken } = refreshInfo;
-    const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
+    const {accessToken, refreshToken} = refreshInfo;
+    const {userId} = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
       ignoreExpiration: true
     });
     const valid = await isValidRfToken(userId, refreshToken);
     if (valid === true) {
-      const newAccessToken = jwt.sign({ userId }, process.env.NOT_A_SECRET_KEY, { expiresIn: 60 * 10 });
+      const newAccessToken = jwt.sign({userId}, process.env.NOT_A_SECRET_KEY, {expiresIn: 60 * 10});
       return {
         accessToken: newAccessToken
       };
@@ -388,13 +406,13 @@ async function checkValidEmail(user) {
 }
 
 /**
- * 
- * @param {string} email 
+ *
+ * @param {string} email
  * @return {bool}
  */
 async function checkEmailExists(email) {
   try {
-    const result = await UserModel.findOne({ email: email }).exec();
+    const result = await UserModel.findOne({email: email}).exec();
     if (!result) {
       return true;
     }
