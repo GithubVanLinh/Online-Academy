@@ -80,8 +80,20 @@ const Course = new mongoose.Schema({
   },
   feedbacks: [
     {
-      type: mongoose.Types.ObjectId,
-      ref: Config.COLLECTION_NAME.FEEDBACK
+      // type: mongoose.Types.ObjectId,
+      // ref: Config.COLLECTION_NAME.FEEDBACK
+      userId: {
+        type: mongoose.Types.ObjectId
+      },
+      content: {
+        type: String
+      },
+      ratingPoint: {
+        type: Number
+      },
+      createdAt: {
+        type: Date
+      }
     }
   ],
   view: {

@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "courseId": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "ratingPoint": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "courseId",
+    "content",
+    "ratingPoint"
+  ],
+  "additionalProperties": false
+}

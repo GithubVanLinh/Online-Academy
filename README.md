@@ -25,6 +25,7 @@ Online Academy Project:
     - [Create change user email verification](https://github.com/GithubVanLinh/Online-Academy#create-change-user-email-verification)
     - [Verify email to change user email](https://github.com/GithubVanLinh/Online-Academy#verify-email-to-change-user-email)
     - [Change user password](https://github.com/GithubVanLinh/Online-Academy#change-user-password)
+    - [Send feedback](https://github.com/GithubVanLinh/Online-Academy#send-feedback)
 
 - [Lecturer API](https://github.com/GithubVanLinh/Online-Academy#lecturer-api)
     - [Lecturer Log In](https://github.com/GithubVanLinh/Online-Academy#lecturer-log-in)
@@ -272,6 +273,36 @@ Online Academy Project:
     "_id": "60b9d65d0ab2a19495ec1211",
     "username": "giakiet99",
     "password": "$2a$10$f4CzzqFuHOJJkk6YrpigXuJEdswzj0U.XprYl.dmNEGn06abrqV3S"
+  }
+  ```
+#### Send feedback
+- Method: `POST /users/:userId/feedback`
+- Params: 
+  - userId
+- Body:
+  - courseId
+  - content
+  - ratingPoint
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/users/60b8d2958e620084208eb793/feedback' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "courseId": "60b748b2a651451b6f25b377",
+  "content":"nice course for learning react",
+  "ratingPoint": 8
+  }'
+  ```
+- Success Response:
+  ```json
+  {
+    "userId": "60b8d2958e620084208eb793",
+    "content": "nice course for learning react",
+    "ratingPoint": 8,
+    "createdAt": 1622900554039
   }
   ```
 
