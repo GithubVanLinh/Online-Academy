@@ -26,8 +26,10 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
+      res.status(400).json({
+        error: "user not found"
+      });
     }
-    res.status(204).end();
   },
 
   updateUserPassword: async (req, res, next) => {
@@ -88,13 +90,24 @@ module.exports = {
     const userId = req.params.userId;
     const { email, key } = req.body;
 
-    const updatedUser = await UserService.verifyEmail(userId, email, key);
-    if (updatedUser) {
-      return res.json(updatedUser);
+    try {
+      const user = await UserService.findUserById(userId);
+      if (user) {
+        const updatedUser = await UserService.verifyEmail(userId, email, key);
+        if (updatedUser) {
+          return res.json(updatedUser);
+        } else {
+          res.status(400).json({
+            error: "incorrect email or key"
+          })
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({
+        error: "user not found"
+      });
     }
-    res.status(400).json({
-      error: "incorrect email or key"
-    })
   },
 
   getUserWishList: async (req, res, next) => {
