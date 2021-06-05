@@ -799,19 +799,19 @@ Online Academy Project:
   ]
   ```
 
-<!-- 
 ### User API
 #### Update user information
-
 - Method: `PATCH /users/:userId`
 - Params: 
   - userId: a string contains 24 charaters
+- Body: 
+  - fullName
+  - phone
+  - address
 - Status Code:
   - Success: `200`
-  - No content:  `204`
-  - Failure: `400`, `500`
+  - Failure: `400`
 - Sample:
-
   ```code
   http://localhost:8080/users/60b8d2958e620084208eb793
   ```
@@ -824,4 +824,261 @@ Online Academy Project:
     "updatedAt": "2021-06-03T13:01:03.808Z"
   }
   ```
- -->
+- Failed response:
+  ```json
+  {
+    "error": "user not found"
+  }
+  ```
+#### Change user password
+- Method: `PATCH /users/:userId/password`
+- Params: 
+  - userId: a string contains 24 charaters
+- Body: 
+  - currentPassword
+  - newPassword
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/password
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60b9d65d0ab2a19495ec1211",
+    "username": "giakiet99",
+    "password": "$2a$10$Asdidz/DEbdsqrYCLEt1AOC/p.jO/KSLMR6sL9iNO.IODHHswMtyK"
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "Incorrect password"
+  }
+  ```
+  ```json
+  {
+    "error": "User not found"
+  }
+  ```
+#### Send change user email request
+- Method: `POST /users/:userId/email`
+- Params: 
+  - userId: a string contains 24 charaters
+- Body: 
+  - email
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/email
+  ```
+- Success response:
+  ```json
+  {
+    "message": "verify your email"
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "email is already taken"
+  }
+  ```
+  ```json
+  {
+    "error": "user not found"
+  }
+  ```
+#### Verify email to change user email
+- Method: `POST /users/:userId/verify`
+- Params: 
+  - userId: a string contains 24 charaters
+- Body: 
+  - email
+  - key
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/verify
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60b9d65d0ab2a19495ec1211",
+    "email": "kietdg99@gmail.com",
+    "updatedAt": "2021-06-05T03:34:29.801Z"
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "incorrect email or key"
+  }
+  ```
+  ```json
+  {
+    "error": "user not found"
+  }
+  ```
+#### Get user wish list
+- Method: `GET /users/:userId/wishList`
+- Params: 
+  - userId: a string contains 24 charaters
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/wishList
+  ```
+- Success response:
+  ```json
+  [
+    {
+      "courseLecturers": [
+        {
+          "_id": "60b74346a651451b6f25b376",
+          "fullName": "Maximilian Schwarzmüller"
+        }
+      ],
+      "ratedNumber": 0,
+      "ratingPoint": 0,
+      "_id": "60b748b2a651451b6f25b377",
+      "courseName": "React - The Complete Guide (incl Hooks, React Router, Redux)",
+      "courseImage": "url(string)",
+      "category": {
+        "_id": "60b73923a651451b6f25b374",
+        "categoryName": "React"
+      },
+      "price": 100000,
+      "promotionalPrice": 10
+    }
+  ]
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "user not found"
+  }
+  ```
+#### Delete courses from wish list
+- Method: `PATCH /users/:userId/wishList`
+- Params: 
+  - userId: a string contains 24 charaters
+- Body:
+  - courseIds: array of course id
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/wishList
+  ```
+- Success response:
+  ```json
+  [
+    {
+      "courseLecturers": [
+        {
+          "_id": "60b74346a651451b6f25b376",
+          "fullName": "Maximilian Schwarzmüller"
+        }
+      ],
+      "ratedNumber": 0,
+      "ratingPoint": 0,
+      "_id": "60b748b2a651451b6f25b377",
+      "courseName": "React - The Complete Guide (incl Hooks, React Router, Redux)",
+      "courseImage": "url(string)",
+      "category": {
+        "_id": "60b73923a651451b6f25b374",
+        "categoryName": "React"
+      },
+      "price": 100000,
+      "promotionalPrice": 10
+    }
+  ]
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "user not found"
+  }
+  ```
+#### Get registered course of user
+- Method: `GET /users/:userId/registeredList`
+- Params: 
+  - userId: a string contains 24 charaters
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/users/60b9d65d0ab2a19495ec1211/registeredList
+  ```
+- Success response:
+  ```json
+  [
+    {
+      "courseLecturers": [
+        {
+          "_id": "60b74346a651451b6f25b376",
+          "fullName": "Maximilian Schwarzmüller"
+        }
+      ],
+      "ratedNumber": 0,
+      "ratingPoint": 0,
+      "_id": "60b748b2a651451b6f25b377",
+      "courseName": "React - The Complete Guide (incl Hooks, React Router, Redux)",
+      "courseImage": "url(string)",
+      "category": {
+        "_id": "60b73923a651451b6f25b374",
+        "categoryName": "React"
+      },
+      "price": 100000,
+      "promotionalPrice": 10
+    }
+  ]
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "user not found"
+  }
+  ```
+### Enrollment API
+#### Create an enrollment
+- Method: `POST /enrollments`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body: 
+  - userId
+  - courseId
+- Sample:
+  ```code
+  http://localhost:8080/enrollments
+  ```
+- Success response:
+  ```json
+  [
+    {
+      "_id": "60ba595136a70a9af592b5aa",
+      "courseId": "60b748b2a651451b6f25b377",
+      "userId": "60b9d65d0ab2a19495ec1211",
+      "__v": 0,
+      "registeredTime": "2021-06-04T16:48:17.324Z"
+    }
+  ]
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "user or course not found"
+  }
+  ```
