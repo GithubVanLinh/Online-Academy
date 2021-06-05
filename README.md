@@ -1082,3 +1082,46 @@ Online Academy Project:
     "error": "user or course not found"
   }
   ```
+
+### Progress API
+#### Create or update progress
+- Method: `POST /progresses`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Body: 
+  - userId
+  - courseId
+  - lessonId
+  - progress
+- Sample:
+  ```code
+  http://localhost:8080/progresses
+  ```
+- Success response:
+  ```json
+  {
+    "isFinish": true,
+    "_id": "60bb3e9aa5348542d309233d",
+    "lessonId": "60b75684a651451b6f25b386",
+    "userId": "60b9d65d0ab2a19495ec1211",
+    "__v": 0,
+    "progress": 50
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "invalid userId or courseId"
+  }
+  ```
+  ```json
+  {
+    "error": "course does not include the lesson"
+  }
+  ```
+  ```json
+  {
+    "error": "invalid progress"
+  }
+  ```
