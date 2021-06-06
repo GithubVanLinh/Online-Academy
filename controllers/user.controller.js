@@ -158,18 +158,6 @@ module.exports = {
     res.status(400).json({
       error: "user not found"
     });
-  },
-
-  addFeedback: async (req,res,next)=>{
-    const userId = req.params.userId;
-    const feedbackData = req.body;
-    const feedback = await UserService.createFeedback(userId, feedbackData);
-    if(feedback){
-      return res.json(feedback);
-    }
-    res.status(400).json({
-      error: "cannot add feedback"
-    });
   }
 
 };

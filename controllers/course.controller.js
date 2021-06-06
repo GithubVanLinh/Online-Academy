@@ -48,5 +48,16 @@ module.exports = {
     const categoryId = course.category._id;
     const resl = await CourseService.getCoursesSortBySoldNumber(categoryId)
     res.json(resl.docs);
+  },
+  addFeedback: async (req,res,next)=>{
+    const courseId = req.params.courseId;
+    const feedbackData = req.body;
+    const feedback = await CourseService.createFeedback(courseId, feedbackData);
+    if(feedback){
+      return res.json(feedback);
+    }
+    res.status(400).json({
+      error: "cannot add feedback"
+    });
   }
 }

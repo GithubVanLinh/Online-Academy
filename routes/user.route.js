@@ -45,7 +45,6 @@ router.patch("/:userId/wishList", UserController.deleteUserCoursesFromWishList);
 // get registered courses
 router.get("/:userId/registeredList", UserController.getUserRegisteredList);
 
-// send feedback
-router.post("/:userId/feedback", Validator.validateRequestBody("send_feedback"), UserController.addFeedback);
+
 
 module.exports = router;

@@ -181,7 +181,7 @@ module.exports = {
         {new: true})
         .select("wishList")
         .exec();
-      return user;
+      return user.wishList;
     } catch (error) {
       console.log(error)
     }
@@ -325,23 +325,7 @@ module.exports = {
       };
     }
     return null;
-  },
-
-  createFeedback: async (userId, feedbackData) => {
-    const {courseId, content, ratingPoint} = feedbackData;
-    const haveEnrollment = await EnrollmentModel.find({userId: userId, courseId: courseId}).exec();
-    if (haveEnrollment.length) {
-      const newFeedback = {userId, content, ratingPoint, createdAt: Date.now()};
-      const course = await CourseModel.findByIdAndUpdate(courseId,
-        {$push: {feedbacks: newFeedback}},
-        {new: true}).exec();
-      updateRatingPoint(course);
-      await course.save();
-      return newFeedback;
-    }
-    return null;
   }
-
 };
 
 /**
@@ -449,11 +433,4 @@ async function isValidRfToken(userId, refreshToken) {
     return false;
   }
 }
-/**
- * Check valid rfToken by userId
- * @param {object} course refreshToken
- */
-function updateRatingPoint(course) {
-  const totalPoints = course.feedbacks.reduce((total, single) => total + single.ratingPoint, 0);
-  course.ratingPoint = totalPoints/course.feedbacks.length;
-}
+
