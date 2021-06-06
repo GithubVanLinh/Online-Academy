@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "ratingPoint": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "userId",
+    "content",
+    "ratingPoint"
+  ],
+  "additionalProperties": false
+}

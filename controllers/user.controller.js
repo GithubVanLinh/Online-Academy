@@ -26,13 +26,15 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
+      res.status(400).json({
+        error: "user not found"
+      });
     }
-    res.status(204).end();
   },
 
   updateUserPassword: async (req, res, next) => {
     const userId = req.params.userId;
-    const { currentPassword, newPassword } = req.body;
+    const {currentPassword, newPassword} = req.body;
     console.log("Current password: " + currentPassword);
     console.log("New password: " + newPassword);
 
@@ -86,22 +88,45 @@ module.exports = {
 
   verifyAndUpdateEmail: async (req, res, next) => {
     const userId = req.params.userId;
-    const { email, key } = req.body;
+    const {email, key} = req.body;
 
-    const updatedUser = await UserService.verifyEmail(userId, email, key);
-    if (updatedUser) {
-      return res.json(updatedUser);
+    try {
+      const user = await UserService.findUserById(userId);
+      if (user) {
+        const updatedUser = await UserService.verifyEmail(userId, email, key);
+        if (updatedUser) {
+          return res.json(updatedUser);
+        } else {
+          res.status(400).json({
+            error: "incorrect email or key"
+          })
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({
+        error: "user not found"
+      });
     }
-    res.status(400).json({
-      error: "incorrect email or key"
-    })
   },
 
   getUserWishList: async (req, res, next) => {
     const userId = req.params.userId;
     const wishList = await UserService.getWishList(userId);
     if (wishList) {
-      res.json(wishList);
+      return res.json(wishList);
+    }
+    res.status(400).json({
+      error: "user not found"
+    });
+  },
+
+  addCourseToWishList: async (req, res, next) => {
+    const userId = req.params.userId;
+    const courseId = req.body.courseId;
+    const wishList = await UserService.addToWishList(userId, courseId);
+    if (wishList) {
+      return res.json(wishList);
     }
     res.status(400).json({
       error: "user not found"
@@ -134,4 +159,5 @@ module.exports = {
       error: "user not found"
     });
   }
+
 };

@@ -7,6 +7,24 @@ module.exports = {
    * @param {String} userId id of user
    * @param {String} courseId id of course
    */
+  didUserRegisterCourse: async (userId, courseId) => {
+    let result = null;
+    try {
+      result = await EnrollmentModel.findOne({
+        userId: userId,
+        courseId: courseId
+      }).exec();
+    } catch (error) {
+      console.log(error);
+    }
+    return result;
+  },
+
+  /**
+   * 
+   * @param {String} userId id of user
+   * @param {String} courseId id of course
+   */
   createEnrollment: async (userId, courseId) => {
     let enrollment;
     try {

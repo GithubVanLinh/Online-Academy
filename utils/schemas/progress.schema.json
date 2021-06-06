@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string"
+    },
+    "courseId": {
+      "type": "string"
+    },
+    "lessonId": {
+      "type": "string"
+    },
+    "progress": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "userId",
+    "courseId",
+    "lessonId",
+    "progress"
+  ],
+  "additionalProperties": false
+}

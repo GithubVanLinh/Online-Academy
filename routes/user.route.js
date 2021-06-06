@@ -36,10 +36,15 @@ router.post("/:userId/verify",
 // get wish list
 router.get("/:userId/wishList", UserController.getUserWishList);
 
-// delete wish list
-router.patch("/:userId/wishList", UserController.deleteUserCoursesFromWishList)
+// add to wish list
+router.post("/:userId/wishList", UserController.addCourseToWishList);
+
+// delete from wish list
+router.patch("/:userId/wishList", UserController.deleteUserCoursesFromWishList);
 
 // get registered courses
-router.get("/:userId/registeredList", UserController.getUserRegisteredList)
+router.get("/:userId/registeredList", UserController.getUserRegisteredList);
+
+
 
 module.exports = router;

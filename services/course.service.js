@@ -235,6 +235,21 @@ module.exports = {
   getCoursesSortBySoldNumber: async (categoryId) => {
     const resl = await mGetCoursesByFilter("category", categoryId, 1, "-soldNumer");
     return resl;
+  },
+
+  createFeedback: async (courseId, feedbackData) => {
+    const {userId, content, ratingPoint} = feedbackData;
+    const haveEnrollment = await enrollmentModel.find({userId: userId, courseId: courseId}).exec();
+    if (haveEnrollment.length) {
+      const newFeedback = {userId, content, ratingPoint, createdAt: Date.now()};
+      const course = await CourseModel.findByIdAndUpdate(courseId,
+        {$push: {feedbacks: newFeedback}},
+        {new: true}).exec();
+      updateRatingPoint(course);
+      await course.save();
+      return newFeedback;
+    }
+    return null;
   }
 
 };
@@ -322,4 +337,12 @@ async function mGetCoursesByFilter(type, condition, page, sort) {
     default:
       break;
   }
+}
+/**
+ * Check valid rfToken by userId
+ * @param {object} course refreshToken
+ */
+function updateRatingPoint(course) {
+  const totalPoints = course.feedbacks.reduce((total, single) => total + single.ratingPoint, 0);
+  course.ratingPoint = totalPoints/course.feedbacks.length;
 }
