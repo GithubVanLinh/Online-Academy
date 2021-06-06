@@ -146,7 +146,9 @@ describe("Courses", async () => {
     await LecturerModel.deleteMany({}, {});
   });
 
-  describe("/GET ", () => {
+  // ------------------------------------------------------------------------------------------
+
+  describe("#Get All Courses ", () => {
     it("it should GET all the courses", async () => {
       // console.log(process.env.TEST_MONGODB_URL);
       const res = await chai.request(app).get("/courses");
@@ -162,7 +164,26 @@ describe("Courses", async () => {
         .eql("React - The Complete Guide (incl Hooks, React Router, Redux)");
     });
 
-    it("it should GET the course have Id", async () => {
+    it("it should GET all the courses have query categoryId", async () => {
+      // console.log(process.env.TEST_MONGODB_URL);
+      const res = await chai.request(app)
+      .get("/courses?categoryId=60b739cc925c8e4710e90c67");
+
+      should.exist(res);
+      should.exist(res.body);
+      res.should.have.status(200);
+      res.body.should.be.a("object");
+      res.body.docs.should.be.a("array");
+      res.body.docs.length.should.be.eql(1);
+      res.body.docs[0].should.have
+        .property("courseName")
+        .eql("The Complete Android N Developer Course");
+      res.body.should.have.property("page").eql(1);
+    });
+  });
+
+  describe("#Get Course Information", async () => {
+    it("it should GET the course information", async () => {
       const res = await chai
         .request(app)
         .get("/courses/60b748b2a651451b6f25b377");
@@ -172,8 +193,13 @@ describe("Courses", async () => {
       res.should.have.status(200);
       res.body.should.be.a("object");
       res.body.should.have.property("_id").eql("60b748b2a651451b6f25b377");
+      res.body.should.have
+        .property("courseName")
+        .eql("React - The Complete Guide (incl Hooks, React Router, Redux)");
     });
+  });
 
+  describe("#Get lecturers of the course", async () => {
     it("it should list lecturer of the course", async () => {
       const res = await chai
         .request(app)
@@ -185,8 +211,11 @@ describe("Courses", async () => {
       res.body.should.be.a("array");
       res.body.length.should.be.eql(2);
       res.body[0].should.have.property("_id").eql("60b745c0925c8e4710e90c6a");
+      res.body[0].should.have.property("username").eql("robpercival");
     });
+  });
 
+  describe("#Get feedbacks of the course", async () => {
     it("it should list feedback of the course", async () => {
       const res = await chai
         .request(app)
@@ -200,27 +229,16 @@ describe("Courses", async () => {
     });
   });
 
-  /*
-   * Test the /POST route
-   */
-  // describe("/POST book", () => {
-  //   it("it should not POST a book without pages field", a() => {
-  //     const book = {
-  //       title: "The Lord of the Rings",
-  //       author: "J.R.R. Tolkien",
-  //       year: 1954
-  //     };
-  //     chai
-  //       .request(app)
-  //       .post("/book")
-  //       .send(book)
-  //       .end((err, res) => {
-  //         res.should.have.status(200);
-  //         res.body.should.be.a("object");
-  //         res.body.should.have.property("errors");
-  //         res.body.errors.should.have.property("pages");
-  //         res.body.errors.pages.should.have.property("kind").eql("required");
-  //       });
-  //   });
-  // });
+  describe("#Get same course", async () => {
+    it("it should list feedback of the course", async () => {
+      const res = await chai
+        .request(app)
+        .get("/statistics/same-course/60b74a89925c8e4710e90c6c");
+      should.exist(res);
+      should.exist(res.body);
+      res.should.have.status(200);
+      res.body.should.be.a("array");
+      res.body.length.should.be.eql(1);
+    });
+  });
 });

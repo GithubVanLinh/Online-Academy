@@ -6,7 +6,7 @@ module.exports = {
     const user = await UserService.createUser(body);
     if (user === null) {
       return res.status(400).json({
-        error: "cannot create user"
+        error_message: "cannot create user"
       });
     }
     return res.status(201).json(user);
