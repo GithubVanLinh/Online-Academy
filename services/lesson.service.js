@@ -19,5 +19,26 @@ module.exports = {
       console.log(error);
     }
     return ret;
+  },
+
+  /**
+   * 
+   * @param {String} lessonId id of lesson
+   * @param {String} courseId id of course
+   * @return {object} lesson
+   */
+  getLessonById: async (lessonId, courseId) => {
+    let lesson = null;
+    try {
+      lesson = await LessonModel.findOne({
+        _id: lessonId,
+        courseId: courseId
+      }).select([
+        "title", "videoUrl", "totalLength"
+      ]).exec();
+    } catch (err) {
+      console.error(err);
+    }
+    return lesson;
   }
 }
