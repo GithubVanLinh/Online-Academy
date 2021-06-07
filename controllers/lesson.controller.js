@@ -1,6 +1,7 @@
 "use strict";
 const LessonService = require("../services/lesson.service");
 const EnrollmentService = require("../services/enrollment.service");
+const ProgressService = require("../services/progress.service");
 
 module.exports = {
   getLessonById: async (req, res, next) => {
@@ -25,6 +26,15 @@ module.exports = {
         error: "incorrect lessonId"
       });
     }
-    res.json(lesson);
+    // get progress info of the lesson
+    const progress = await ProgressService.getProgress(userId, lessonId);
+    const result = {
+      title: lesson.title,
+      totalLength: lesson.totalLength,
+      videoUrl: lesson.videoUrl,
+      progress: (progress === null) ? 0 : progress.progress,
+      isFinish: (progress === null) ? false : progress.isFinish
+    };
+    res.json(result);
   }
 }

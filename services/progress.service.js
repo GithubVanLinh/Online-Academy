@@ -32,5 +32,24 @@ module.exports = {
     } catch (error) {
       throw Error(error);
     }
+  },
+
+  /**
+   * 
+   * @param {String} userId id of user
+   * @param {String} lessonId id of lesson
+   * @return {Object} progress
+   */
+  getProgress: async (userId, lessonId) => {
+    let progress = null;
+    try {
+      progress = await ProgressModel.findOne({
+        userId: userId, 
+        lessonId: lessonId
+      }).exec();
+    } catch (error) {
+      console.error(error);
+    }
+    return progress;
   }
 }
