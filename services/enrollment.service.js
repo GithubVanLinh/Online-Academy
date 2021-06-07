@@ -44,5 +44,49 @@ module.exports = {
       console.log(error);
     }
     return enrollment;
+  },
+
+  deleteEnrollmentByEnrollmentId: async (enrollId) => {
+    const res = await mDeleteEnrollment(enrollId);
+    return res;
+  },
+
+  deleteEnrollmentByCourseId: async (courseId) => {
+    return await mDeleteEnrollHaveCourse(courseId);
   }
+}
+
+/**
+ * delete enrollment in database
+ * @param {string} enrollmentId in
+ */
+async function mDeleteEnrollment(enrollmentId) {
+  const res = await EnrollmentModel.findByIdAndDelete(enrollmentId);
+  return res;
+}
+
+/**
+ * get enrolls contain list
+ * @param {string} courseId course id
+ * @return {Promise<Array<object>>}
+ */
+async function mGetListEnrollmentHaveCourse(courseId) {
+  const enrolls = await EnrollmentModel.find({
+    courseId: courseId
+  });
+
+  return enrolls;
+}
+
+/**
+ * delete multiple enroll
+ * @param {string} courseId id
+ * @return {Promise<number>}
+ */
+async function mDeleteEnrollHaveCourse(courseId) {
+  const enrolls =await mGetListEnrollmentHaveCourse(courseId);
+  await enrolls.map(async (enroll)=>{
+    await mDeleteEnrollment(enroll._id);
+  });
+  return enrolls.length;
 }

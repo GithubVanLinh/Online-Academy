@@ -1310,7 +1310,7 @@ Online Academy Project:
 
   ```json
   {
-    "error_message": "invalid courseId"
+    "error_message": "Invalid CourseId"
   }
   ```
 

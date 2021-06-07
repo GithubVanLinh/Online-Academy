@@ -250,6 +250,14 @@ module.exports = {
       return newFeedback;
     }
     return null;
+  },
+
+  
+  deleteCourse: async (courseId) =>{
+    const res = await CourseModel.findByIdAndUpdate(courseId, {
+      status: Config.COURSE_STATUS.DELETED
+    });
+    return res;
   }
 
 };

@@ -16,7 +16,7 @@ module.exports = {
     } catch (error) {
       console.error(error);
       return res.status(404).json({
-        "error": "Invalid CourseId"
+        "error_message": "Invalid CourseId"
       })
     }
   },
@@ -32,7 +32,7 @@ module.exports = {
       }
     } catch (error) {
       return res.status(404).json({
-        "error": "Invalid categoryId"
+        "error_message": "Invalid categoryId"
       })
     }
   }

@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const Config = require("../configs/constraints");
 
-const User = new mongoose.Schema({
+const Admin = new mongoose.Schema({
   username: {
     type: String,
     require: true
@@ -33,4 +33,4 @@ const User = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model(Config.COLLECTION_NAME.USER, User);
+module.exports = mongoose.model(Config.COLLECTION_NAME.ADMIN, Admin);

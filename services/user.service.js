@@ -350,6 +350,10 @@ module.exports = {
       };
     }
     return null;
+  },
+
+  removeCourseFromWishListForAllUser: async (courseId) => {
+    return await mRemoveCourseFromWishListForAllUser(courseId);
   }
 };
 
@@ -471,4 +475,54 @@ async function isValidRfToken(userId, refreshToken) {
   } else {
     return false;
   }
+}
+
+
+/**
+ * Delete course
+ * @param {string} courseId id of course
+ * @return {Promise<number>} number course in lecturer is deleted
+ */
+ async function mRemoveCourseFromWishListForAllUser(courseId) {
+  const users =await UserModel.find({
+    wishList: {_id: courseId}
+  });
+
+  for (let index = 0; index < users.length; index++) {
+    await mDeleteCourseFromWishList(users[index]._id, courseId);
+    
+  }
+
+  return users.length
+}
+
+/**
+ *
+ * @param {string} userId userId
+ * @param {string} courseId courseId
+ * @return {object}
+ */
+async function mDeleteCourseFromWishList(userId, courseId) {
+  const wishList = await mGetWishList(userId);
+  const pos = wishList.indexOf(courseId);
+  if (pos > -1) {
+    wishList.splice(pos, 1);
+    console.log("wishList", wishList);
+    const res = await UserModel.findByIdAndUpdate(userId, {
+      wishList: wishList
+    });
+    return res;
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Get list teaching course of lecturer
+ * @param {string} userId id
+ * @return {Promise<Array<object>>}
+ */
+async function mGetWishList(userId) {
+  const res = await UserModel.findById(userId);
+  return res.wishList;
 }

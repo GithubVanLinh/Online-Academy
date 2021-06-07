@@ -1,6 +1,9 @@
 "use strict";
 
 const CourseService = require("../services/course.service");
+const EnrollmentService = require("../services/enrollment.service");
+const LecturerService = require("../services/lecturer.service");
+const UserService = require("../services/user.service");
 
 module.exports = {
   getCourseByCourseId: async (req, res, next) => {
@@ -59,5 +62,16 @@ module.exports = {
     res.status(400).json({
       error: "cannot add feedback"
     });
+  },
+  removeCourse: async (req, res, next) => {
+    const courseId = req.params.courseId;
+
+    await CourseService.deleteCourse(courseId);
+    await LecturerService.removeCourseFromTeachingCoursesForAllLecturer(courseId);
+    await EnrollmentService.deleteEnrollmentByCourseId(courseId);
+    await UserService.removeCourseFromWishListForAllUser(courseId);
+    res.status(200).json({
+      "message": `${courseId} delete success`
+    })
   }
 }
