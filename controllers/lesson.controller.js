@@ -14,7 +14,7 @@ module.exports = {
     const didUserRegisterCourse = await EnrollmentService.didUserRegisterCourse(userId, courseId);
 
     if (didUserRegisterCourse === null) {
-      return res.status(404).json({
+      return res.status(400).json({
         error: "user haven't registered the course yet"
       });
     }
