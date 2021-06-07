@@ -818,10 +818,11 @@ Online Academy Project:
 - Success Response:
   ```json
   {
-    "_id": "60b75041a651451b6f25b37b",
     "title": "Welcome To The Course!",
     "totalLength": 61,
-    "videoUrl": "https://vimeo.com/559574353/16f3f822b5"
+    "videoUrl": "https://vimeo.com/559574353/16f3f822b5",
+    "progress": 28,
+    "isFinish": true
   }
   ```
 - Failed Response: 
