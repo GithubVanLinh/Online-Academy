@@ -10,9 +10,6 @@ const queryValidate = require("../middlewares/querycheck.mdw");
 const CourseController = require("../controllers/course.controller");
 
 router.get("/", queryValidate.checkCategoryId, CourseController.getCourses);
-router.get("/newestCourses", CourseController.getNewestCourses);
-router.get("/mostViewedCourses", CourseController.getMostViewdCourses);
-router.get("/featuredCourses", CourseController.getFeaturedCourses);
 
 router.use("/:courseId", paramsValidate.checkCourseId);
 router.get("/:courseId", CourseController.getCourseByCourseId);
