@@ -831,6 +831,41 @@ Online Academy Project:
     "createdAt": 1622900554039
   }
   ```
+#### Get lesson info of the course
+- Method: `GET /courses/:courseId/lessons/:lessonId`
+- Headers: 
+  - x-access-token
+- Params:
+  - courseId
+  - lessonId
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/courses/60b748b2a651451b6f25b377/lessons/60b75041a651451b6f25b37b
+  ```
+- Success Response:
+  ```json
+  {
+    "title": "Welcome To The Course!",
+    "totalLength": 61,
+    "videoUrl": "https://vimeo.com/559574353/16f3f822b5",
+    "progress": 28,
+    "isFinish": true
+  }
+  ```
+- Failed Response: 
+  ```json
+  {
+    "error": "user haven't registered the course yet"
+  }
+  ```
+  ```json
+  {
+    "error": "incorrect lessonId"
+  }
+  ```
 
 ### Search API
 
