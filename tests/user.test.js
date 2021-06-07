@@ -62,7 +62,7 @@ describe("Users", async () => {
   describe("#Register",async () => {
     it("it should create a student success", async () => {
       const user = {
-        username: "abc",
+        username: "abcd",
         password: "abc",
         fullName: "vanlinh",
         email: "vovanlinhleo1999@gmail.com",
@@ -85,7 +85,7 @@ describe("Users", async () => {
 
     it("it should create a student failed", async () => {
       const user = {
-        username: "abc",
+        username: "abcd",
         password: "abc",
         fullName: "vanlinh",
         email: user1.email,

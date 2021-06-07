@@ -38,7 +38,6 @@ const Lecturer = new mongoose.Schema({
   status: {
     type: String,
     enum: [
-      Config.ACCOUNT_STATUS.PENDING,
       Config.ACCOUNT_STATUS.ACTIVE,
       Config.ACCOUNT_STATUS.DELETED
     ],

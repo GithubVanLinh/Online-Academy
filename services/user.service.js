@@ -35,9 +35,9 @@ module.exports = {
     try {
       const hashPassword = await bcrypt.hash(newPassword, salt);
       return await UserModel.findOneAndUpdate(
-        {_id: userId},
-        {password: hashPassword, updatedAt: Date.now()},
-        {new: true}
+        { _id: userId },
+        { password: hashPassword, updatedAt: Date.now() },
+        { new: true }
       ).select(["username", "password"]);
     } catch (error) {
       throw Error(error);
@@ -65,15 +65,10 @@ module.exports = {
   updateUserInfo: async (userId, newInfo) => {
     try {
       return await UserModel.findOneAndUpdate(
-        {_id: userId},
-        {...newInfo, updatedAt: Date.now()},
-        {new: true}
-      ).select([
-        "fullName",
-        "phone",
-        "address",
-        "updatedAt"
-      ]);
+        { _id: userId },
+        { ...newInfo, updatedAt: Date.now() },
+        { new: true }
+      ).select(["fullName", "phone", "address", "updatedAt"]);
     } catch (error) {
       throw Error(error);
     }
@@ -88,7 +83,9 @@ module.exports = {
     try {
       const isValidEmail = await checkEmailExists(newEmail);
       if (isValidEmail) {
-        const verification = await VerifyService.createNewValidateRequestV2(newEmail);
+        const verification = await VerifyService.createNewValidateRequestV2(
+          newEmail
+        );
         return verification;
       }
       return null;
@@ -110,9 +107,9 @@ module.exports = {
       const result = await VerifyService.validateUser(email, key);
       if (result === true) {
         user = await UserModel.findOneAndUpdate(
-          {_id: userId},
-          {email: email, updatedAt: Date.now()},
-          {new: true}
+          { _id: userId },
+          { email: email, updatedAt: Date.now() },
+          { new: true }
         ).select(["email", "updatedAt"]);
       }
     } catch (error) {
@@ -129,8 +126,7 @@ module.exports = {
   getWishList: async (userId) => {
     let user;
     try {
-      user = await UserModel.findById(userId)
-        .select("wishList").exec();
+      user = await UserModel.findById(userId).select("wishList").exec();
     } catch (error) {
       console.log(error);
       return null;
@@ -142,25 +138,27 @@ module.exports = {
           _id: {
             $in: courseIds
           }
-        }).populate([
-          {
-            path: "category",
-            select: "categoryName"
-          },
-          {
-            path: "courseLecturers",
-            select: "fullName"
-          }
-        ]).select([
-          "courseName",
-          "category",
-          "courseLecturers",
-          "ratingPoint",
-          "ratedNumber",
-          "courseImage",
-          "price",
-          "promotionalPrice"
-        ]);
+        })
+          .populate([
+            {
+              path: "category",
+              select: "categoryName"
+            },
+            {
+              path: "courseLecturers",
+              select: "fullName"
+            }
+          ])
+          .select([
+            "courseName",
+            "category",
+            "courseLecturers",
+            "ratingPoint",
+            "ratedNumber",
+            "courseImage",
+            "price",
+            "promotionalPrice"
+          ]);
         return courses;
       } catch (error) {
         throw Error(error);
@@ -177,13 +175,14 @@ module.exports = {
     try {
       const user = await UserModel.findByIdAndUpdate(
         userId,
-        {$addToSet: {wishList: courseId}},
-        {new: true})
+        { $addToSet: { wishList: courseId } },
+        { new: true }
+      )
         .select("wishList")
         .exec();
       return user.wishList;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   },
   /**
@@ -194,14 +193,19 @@ module.exports = {
   deleteCoursesFromWishList: async (userId, courseIds) => {
     let user = null;
     try {
-      user = await UserModel.findByIdAndUpdate(userId, {
-        $pull: {
-          wishList: {
-            $in: courseIds
+      user = await UserModel.findByIdAndUpdate(
+        userId,
+        {
+          $pull: {
+            wishList: {
+              $in: courseIds
+            }
           }
-        }
-      }, {new: true})
-        .select("wishList").exec();
+        },
+        { new: true }
+      )
+        .select("wishList")
+        .exec();
     } catch (error) {
       console.log(error);
     }
@@ -217,29 +221,31 @@ module.exports = {
     try {
       user = await EnrollmentModel.find({
         userId: userId
-      }).populate({
-        path: "courseId",
-        populate: [
-          {
-            path: "category",
-            select: "categoryName"
-          },
-          {
-            path: "courseLecturers",
-            select: "fullName"
-          }
-        ],
-        select: [
-          "courseName",
-          "category",
-          "courseLecturers",
-          "ratingPoint",
-          "ratedNumber",
-          "courseImage",
-          "price",
-          "promotionalPrice"
-        ]
-      }).select("courseId");
+      })
+        .populate({
+          path: "courseId",
+          populate: [
+            {
+              path: "category",
+              select: "categoryName"
+            },
+            {
+              path: "courseLecturers",
+              select: "fullName"
+            }
+          ],
+          select: [
+            "courseName",
+            "category",
+            "courseLecturers",
+            "ratingPoint",
+            "ratedNumber",
+            "courseImage",
+            "price",
+            "promotionalPrice"
+          ]
+        })
+        .select("courseId");
     } catch (error) {
       console.log(error);
     }
@@ -254,6 +260,11 @@ module.exports = {
   createUser: async (user) => {
     const newUser = createUserTemplate(user);
     if (newUser === null) {
+      return null;
+    }
+
+    const res = await mCheckUsernameIsValid(newUser.username);
+    if (!res) {
       return null;
     }
 
@@ -274,6 +285,11 @@ module.exports = {
     delete newUser.password;
     return newUser;
   },
+
+  checkValidUsername: async (username) => {
+    return await mCheckUsernameIsValid(username);
+  },
+
   verifyUser: async (email, key) => {
     const valid = await VerifyService.validateUser(email, key);
     if (!valid) {
@@ -291,9 +307,14 @@ module.exports = {
   },
 
   logIn: async (loginInfo) => {
-    const user = await UserModel.findOne({username: loginInfo.username}).exec();
-    if ((user === null) || !bcrypt.compareSync(loginInfo.password, user.password)) {
-      return {authenticated: false};
+    const user = await UserModel.findOne({
+      username: loginInfo.username
+    }).exec();
+    if (
+      user === null ||
+      !bcrypt.compareSync(loginInfo.password, user.password)
+    ) {
+      return { authenticated: false };
     }
     const payload = {
       userId: user._id
@@ -304,7 +325,7 @@ module.exports = {
     const accessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
 
     const refreshToken = randomstring.generate(80);
-    await UserModel.findByIdAndUpdate(user._id, {rfToken: refreshToken});
+    await UserModel.findByIdAndUpdate(user._id, { rfToken: refreshToken });
     return {
       authenticated: true,
       accessToken,
@@ -313,13 +334,17 @@ module.exports = {
   },
 
   refreshAccessToken: async (refreshInfo) => {
-    const {accessToken, refreshToken} = refreshInfo;
-    const {userId} = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
+    const { accessToken, refreshToken } = refreshInfo;
+    const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
       ignoreExpiration: true
     });
     const valid = await isValidRfToken(userId, refreshToken);
     if (valid === true) {
-      const newAccessToken = jwt.sign({userId}, process.env.NOT_A_SECRET_KEY, {expiresIn: 60 * 10});
+      const newAccessToken = jwt.sign(
+        { userId },
+        process.env.NOT_A_SECRET_KEY,
+        { expiresIn: 60 * 10 }
+      );
       return {
         accessToken: newAccessToken
       };
@@ -327,6 +352,20 @@ module.exports = {
     return null;
   }
 };
+
+/**
+ * check username is registed
+ * @param {string} username username
+ * @return {bool}
+ */
+async function mCheckUsernameIsValid(username) {
+  const res = await UserModel.findOne({ username: username });
+  if (res) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 /**
  * create user from raw infomation
@@ -409,14 +448,14 @@ async function checkValidEmail(user) {
  */
 async function checkEmailExists(email) {
   try {
-    const result = await UserModel.findOne({email: email}).exec();
+    const result = await UserModel.findOne({ email: email }).exec();
     if (!result) {
       return true;
     }
   } catch (error) {
     throw Error(error);
   }
-  return false
+  return false;
 }
 
 /**
@@ -433,4 +472,3 @@ async function isValidRfToken(userId, refreshToken) {
     return false;
   }
 }
-
