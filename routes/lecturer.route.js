@@ -15,11 +15,11 @@ router.patch("/:lecturerId",
   LecturerController.updateLecturerInfo
 );
 
-// // change user password
-// router.patch("/:userId/password",
-//   Validator.validateRequestBody("update_user_password"),
-//   UserController.updateUserPassword
-// );
+// change user password
+router.patch("/:lecturerId/password",
+  Validator.validateRequestBody("update_user_password"),
+  LecturerController.updateLecturerPassword
+);
 
 // // change user email
 // router.post("/:userId/email",

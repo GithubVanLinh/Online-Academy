@@ -1,5 +1,6 @@
 "use strict";
 const LecturerService = require("../services/lecturer.service");
+const UserService = require("../services/user.service");
 
 module.exports = {
   login: async (req, res, next) => {
@@ -38,6 +39,34 @@ module.exports = {
       });
     }
     res.json(updatedLecturer);
+  },
+
+  updateLecturerPassword: async (req, res, nect) => {
+    const lecturerId = req.params.lecturerId || 0;
+    const { currentPassword, newPassword } = req.body;
+
+    // console.log("Current password: " + currentPassword);
+    // console.log("New password: " + newPassword);
+
+    try {
+      const lecturer = await LecturerService.findById(lecturerId);
+      if (lecturer) {
+        const ret = await UserService.verifyPassword(currentPassword, lecturer.password);
+        if (ret) {
+          const updatedLecturer = await LecturerService.updatePassword(lecturer._id, newPassword);
+          return res.json(updatedLecturer);
+        } else {
+          return res.status(400).json({
+            error: "Incorrect password"
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    res.status(400).json({
+      error: "lecturer not found"
+    });
   }
 
 }

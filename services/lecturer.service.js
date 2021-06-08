@@ -5,7 +5,8 @@ const randomstring = require("randomstring");
 
 const LecturerModel = require("../models/lecturer.model");
 const Config = require("../configs/constraints");
-// const salt = bcrypt.genSaltSync(10);
+
+const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
   logIn: async (loginInfo) => {
@@ -60,6 +61,16 @@ module.exports = {
     return await mRemoveCourseFromTeachingCoursesForAllLecturer(courseId);
   },
 
+  findById: async (lecturerId) => {
+    let lecturer = null;
+    try {
+      lecturer = await LecturerModel.findById(lecturerId).exec();
+    } catch (error) {
+      console.error(error);
+    }
+    return lecturer;
+  },
+
   findAndUpdate: async (lecturerId, newInfo) => {
     let lecturer = null;
     try {
@@ -85,7 +96,21 @@ module.exports = {
       console.error(error);
     }
     return lecturer;
+  },
+
+  updatePassword: async (lecturerId, newPassword) => {
+    try {
+      const hashPassword = await bcrypt.hash(newPassword, salt);
+      return await LecturerModel.findOneAndUpdate(
+        { _id: lecturerId },
+        { password: hashPassword, updatedAt: Date.now() },
+        { new: true }
+      ).select(["username", "password", "updatedAt"]);
+    } catch (error) {
+      throw Error(error);
+    }
   }
+
 };
 
 /**
