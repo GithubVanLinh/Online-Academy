@@ -7,7 +7,7 @@ imgur.setAPIUrl("https://api.imgur.com/3/");
 module.exports =
   {
     getNewFileUrl: async (filePath) => {
-      try{
+      try {
         const res = await imgur.uploadFile(filePath);
         return res.link;
       } catch (error) {

@@ -158,6 +158,18 @@ module.exports = {
     res.status(400).json({
       error: "user not found"
     });
+  },
+
+  changeAvatar: async (req, res, next) => {
+    try {
+      const userId = req.params.userId;
+      const imgFilePath = req.file.path;
+      const user = await UserService.changeUserAvatar(userId, imgFilePath);
+      return res.json(user);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({error: "user not found"});
+    }
   }
 
 };
