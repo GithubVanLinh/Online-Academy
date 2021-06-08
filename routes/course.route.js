@@ -2,6 +2,7 @@
 const express = require("express");
 // eslint-disable-next-line new-cap
 const router = express.Router();
+const upload = require("../configs/multer.config");
 
 const Validator = require("../middlewares/validator.mdw");
 const paramsValidate = require("../middlewares/paramscheck.mdw");
@@ -24,5 +25,5 @@ router.post("/:courseId/feedback", Validator.validateRequestBody("send_feedback"
 
 // get lesson info
 router.get("/:courseId/lessons/:lessonId", auth, LessonController.getLessonById);
-
+router.post("/:courseId/courseImage", upload.single("courseImage"), CourseController.updateCourseImage)
 module.exports = router;

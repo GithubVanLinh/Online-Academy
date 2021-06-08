@@ -3,7 +3,9 @@
 const CourseModel = require("../models/course.model");
 const Config = require("../configs/constraints");
 const enrollmentModel = require("../models/enrollment.model");
-const courseModel = require("../models/course.model");
+const LecturerService = require("../services/lecturer.service");
+const ImgUtil = require("../utils/ImgUtil");
+const fs = require("fs");
 // const userModel = require("../models/user.model");
 
 module.exports = {
@@ -199,7 +201,7 @@ module.exports = {
       arr.length = 3; // top 3 featured courses
       const Ids = arr.map(e => e.content._id);
 
-      const ret = await courseModel.find({
+      const ret = await CourseModel.find({
         _id: {
           $in: Ids
         }
@@ -261,7 +263,7 @@ module.exports = {
   },
 
   /**
-   * 
+   *
    * @param {string} courseName name of course
    * @return {Promise<object>}
    */
@@ -278,8 +280,8 @@ module.exports = {
   },
 
   /**
-   * 
-   * @param {object} courseInfo 
+   *
+   * @param {object} courseInfo
    * @param {string} lecturerId id of lecturer
    * @return {Promise<object>}
    */
@@ -292,10 +294,21 @@ module.exports = {
       }
       console.log(dataToCreate);
       course = await CourseModel.create(dataToCreate);
+      await LecturerService.addCourseToTeachingCourses(lecturerId, course._id);
     } catch (error) {
       console.error(error);
     }
     return course;
+  },
+
+  changeCourseImage: async(courseId, imagePath) =>{
+    const newImageUrl = await ImgUtil.getNewFileUrl(imagePath);
+    fs.unlinkSync(imagePath);
+    const result = CourseModel.findByIdAndUpdate(
+      courseId,
+      {courseImage: newImageUrl, updatedAt: Date.now()},
+      {new: true}).select("courseImage");
+    return result;
   }
 
 };

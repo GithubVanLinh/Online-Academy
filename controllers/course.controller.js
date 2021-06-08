@@ -82,5 +82,16 @@ module.exports = {
     res.status(200).json({
       "message": `${courseId} delete success`
     })
+  },
+  updateCourseImage: async (req, res, next) => {
+    try {
+      const courseId = req.params.courseId;
+      const imgFilePath = req.file.path;
+      const course = await CourseService.changeCourseImage(courseId, imgFilePath);
+      return res.json(course);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({error: "Course not found"});
+    }
   }
 }

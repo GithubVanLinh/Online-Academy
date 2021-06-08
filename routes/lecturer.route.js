@@ -40,5 +40,4 @@ router.post("/:lecturerId/courses",
   Validator.validateRequestBody("new_course"),
   LecturerController.uploadNewCourse
 );
-
 module.exports = router;
