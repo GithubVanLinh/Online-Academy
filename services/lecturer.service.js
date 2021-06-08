@@ -3,7 +3,8 @@ const bcrypt = require("bcryptjs");
 const LecturerModel = require("../models/lecturer.model");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
-
+const ImgUtil = require("../utils/ImgUtil");
+const fs = require("fs");
 // const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
@@ -60,9 +61,19 @@ module.exports = {
       .select("teachingCourses")
       .populate({
         path: "teachingCourses",
-        populate:{path:"teachingCourses"}
+        populate: {path: "teachingCourses"}
       });
     return lecturer.teachingCourses;
+  },
+
+  changeLecturerAvatar: async (lecturerId, imgFilePath) => {
+    const newAvatarUrl = await ImgUtil.getNewFileUrl(imgFilePath);
+    fs.unlinkSync(imgFilePath);
+    const result = LecturerModel.findByIdAndUpdate(
+      lecturerId,
+      {avatar: newAvatarUrl, updatedAt: Date.now()},
+      {new: true});
+    return result;
   },
 
   removeCourseFromTeachingCoursesForAllLecturer: async (courseId) => {

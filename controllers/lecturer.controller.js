@@ -39,6 +39,17 @@ module.exports = {
       console.log(error);
       res.status(400).json({error: error});
     }
+  },
+  changeAvatar: async (req, res, next) => {
+    try {
+      const lecturerId = req.params.lecturerId;
+      const imgFilePath = req.file.path;
+      const lecturer = await LecturerService.changeLecturerAvatar(lecturerId, imgFilePath);
+      return res.json(lecturer);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({error: e});
+    }
   }
 }
 
