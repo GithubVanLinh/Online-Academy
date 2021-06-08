@@ -12,7 +12,8 @@ const CONST = require("../models/constraint");
 const VerifyService = require("./verify.service");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
-
+const ImgUtil = require("../utils/ImgUtil");
+const fs = require("fs");
 const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
@@ -357,6 +358,16 @@ module.exports = {
 
   removeCourseFromWishListForAllUser: async (courseId) => {
     return await mRemoveCourseFromWishListForAllUser(courseId);
+  },
+
+  changeUserAvatar: async (userId, imgFilePath) => {
+    const newAvatarUrl = await ImgUtil.getNewFileUrl(imgFilePath);
+    fs.unlinkSync(imgFilePath);
+    const result = UserModel.findByIdAndUpdate(
+      userId,
+      {avatar: newAvatarUrl, updatedAt: Date.now()},
+      {new: true}).select("avatar");
+    return result;
   }
 };
 

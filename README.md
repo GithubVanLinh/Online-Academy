@@ -27,11 +27,13 @@ Online Academy Project:
   - [Verify email to change user email](https://github.com/GithubVanLinh/Online-Academy#verify-email-to-change-user-email)
   - [Change user password](https://github.com/GithubVanLinh/Online-Academy#change-user-password)
   - [Add a course to Wishlist](https://github.com/GithubVanLinh/Online-Academy#add-a-course-to-wishlist)
-
+  - [Change user avatar](https://github.com/GithubVanLinh/Online-Academy#change-user-avatar)
+  
 - [Lecturer API](https://github.com/GithubVanLinh/Online-Academy#lecturer-api)
 
   - [Lecturer Log In](https://github.com/GithubVanLinh/Online-Academy#lecturer-log-in)
   - [Lecturer request new accessToken](https://github.com/GithubVanLinh/Online-Academy#lecturer-request-new-accesstoken)
+  - [Lecturer change avatar](https://github.com/GithubVanLinh/Online-Academy#lecturer-change-avatar)
 
 - [Course API](https://github.com/GithubVanLinh/Online-Academy#course-api)
   - [Get Courses](https://github.com/GithubVanLinh/Online-Academy#get-courses)
@@ -51,7 +53,7 @@ Online Academy Project:
   - [Get 10 most viewed courses](https://github.com/GithubVanLinh/Online-Academy#get-10-most-viewed-courses)
   - [Get 3 featured course of the week](https://github.com/GithubVanLinh/Online-Academy#get-3-featured-course-of-the-week)
   - [Get list of featured category of the week](https://github.com/GithubVanLinh/Online-Academy#get-list-of-featured-category-of-the-week)
-- [Administator API](https://github.com/GithubVanLinh/Online-Academy#administator-api)
+- [Administrator API](https://github.com/GithubVanLinh/Online-Academy#administator-api)
   - [Course Management](https://github.com/GithubVanLinh/Online-Academy#manage-course)
     - [Remove Course](https://github.com/GithubVanLinh/Online-Academy#remove-course)
   - [Category Management](https://github.com/GithubVanLinh/Online-Academy#manage-category)
@@ -481,6 +483,27 @@ Online Academy Project:
     "60b748b2a651451b6f25b377"
   ]
   ```
+#### Change user avatar
+- Method: `POST /users/:userId/avatar`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Params:
+  - userId
+- Form-date:
+  - avaImage
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/users/60b8d2958e620084208eb793/avatar' \
+  --form 'avaImage=@"/home/kptankhoa/Pictures/uv6sesg2qj071.jpg"'
+  ```
+- Success Response:
+  ```json
+  {
+    "avatar": "https://i.imgur.com/W6aSjhy.jpeg",
+    "_id": "60b8d2958e620084208eb793"
+  }
+  ```
 
 ### Lecturer API
 
@@ -538,8 +561,8 @@ Online Academy Project:
   }
   ```
 
-#### Leuturer change avatar
-- Method: `POST /lecturer/lecturerId/avatar`
+#### Lecturer change avatar
+- Method: `POST /lecturers/:lecturerId/avatar`
 - Status Code:
   - Success: `200`
   - Failure: `400`
