@@ -68,7 +68,10 @@ module.exports = {
         { _id: userId },
         { ...newInfo, updatedAt: Date.now() },
         { new: true }
-      ).select(["fullName", "phone", "address", "updatedAt"]);
+      ).select([
+        ...Object.keys(newInfo),
+        "updatedAt"
+      ]);
     } catch (error) {
       throw Error(error);
     }
@@ -483,14 +486,14 @@ async function isValidRfToken(userId, refreshToken) {
  * @param {string} courseId id of course
  * @return {Promise<number>} number course in lecturer is deleted
  */
- async function mRemoveCourseFromWishListForAllUser(courseId) {
-  const users =await UserModel.find({
-    wishList: {_id: courseId}
+async function mRemoveCourseFromWishListForAllUser(courseId) {
+  const users = await UserModel.find({
+    wishList: { _id: courseId }
   });
 
   for (let index = 0; index < users.length; index++) {
     await mDeleteCourseFromWishList(users[index]._id, courseId);
-    
+
   }
 
   return users.length

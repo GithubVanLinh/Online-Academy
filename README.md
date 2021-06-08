@@ -184,7 +184,7 @@ Online Academy Project:
 - Method: `PATCH /users/:userId`
 - Params:
   - userId: a string contains 24 charaters
-- Body:
+- Body ( at least one of following ):
   - fullName
   - phone
   - address
@@ -543,10 +543,11 @@ Online Academy Project:
 - Method: `PATCH /lecturers/:lecturerId`
 - Params:
   - lecturerId: a string contains 24 charaters
-- Body:
+- Body ( at least one of following ):
   - fullName
   - phone
   - address
+  - description
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -560,7 +561,8 @@ Online Academy Project:
     "_id": "60bf19957952b970b11b9f58",
     "fullName": "Gia Kiet",
     "address": "tp hcm",
-    "phone": "0338339593"
+    "phone": "0338339593",
+    "description": "this is description"
   }
   ```
 - Failed response:

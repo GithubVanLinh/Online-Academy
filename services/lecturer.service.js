@@ -88,10 +88,8 @@ module.exports = {
       };
       lecturer = await LecturerModel.findOneAndUpdate(query, update, option)
         .select([
-          "fullName",
-          "phone",
-          "address",
-          "udpatedAt"
+          ...Object.keys(newInfo),
+          "updatedAt"
         ]).exec();
     } catch (error) {
       console.error(error);
