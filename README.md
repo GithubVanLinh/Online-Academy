@@ -486,7 +486,7 @@ Online Academy Project:
 
 #### Lecturer Log In
 
-- Method: `POST /lecturers/login`
+- Method: `POST /auth/login/lecturer`
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -515,7 +515,7 @@ Online Academy Project:
 
 #### Lecturer request new accessToken
 
-- Method: `POST /lecturers/refresh`
+- Method: `POST /auth/refresh/lecturer`
 - Status Code:
   - Success: `200`
   - Failure: `400`
