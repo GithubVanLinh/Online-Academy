@@ -72,7 +72,7 @@ module.exports = {
     const result = LecturerModel.findByIdAndUpdate(
       lecturerId,
       {avatar: newAvatarUrl, updatedAt: Date.now()},
-      {new: true});
+      {new: true}).select("avatar");
     return result;
   },
 

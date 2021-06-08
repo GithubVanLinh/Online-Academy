@@ -537,7 +537,27 @@ Online Academy Project:
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGI3NDVjMDkyNWM4ZTQ3MTBlOTBjNmEiLCJpYXQiOjE2MjI4ODAzMjgsImV4cCI6MTYyMjg4MDkyOH0.dLBhJbnI3RCvYEAYxCswBNl6FLaYU0cRqORPflTSPN8"
   }
   ```
-
+#### Leuturer change avatar
+- Method: `POST /lecturer/lecturerId/avatar`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Params:
+  - lecturerId
+- Form-date:
+  - avaImage
+- Sample:
+  ```code
+  curl --location --request POST  'localhost:8080/lecturers/60b745c0925c8e4710e90c6a/avatar' \
+  --form 'avaImage=@"/home/kptankhoa/Pictures/uv6sesg2qj071.jpg"'
+  ```
+- Success Response:
+  ```json
+  {
+    "avatar": "https://i.imgur.com/WiO6sGN.jpeg",
+    "_id": "60b745c0925c8e4710e90c6a"
+  }
+  ```
 ### Course API
 
 #### Get Courses
