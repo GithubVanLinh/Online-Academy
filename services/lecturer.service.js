@@ -2,6 +2,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
+const ImgUtil = require("../utils/ImgUtil");
+const fs = require("fs");
 
 const VerifyService = require("../services/verify.service");
 const LecturerModel = require("../models/lecturer.model");
@@ -18,7 +20,7 @@ module.exports = {
       lecturer === null ||
       !bcrypt.compareSync(loginInfo.password, lecturer.password)
     ) {
-      return { authenticated: false };
+      return {authenticated: false};
     }
     const payload = {
       userId: lecturer._id
@@ -40,22 +42,42 @@ module.exports = {
   },
 
   refreshAccessToken: async (refreshInfo) => {
-    const { accessToken, refreshToken } = refreshInfo;
-    const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
+    const {accessToken, refreshToken} = refreshInfo;
+    const {userId} = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
       ignoreExpiration: true
     });
     const valid = await isValidRfToken(userId, refreshToken);
     if (valid === true) {
       const newAccessToken = jwt.sign(
-        { userId },
+        {userId},
         process.env.NOT_A_SECRET_KEY,
-        { expiresIn: 60 * 10 }
+        {expiresIn: 60 * 10}
       );
       return {
         accessToken: newAccessToken
       };
     }
     return null;
+  },
+
+  getTeachingCourses: async (lecturerId) => {
+    const lecturer = await LecturerModel.findById(lecturerId)
+      .select("teachingCourses")
+      .populate({
+        path: "teachingCourses",
+        populate: {path: "teachingCourses"}
+      });
+    return lecturer.teachingCourses;
+  },
+
+  changeLecturerAvatar: async (lecturerId, imgFilePath) => {
+    const newAvatarUrl = await ImgUtil.getNewFileUrl(imgFilePath);
+    fs.unlinkSync(imgFilePath);
+    const result = LecturerModel.findByIdAndUpdate(
+      lecturerId,
+      {avatar: newAvatarUrl, updatedAt: Date.now()},
+      {new: true}).select("avatar");
+    return result;
   },
 
   removeCourseFromTeachingCoursesForAllLecturer: async (courseId) => {

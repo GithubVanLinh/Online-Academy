@@ -64,6 +64,7 @@ const Course = new mongoose.Schema({
   status: {
     type: String,
     enum: [
+      Config.COURSE_STATUS.UNVERIFIED,
       Config.COURSE_STATUS.INCOMPLETE,
       Config.COURSE_STATUS.COMPLETED,
       Config.COURSE_STATUS.DELETED

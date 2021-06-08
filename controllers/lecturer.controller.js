@@ -26,6 +26,33 @@ module.exports = {
     }
   },
 
+  getCourses: async (req, res, next) => {
+    const lecturerId = req.params.lecturerId;
+    try {
+      const result = await LecturerService.getTeachingCourses(lecturerId);
+      if (!result) {
+        return res.status(400).json({
+          message: "lecturerId not right!"
+        });
+      } else {
+        return res.json(result);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({error: error});
+    }
+  },
+  
+  changeAvatar: async (req, res, next) => {
+    try {
+      const lecturerId = req.params.lecturerId;
+      const imgFilePath = req.file.path;
+      const lecturer = await LecturerService.changeLecturerAvatar(lecturerId, imgFilePath);
+      return res.json(lecturer);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({error: e});
+
   updateLecturerInfo: async (req, res, next) => {
     const lecturerId = req.params.lecturerId || 0;
     const newInfo = req.body;
@@ -113,6 +140,7 @@ module.exports = {
       res.status(400).json({
         error: "lecturer not found"
       });
+
     }
   }
 
