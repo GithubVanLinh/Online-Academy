@@ -23,6 +23,22 @@ module.exports = {
     } else {
       return res.json(result);
     }
+  },
+  getCourses: async (req, res, next) => {
+    const lecturerId = req.params.lecturerId;
+    try {
+      const result = await LecturerService.getTeachingCourses(lecturerId);
+      if (!result) {
+        return res.status(400).json({
+          message: "lecturerId not right!"
+        });
+      } else {
+        return res.json(result);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({error: error});
+    }
   }
 }
 

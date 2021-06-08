@@ -4,9 +4,10 @@ const express = require("express");
 const router = express.Router();
 
 // const Validator = require("../middlewares/validator.mdw");
-// const LecturerController = require("../controllers/lecturer.controller");
+const LecturerController = require("../controllers/lecturer.controller");
 //
 // router.post("/login", Validator.validateRequestBody("login"), LecturerController.login);
 // router.post("/refresh", LecturerController.refreshAcToken);
+router.get("/:lecturerId/courses", LecturerController.getCourses);
 
 module.exports = router;

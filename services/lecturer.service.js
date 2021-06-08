@@ -15,7 +15,7 @@ module.exports = {
       lecturer === null ||
       !bcrypt.compareSync(loginInfo.password, lecturer.password)
     ) {
-      return { authenticated: false };
+      return {authenticated: false};
     }
     const payload = {
       userId: lecturer._id
@@ -37,22 +37,32 @@ module.exports = {
   },
 
   refreshAccessToken: async (refreshInfo) => {
-    const { accessToken, refreshToken } = refreshInfo;
-    const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
+    const {accessToken, refreshToken} = refreshInfo;
+    const {userId} = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
       ignoreExpiration: true
     });
     const valid = await isValidRfToken(userId, refreshToken);
     if (valid === true) {
       const newAccessToken = jwt.sign(
-        { userId },
+        {userId},
         process.env.NOT_A_SECRET_KEY,
-        { expiresIn: 60 * 10 }
+        {expiresIn: 60 * 10}
       );
       return {
         accessToken: newAccessToken
       };
     }
     return null;
+  },
+
+  getTeachingCourses: async (lecturerId) => {
+    const lecturer = await LecturerModel.findById(lecturerId)
+      .select("teachingCourses")
+      .populate({
+        path: "teachingCourses",
+        populate:{path:"teachingCourses"}
+      });
+    return lecturer.teachingCourses;
   },
 
   removeCourseFromTeachingCoursesForAllLecturer: async (courseId) => {
