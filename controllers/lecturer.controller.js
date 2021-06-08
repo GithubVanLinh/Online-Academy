@@ -67,6 +67,53 @@ module.exports = {
     res.status(400).json({
       error: "lecturer not found"
     });
+  },
+
+  makeEmailVerification: async (req, res, next) => {
+    const email = req.body.email;
+    const lecturerId = req.params.lecturerId;
+
+    const lecturer = await LecturerService.findById(lecturerId);
+    // console.log(lecturer);
+    if (lecturer) {
+      const verification = await LecturerService.makeChangeEmailVerification(email);
+      if (verification) {
+        return res.json({
+          message: "verify your email"
+        })
+      } else {
+        return res.status(400).json({
+          error: "email is already taken"
+        })
+      }
+    }
+    else {
+      res.status(400).json({
+        error: "lecturer not found"
+      })
+    }
+  },
+
+  verifyAndUpdateEmail: async (req, res, next) => {
+    const lecturerId = req.params.lecturerId;
+    const { email, key } = req.body;
+
+    const lecturer = await LecturerService.findById(lecturerId);
+    if (lecturer) {
+      const updatedLecturer = await LecturerService.verifyEmail(lecturerId, email, key);
+      if (updatedLecturer) {
+        res.json(updatedLecturer);
+      } else {
+        res.status(400).json({
+          error: "incorrect email or key"
+        })
+      }
+    }
+    else {
+      res.status(400).json({
+        error: "lecturer not found"
+      });
+    }
   }
 
 }

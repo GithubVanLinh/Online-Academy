@@ -21,16 +21,16 @@ router.patch("/:lecturerId/password",
   LecturerController.updateLecturerPassword
 );
 
-// // change user email
-// router.post("/:userId/email",
-//   Validator.validateRequestBody("update_user_email"),
-//   UserController.makeEmailVerification
-// );
+// change user email
+router.post("/:lecturerId/email",
+  Validator.validateRequestBody("update_user_email"),
+  LecturerController.makeEmailVerification
+);
 
-// // verify change email
-// router.post("/:userId/verify",
-//   Validator.validateRequestBody("validate_student"),
-//   UserController.verifyAndUpdateEmail
-// );
+// verify change email
+router.post("/:lecturerId/verify",
+  Validator.validateRequestBody("validate_student"),
+  LecturerController.verifyAndUpdateEmail
+);
 
 module.exports = router;

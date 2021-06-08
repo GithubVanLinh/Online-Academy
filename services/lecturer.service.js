@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
 
+const VerifyService = require("../services/verify.service");
 const LecturerModel = require("../models/lecturer.model");
 const Config = require("../configs/constraints");
 
@@ -109,6 +110,50 @@ module.exports = {
     } catch (error) {
       throw Error(error);
     }
+  },
+
+  /**
+ *
+ * @param {string} newEmail
+ * @return {object}
+ */
+  makeChangeEmailVerification: async (newEmail) => {
+    try {
+      const isValidEmail = await checkEmailExists(newEmail);
+      if (isValidEmail) {
+        const verification = await VerifyService.createNewValidateRequestV2(
+          newEmail
+        );
+        return verification;
+      }
+      return null;
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  /**
+ *
+ * @param {string} lecturerId
+ * @param {string} email
+ * @param {string} key
+ * @return {object}
+ */
+  verifyEmail: async (lecturerId, email, key) => {
+    let lecturer = null;
+    try {
+      const result = await VerifyService.validateUser(email, key);
+      if (result === true) {
+        lecturer = await LecturerModel.findOneAndUpdate(
+          { _id: lecturerId },
+          { email: email, updatedAt: Date.now() },
+          { new: true }
+        ).select(["email", "updatedAt"]);
+      }
+    } catch (error) {
+      throw Error(error);
+    }
+    return lecturer;
   }
 
 };
@@ -175,4 +220,21 @@ async function mDeleteCourseFromTeachingCourses(lecturerId, courseId) {
 async function mGetListTechingCourses(lecturerId) {
   const res = await LecturerModel.findById(lecturerId);
   return res.teachingCourses;
+}
+
+/**
+ * 
+ * @param {String} email 
+ * @return {bool}
+ */
+async function checkEmailExists(email) {
+  try {
+    const result = await LecturerModel.findOne({ email: email }).exec();
+    if (!result) {
+      return true;
+    }
+  } catch (error) {
+    throw Error(error);
+  }
+  return false;
 }
