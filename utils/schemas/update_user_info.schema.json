@@ -10,12 +10,11 @@
     },
     "address": {
       "type": "string"
+    },
+    "description": {
+      "type": "string"
     }
   },
-  "required": [
-    "fullName",
-    "phone",
-    "address"
-  ],
+  "minProperties": 1,
   "additionalProperties": false
 }
