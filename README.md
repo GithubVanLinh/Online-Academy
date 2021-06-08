@@ -677,6 +677,70 @@ Online Academy Project:
   }
   ```
 
+#### Upload new course
+
+- Method: `POST /lecturers/:lecturerId/courses`
+- Params:
+  - lecturerId: a string contains 24 charaters
+- Body:
+  - courseName
+  - courseImage
+  - category
+  - price
+  - promotionalPrice
+  - briefDescription
+  - detailDescription
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/lecturers/60bf19957952b970b11b9f58/courses
+  ```
+- Success response:
+  ```json
+  {
+    "courseLecturers": [
+        "60bf19957952b970b11b9f58"
+    ],
+    "briefDescription": "short desc",
+    "detailDescription": "long desc",
+    "soldNumber": 0,
+    "ratedNumber": 0,
+    "lessionNumber": 0,
+    "totalHours": 0,
+    "ratingPoint": 0,
+    "status": "INCOMPLETE",
+    "view": 0,
+    "_id": "60bf43c55d61c8652a551042",
+    "courseName": "Test create new course",
+    "courseImage": "This is course image url",
+    "category": "60b73923a651451b6f25b374",
+    "price": 145000,
+    "promotionalPrice": 45000,
+    "createdAt": "2021-06-08T10:17:41.704Z",
+    "updatedAt": "2021-06-08T10:17:41.704Z",
+    "feedbacks": [],
+    "__v": 0
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "course is already exists"
+  }
+  ```
+  ```json
+  {
+    "error": "lecturer not found"
+  }
+  ```
+  ```json
+  {
+    "error": "invalid course info"
+  }
+  ```
+
 ### Course API
 
 #### Get Courses

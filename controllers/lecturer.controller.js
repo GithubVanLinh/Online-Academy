@@ -1,6 +1,7 @@
 "use strict";
 const LecturerService = require("../services/lecturer.service");
 const UserService = require("../services/user.service");
+const CourseService = require("../services/course.service");
 
 module.exports = {
   login: async (req, res, next) => {
@@ -114,6 +115,35 @@ module.exports = {
         error: "lecturer not found"
       });
     }
+  },
+
+  uploadNewCourse: async (req, res, next) => {
+    const lecturerId = req.params.lecturerId;
+    const newCourseInfo = req.body;
+
+    const lecturer = await LecturerService.findById(lecturerId);
+
+    if (lecturer === null) {
+      return res.status(400).json({
+        error: "lecturer not found"
+      });
+    }
+
+    const course = await CourseService.getCourseByName(newCourseInfo.courseName);
+    if (course) {
+      return res.status(400).json({
+        error: "course is already exists"
+      })
+    }
+
+    const newCourse = await CourseService.createCourse(newCourseInfo, lecturerId);
+    if (newCourse === null) {
+      return res.status(400).json({
+        error: "invalid course info"
+      });
+    }
+
+    res.json(newCourse);
   }
 
 }
