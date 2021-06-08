@@ -15,6 +15,7 @@ module.exports = {
       return res.json(result);
     }
   },
+
   refreshAcToken: async (req, res, next) => {
     const refreshInfo = req.body;
     const result = await LecturerService.refreshAccessToken(refreshInfo);
@@ -27,11 +28,39 @@ module.exports = {
     }
   },
 
+  getCourses: async (req, res, next) => {
+    const lecturerId = req.params.lecturerId;
+    try {
+      const result = await LecturerService.getTeachingCourses(lecturerId);
+      if (!result) {
+        return res.status(400).json({
+          message: "lecturerId not right!"
+        });
+      } else {
+        return res.json(result);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ error: error });
+    }
+  },
+
+  changeAvatar: async (req, res, next) => {
+    try {
+      const lecturerId = req.params.lecturerId;
+      const imgFilePath = req.file.path;
+      const lecturer = await LecturerService.changeLecturerAvatar(lecturerId, imgFilePath);
+      return res.json(lecturer);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({ error: e });
+    }
+  },
+
   updateLecturerInfo: async (req, res, next) => {
     const lecturerId = req.params.lecturerId || 0;
     const newInfo = req.body;
     // console.log(newInfo);
-
     const updatedLecturer = await LecturerService.findAndUpdate(lecturerId, newInfo);
 
     if (updatedLecturer === null) {
@@ -42,7 +71,7 @@ module.exports = {
     res.json(updatedLecturer);
   },
 
-  updateLecturerPassword: async (req, res, nect) => {
+  updateLecturerPassword: async (req, res, next) => {
     const lecturerId = req.params.lecturerId || 0;
     const { currentPassword, newPassword } = req.body;
 
@@ -64,36 +93,37 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
-    }
-    res.status(400).json({
-      error: "lecturer not found"
-    });
-  },
-
-  makeEmailVerification: async (req, res, next) => {
-    const email = req.body.email;
-    const lecturerId = req.params.lecturerId;
-
-    const lecturer = await LecturerService.findById(lecturerId);
-    // console.log(lecturer);
-    if (lecturer) {
-      const verification = await LecturerService.makeChangeEmailVerification(email);
-      if (verification) {
-        return res.json({
-          message: "verify your email"
-        })
-      } else {
-        return res.status(400).json({
-          error: "email is already taken"
-        })
-      }
-    }
-    else {
       res.status(400).json({
         error: "lecturer not found"
-      })
+      });
     }
+
   },
+
+  makeEmailVerification:
+    async (req, res, next) => {
+      const email = req.body.email;
+      const lecturerId = req.params.lecturerId;
+
+      const lecturer = await LecturerService.findById(lecturerId);
+      // console.log(lecturer);
+      if (lecturer) {
+        const verification = await LecturerService.makeChangeEmailVerification(email);
+        if (verification) {
+          return res.json({
+            message: "verify your email"
+          });
+        } else {
+          return res.status(400).json({
+            error: "email is already taken"
+          });
+        }
+      } else {
+        res.status(400).json({
+          error: "lecturer not found"
+        });
+      }
+    },
 
   verifyAndUpdateEmail: async (req, res, next) => {
     const lecturerId = req.params.lecturerId;
@@ -107,10 +137,9 @@ module.exports = {
       } else {
         res.status(400).json({
           error: "incorrect email or key"
-        })
+        });
       }
-    }
-    else {
+    } else {
       res.status(400).json({
         error: "lecturer not found"
       });
@@ -133,7 +162,7 @@ module.exports = {
     if (course) {
       return res.status(400).json({
         error: "course is already exists"
-      })
+      });
     }
 
     const newCourse = await CourseService.createCourse(newCourseInfo, lecturerId);
@@ -146,7 +175,8 @@ module.exports = {
     res.json(newCourse);
   }
 
-}
+
+};
 
 
 

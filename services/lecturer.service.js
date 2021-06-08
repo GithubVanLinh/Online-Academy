@@ -2,6 +2,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
+const ImgUtil = require("../utils/ImgUtil");
+const fs = require("fs");
 
 const VerifyService = require("../services/verify.service");
 const LecturerModel = require("../models/lecturer.model");
@@ -18,7 +20,7 @@ module.exports = {
       lecturer === null ||
       !bcrypt.compareSync(loginInfo.password, lecturer.password)
     ) {
-      return { authenticated: false };
+      return {authenticated: false};
     }
     const payload = {
       userId: lecturer._id
@@ -40,22 +42,42 @@ module.exports = {
   },
 
   refreshAccessToken: async (refreshInfo) => {
-    const { accessToken, refreshToken } = refreshInfo;
-    const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
+    const {accessToken, refreshToken} = refreshInfo;
+    const {userId} = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
       ignoreExpiration: true
     });
     const valid = await isValidRfToken(userId, refreshToken);
     if (valid === true) {
       const newAccessToken = jwt.sign(
-        { userId },
+        {userId},
         process.env.NOT_A_SECRET_KEY,
-        { expiresIn: 60 * 10 }
+        {expiresIn: 60 * 10}
       );
       return {
         accessToken: newAccessToken
       };
     }
     return null;
+  },
+
+  getTeachingCourses: async (lecturerId) => {
+    const lecturer = await LecturerModel.findById(lecturerId)
+      .select("teachingCourses")
+      .populate({
+        path: "teachingCourses",
+        populate: {path: "teachingCourses"}
+      });
+    return lecturer.teachingCourses;
+  },
+
+  changeLecturerAvatar: async (lecturerId, imgFilePath) => {
+    const newAvatarUrl = await ImgUtil.getNewFileUrl(imgFilePath);
+    fs.unlinkSync(imgFilePath);
+    const result = LecturerModel.findByIdAndUpdate(
+      lecturerId,
+      {avatar: newAvatarUrl, updatedAt: Date.now()},
+      {new: true}).select("avatar");
+    return result;
   },
 
   removeCourseFromTeachingCoursesForAllLecturer: async (courseId) => {
@@ -101,9 +123,9 @@ module.exports = {
     try {
       const hashPassword = await bcrypt.hash(newPassword, salt);
       return await LecturerModel.findOneAndUpdate(
-        { _id: lecturerId },
-        { password: hashPassword, updatedAt: Date.now() },
-        { new: true }
+        {_id: lecturerId},
+        {password: hashPassword, updatedAt: Date.now()},
+        {new: true}
       ).select(["username", "password", "updatedAt"]);
     } catch (error) {
       throw Error(error);
@@ -111,10 +133,10 @@ module.exports = {
   },
 
   /**
- *
- * @param {string} newEmail
- * @return {object}
- */
+   *
+   * @param {string} newEmail
+   * @return {object}
+   */
   makeChangeEmailVerification: async (newEmail) => {
     try {
       const isValidEmail = await checkEmailExists(newEmail);
@@ -131,21 +153,21 @@ module.exports = {
   },
 
   /**
- *
- * @param {string} lecturerId
- * @param {string} email
- * @param {string} key
- * @return {object}
- */
+   *
+   * @param {string} lecturerId
+   * @param {string} email
+   * @param {string} key
+   * @return {object}
+   */
   verifyEmail: async (lecturerId, email, key) => {
     let lecturer = null;
     try {
       const result = await VerifyService.validateUser(email, key);
       if (result === true) {
         lecturer = await LecturerModel.findOneAndUpdate(
-          { _id: lecturerId },
-          { email: email, updatedAt: Date.now() },
-          { new: true }
+          {_id: lecturerId},
+          {email: email, updatedAt: Date.now()},
+          {new: true}
         ).select(["email", "updatedAt"]);
       }
     } catch (error) {
@@ -178,7 +200,7 @@ async function isValidRfToken(userId, refreshToken) {
  */
 async function mRemoveCourseFromTeachingCoursesForAllLecturer(courseId) {
   const lecturers = await LecturerModel.find({
-    teachingCourses: { _id: courseId }
+    teachingCourses: {_id: courseId}
   });
 
 
@@ -221,13 +243,13 @@ async function mGetListTechingCourses(lecturerId) {
 }
 
 /**
- * 
- * @param {String} email 
+ *
+ * @param {String} email
  * @return {bool}
  */
 async function checkEmailExists(email) {
   try {
-    const result = await LecturerModel.findOne({ email: email }).exec();
+    const result = await LecturerModel.findOne({email: email}).exec();
     if (!result) {
       return true;
     }

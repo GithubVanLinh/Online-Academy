@@ -22,7 +22,7 @@ module.exports = {
     res.json(feedbacks);
   },
   getCourses: async (req, res, next) => {
-    const { categoryId } = req.query;
+    const {categoryId} = req.query;
     const page = +req.query.page || 1;
     if (categoryId) {
       const resl = await CourseService.getCoursesByCategory(categoryId, page);
@@ -52,16 +52,25 @@ module.exports = {
     const resl = await CourseService.getCoursesSortBySoldNumber(categoryId)
     res.json(resl.docs);
   },
-  addFeedback: async (req,res,next)=>{
+  addFeedback: async (req, res, next) => {
     const courseId = req.params.courseId;
     const feedbackData = req.body;
-    const feedback = await CourseService.createFeedback(courseId, feedbackData);
-    if(feedback){
-      return res.json(feedback);
+    try {
+      const feedback = await CourseService.createFeedback(courseId, feedbackData);
+      if (feedback) {
+        return res.json(feedback);
+      } else {
+        return res.status(400).json({
+          error: "cannot add feedback"
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({
+        error: error
+      })
     }
-    res.status(400).json({
-      error: "cannot add feedback"
-    });
+
   },
   removeCourse: async (req, res, next) => {
     const courseId = req.params.courseId;
