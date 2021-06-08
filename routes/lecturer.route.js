@@ -35,4 +35,10 @@ router.post("/:lecturerId/verify",
   LecturerController.verifyAndUpdateEmail
 );
 
+// upload new course
+router.post("/:lecturerId/courses",
+  Validator.validateRequestBody("new_course"),
+  LecturerController.uploadNewCourse
+);
+
 module.exports = router;

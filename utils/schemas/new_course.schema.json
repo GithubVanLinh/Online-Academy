@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "courseName": {
+      "type": "string"
+    },
+    "courseImage": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number"
+    },
+    "promotionalPrice": {
+      "type": "number"
+    },
+    "briefDescription": {
+      "type": "string"
+    },
+    "detailDescription": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "courseName",
+    "courseImage",
+    "category",
+    "price",
+    "promotionalPrice",
+    "briefDescription",
+    "detailDescription"
+  ],
+  "additionalProperties": false
+}

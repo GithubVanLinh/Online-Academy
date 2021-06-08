@@ -238,13 +238,13 @@ module.exports = {
   },
 
   createFeedback: async (courseId, feedbackData) => {
-    const {userId, content, ratingPoint} = feedbackData;
-    const haveEnrollment = await enrollmentModel.find({userId: userId, courseId: courseId}).exec();
+    const { userId, content, ratingPoint } = feedbackData;
+    const haveEnrollment = await enrollmentModel.find({ userId: userId, courseId: courseId }).exec();
     if (haveEnrollment.length) {
-      const newFeedback = {userId, content, ratingPoint, createdAt: Date.now()};
+      const newFeedback = { userId, content, ratingPoint, createdAt: Date.now() };
       const course = await CourseModel.findByIdAndUpdate(courseId,
-        {$push: {feedbacks: newFeedback}},
-        {new: true}).exec();
+        { $push: { feedbacks: newFeedback } },
+        { new: true }).exec();
       updateRatingPoint(course);
       await course.save();
       return newFeedback;
@@ -252,12 +252,50 @@ module.exports = {
     return null;
   },
 
-  
-  deleteCourse: async (courseId) =>{
+
+  deleteCourse: async (courseId) => {
     const res = await CourseModel.findByIdAndUpdate(courseId, {
       status: Config.COURSE_STATUS.DELETED
     });
     return res;
+  },
+
+  /**
+   * 
+   * @param {string} courseName name of course
+   * @return {Promise<object>}
+   */
+  getCourseByName: async (courseName) => {
+    let course;
+    try {
+      course = await CourseModel.findOne({
+        courseName: courseName
+      }).exec();
+    } catch (error) {
+      console.error(error);
+    }
+    return course;
+  },
+
+  /**
+   * 
+   * @param {object} courseInfo 
+   * @param {string} lecturerId id of lecturer
+   * @return {Promise<object>}
+   */
+  createCourse: async (courseInfo, lecturerId) => {
+    let course = null;
+    try {
+      const dataToCreate = {
+        ...courseInfo,
+        courseLecturers: [lecturerId]
+      }
+      console.log(dataToCreate);
+      course = await CourseModel.create(dataToCreate);
+    } catch (error) {
+      console.error(error);
+    }
+    return course;
   }
 
 };
@@ -352,5 +390,5 @@ async function mGetCoursesByFilter(type, condition, page, sort) {
  */
 function updateRatingPoint(course) {
   const totalPoints = course.feedbacks.reduce((total, single) => total + single.ratingPoint, 0);
-  course.ratingPoint = totalPoints/course.feedbacks.length;
+  course.ratingPoint = totalPoints / course.feedbacks.length;
 }

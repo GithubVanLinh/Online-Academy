@@ -1,6 +1,7 @@
 "use strict";
 const LecturerService = require("../services/lecturer.service");
 const UserService = require("../services/user.service");
+const CourseService = require("../services/course.service");
 
 module.exports = {
   login: async (req, res, next) => {
@@ -40,7 +41,7 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
-      res.status(400).json({error: error});
+      res.status(400).json({ error: error });
     }
   },
 
@@ -72,7 +73,7 @@ module.exports = {
 
   updateLecturerPassword: async (req, res, next) => {
     const lecturerId = req.params.lecturerId || 0;
-    const {currentPassword, newPassword} = req.body;
+    const { currentPassword, newPassword } = req.body;
 
     // console.log("Current password: " + currentPassword);
     // console.log("New password: " + newPassword);
@@ -111,43 +112,71 @@ module.exports = {
         if (verification) {
           return res.json({
             message: "verify your email"
-          })
+          });
         } else {
           return res.status(400).json({
             error: "email is already taken"
-          })
-        }
-      } else {
-        res.status(400).json({
-          error: "lecturer not found"
-        })
-      }
-    },
-
-  verifyAndUpdateEmail:
-    async (req, res, next) => {
-      const lecturerId = req.params.lecturerId;
-      const {email, key} = req.body;
-
-      const lecturer = await LecturerService.findById(lecturerId);
-      if (lecturer) {
-        const updatedLecturer = await LecturerService.verifyEmail(lecturerId, email, key);
-        if (updatedLecturer) {
-          res.json(updatedLecturer);
-        } else {
-          res.status(400).json({
-            error: "incorrect email or key"
-          })
+          });
         }
       } else {
         res.status(400).json({
           error: "lecturer not found"
         });
-
       }
+    },
+
+  verifyAndUpdateEmail: async (req, res, next) => {
+    const lecturerId = req.params.lecturerId;
+    const { email, key } = req.body;
+
+    const lecturer = await LecturerService.findById(lecturerId);
+    if (lecturer) {
+      const updatedLecturer = await LecturerService.verifyEmail(lecturerId, email, key);
+      if (updatedLecturer) {
+        res.json(updatedLecturer);
+      } else {
+        res.status(400).json({
+          error: "incorrect email or key"
+        });
+      }
+    } else {
+      res.status(400).json({
+        error: "lecturer not found"
+      });
+    }
+  },
+
+  uploadNewCourse: async (req, res, next) => {
+    const lecturerId = req.params.lecturerId;
+    const newCourseInfo = req.body;
+
+    const lecturer = await LecturerService.findById(lecturerId);
+
+    if (lecturer === null) {
+      return res.status(400).json({
+        error: "lecturer not found"
+      });
     }
 
-}
+    const course = await CourseService.getCourseByName(newCourseInfo.courseName);
+    if (course) {
+      return res.status(400).json({
+        error: "course is already exists"
+      });
+    }
+
+    const newCourse = await CourseService.createCourse(newCourseInfo, lecturerId);
+    if (newCourse === null) {
+      return res.status(400).json({
+        error: "invalid course info"
+      });
+    }
+
+    res.json(newCourse);
+  }
+
+
+};
 
 
 

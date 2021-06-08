@@ -18,6 +18,7 @@ const enrollmentSchema = require("../utils/schemas/enrollment.schema.json");
 const progressSchema = require("../utils/schemas/progress.schema.json");
 const feedbackSchema = require("../utils/schemas/send_feedback.schema.json");
 const categorySchema = require("../utils/schemas/category.schema.json");
+const newCourseSchema = require("../utils/schemas/new_course.schema.json");
 
 ajv.addSchema(registerSchema, "register_student");
 ajv.addSchema(updateSchema, "user");
@@ -28,7 +29,8 @@ ajv.addSchema(updateUserPasswordSchema, "update_user_password");
 ajv.addSchema(updateUserEmail, "update_user_email");
 ajv.addSchema(enrollmentSchema, "enrollment");
 ajv.addSchema(progressSchema, "progress");
-ajv.addSchema(feedbackSchema,"send_feedback");
+ajv.addSchema(feedbackSchema, "send_feedback");
 ajv.addSchema(categorySchema, "category");
+ajv.addSchema(newCourseSchema, "new_course");
 
 module.exports = ajv;
