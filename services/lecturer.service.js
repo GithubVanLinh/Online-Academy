@@ -123,9 +123,9 @@ module.exports = {
     try {
       const hashPassword = await bcrypt.hash(newPassword, salt);
       return await LecturerModel.findOneAndUpdate(
-        { _id: lecturerId },
-        { password: hashPassword, updatedAt: Date.now() },
-        { new: true }
+        {_id: lecturerId},
+        {password: hashPassword, updatedAt: Date.now()},
+        {new: true}
       ).select(["username", "password", "updatedAt"]);
     } catch (error) {
       throw Error(error);
@@ -133,10 +133,10 @@ module.exports = {
   },
 
   /**
- *
- * @param {string} newEmail
- * @return {object}
- */
+   *
+   * @param {string} newEmail
+   * @return {object}
+   */
   makeChangeEmailVerification: async (newEmail) => {
     try {
       const isValidEmail = await checkEmailExists(newEmail);
@@ -153,21 +153,21 @@ module.exports = {
   },
 
   /**
- *
- * @param {string} lecturerId
- * @param {string} email
- * @param {string} key
- * @return {object}
- */
+   *
+   * @param {string} lecturerId
+   * @param {string} email
+   * @param {string} key
+   * @return {object}
+   */
   verifyEmail: async (lecturerId, email, key) => {
     let lecturer = null;
     try {
       const result = await VerifyService.validateUser(email, key);
       if (result === true) {
         lecturer = await LecturerModel.findOneAndUpdate(
-          { _id: lecturerId },
-          { email: email, updatedAt: Date.now() },
-          { new: true }
+          {_id: lecturerId},
+          {email: email, updatedAt: Date.now()},
+          {new: true}
         ).select(["email", "updatedAt"]);
       }
     } catch (error) {
@@ -200,7 +200,7 @@ async function isValidRfToken(userId, refreshToken) {
  */
 async function mRemoveCourseFromTeachingCoursesForAllLecturer(courseId) {
   const lecturers = await LecturerModel.find({
-    teachingCourses: { _id: courseId }
+    teachingCourses: {_id: courseId}
   });
 
 
@@ -243,13 +243,13 @@ async function mGetListTechingCourses(lecturerId) {
 }
 
 /**
- * 
- * @param {String} email 
+ *
+ * @param {String} email
  * @return {bool}
  */
 async function checkEmailExists(email) {
   try {
-    const result = await LecturerModel.findOne({ email: email }).exec();
+    const result = await LecturerModel.findOne({email: email}).exec();
     if (!result) {
       return true;
     }

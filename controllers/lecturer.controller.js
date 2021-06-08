@@ -14,6 +14,7 @@ module.exports = {
       return res.json(result);
     }
   },
+
   refreshAcToken: async (req, res, next) => {
     const refreshInfo = req.body;
     const result = await LecturerService.refreshAccessToken(refreshInfo);
@@ -42,7 +43,7 @@ module.exports = {
       res.status(400).json({error: error});
     }
   },
-  
+
   changeAvatar: async (req, res, next) => {
     try {
       const lecturerId = req.params.lecturerId;
@@ -52,12 +53,13 @@ module.exports = {
     } catch (e) {
       console.log(e);
       return res.status(400).json({error: e});
+    }
+  },
 
   updateLecturerInfo: async (req, res, next) => {
     const lecturerId = req.params.lecturerId || 0;
     const newInfo = req.body;
     // console.log(newInfo);
-
     const updatedLecturer = await LecturerService.findAndUpdate(lecturerId, newInfo);
 
     if (updatedLecturer === null) {
@@ -68,9 +70,9 @@ module.exports = {
     res.json(updatedLecturer);
   },
 
-  updateLecturerPassword: async (req, res, nect) => {
+  updateLecturerPassword: async (req, res, next) => {
     const lecturerId = req.params.lecturerId || 0;
-    const { currentPassword, newPassword } = req.body;
+    const {currentPassword, newPassword} = req.body;
 
     // console.log("Current password: " + currentPassword);
     // console.log("New password: " + newPassword);
@@ -90,59 +92,60 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
-    }
-    res.status(400).json({
-      error: "lecturer not found"
-    });
-  },
-
-  makeEmailVerification: async (req, res, next) => {
-    const email = req.body.email;
-    const lecturerId = req.params.lecturerId;
-
-    const lecturer = await LecturerService.findById(lecturerId);
-    // console.log(lecturer);
-    if (lecturer) {
-      const verification = await LecturerService.makeChangeEmailVerification(email);
-      if (verification) {
-        return res.json({
-          message: "verify your email"
-        })
-      } else {
-        return res.status(400).json({
-          error: "email is already taken"
-        })
-      }
-    }
-    else {
-      res.status(400).json({
-        error: "lecturer not found"
-      })
-    }
-  },
-
-  verifyAndUpdateEmail: async (req, res, next) => {
-    const lecturerId = req.params.lecturerId;
-    const { email, key } = req.body;
-
-    const lecturer = await LecturerService.findById(lecturerId);
-    if (lecturer) {
-      const updatedLecturer = await LecturerService.verifyEmail(lecturerId, email, key);
-      if (updatedLecturer) {
-        res.json(updatedLecturer);
-      } else {
-        res.status(400).json({
-          error: "incorrect email or key"
-        })
-      }
-    }
-    else {
       res.status(400).json({
         error: "lecturer not found"
       });
-
     }
-  }
+
+  },
+
+  makeEmailVerification:
+    async (req, res, next) => {
+      const email = req.body.email;
+      const lecturerId = req.params.lecturerId;
+
+      const lecturer = await LecturerService.findById(lecturerId);
+      // console.log(lecturer);
+      if (lecturer) {
+        const verification = await LecturerService.makeChangeEmailVerification(email);
+        if (verification) {
+          return res.json({
+            message: "verify your email"
+          })
+        } else {
+          return res.status(400).json({
+            error: "email is already taken"
+          })
+        }
+      } else {
+        res.status(400).json({
+          error: "lecturer not found"
+        })
+      }
+    },
+
+  verifyAndUpdateEmail:
+    async (req, res, next) => {
+      const lecturerId = req.params.lecturerId;
+      const {email, key} = req.body;
+
+      const lecturer = await LecturerService.findById(lecturerId);
+      if (lecturer) {
+        const updatedLecturer = await LecturerService.verifyEmail(lecturerId, email, key);
+        if (updatedLecturer) {
+          res.json(updatedLecturer);
+        } else {
+          res.status(400).json({
+            error: "incorrect email or key"
+          })
+        }
+      } else {
+        res.status(400).json({
+          error: "lecturer not found"
+        });
+
+      }
+    }
 
 }
 
