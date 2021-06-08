@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "categoryName": {
+      "type": "string"
+    },
+    "level": {
+      "type": "string",
+      "enum": ["WEB", "MOBILE"]
+    },
+    "isDeleted": {
+      "type": "boolean"
+    },
+    "createdAt": {
+      "type": "number",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "number",
+      "format": "date-time"
+    }
+  },
+  "required": ["categoryName", "level"],
+  "additionalProperties": false
+}

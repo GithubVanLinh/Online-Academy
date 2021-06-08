@@ -11,4 +11,28 @@ const LecturerController = require("../controllers/lecturer.controller");
 router.get("/:lecturerId/courses", LecturerController.getCourses);
 router.post("/:lecturerId/avatar", upload.single("avaImage"), LecturerController.changeAvatar);
 
+// update lecturer info (fullName, phone, address)
+router.patch("/:lecturerId",
+  Validator.validateRequestBody("update_user_info"),
+  LecturerController.updateLecturerInfo
+);
+
+// change lecturer password
+router.patch("/:lecturerId/password",
+  Validator.validateRequestBody("update_user_password"),
+  LecturerController.updateLecturerPassword
+);
+
+// change lecturer email
+router.post("/:lecturerId/email",
+  Validator.validateRequestBody("update_user_email"),
+  LecturerController.makeEmailVerification
+);
+
+// verify lecturer email
+router.post("/:lecturerId/verify",
+  Validator.validateRequestBody("validate_student"),
+  LecturerController.verifyAndUpdateEmail
+);
+
 module.exports = router;

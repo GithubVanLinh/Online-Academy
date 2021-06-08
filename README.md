@@ -184,7 +184,7 @@ Online Academy Project:
 - Method: `PATCH /users/:userId`
 - Params:
   - userId: a string contains 24 charaters
-- Body:
+- Body ( at least one of following ):
   - fullName
   - phone
   - address
@@ -537,6 +537,7 @@ Online Academy Project:
     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGI3NDVjMDkyNWM4ZTQ3MTBlOTBjNmEiLCJpYXQiOjE2MjI4ODAzMjgsImV4cCI6MTYyMjg4MDkyOH0.dLBhJbnI3RCvYEAYxCswBNl6FLaYU0cRqORPflTSPN8"
   }
   ```
+
 #### Leuturer change avatar
 - Method: `POST /lecturer/lecturerId/avatar`
 - Status Code:
@@ -558,6 +559,147 @@ Online Academy Project:
     "_id": "60b745c0925c8e4710e90c6a"
   }
   ```
+
+
+#### Update lecturer information
+
+- Method: `PATCH /lecturers/:lecturerId`
+- Params:
+  - lecturerId: a string contains 24 charaters
+- Body ( at least one of following ):
+  - fullName
+  - phone
+  - address
+  - description
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/lecturers/60bf19957952b970b11b9f58
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60bf19957952b970b11b9f58",
+    "fullName": "Gia Kiet",
+    "address": "tp hcm",
+    "phone": "0338339593",
+    "description": "this is description"
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "lecturer not found"
+  }
+  ```
+
+#### Send change lecturer email request
+
+- Method: `POST /lecturers/:lecturerId/email`
+- Params:
+  - lecturerId: a string contains 24 charaters
+- Body:
+  - email
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/lecturers/60bf19957952b970b11b9f58/email
+  ```
+- Success response:
+  ```json
+  {
+    "message": "verify your email"
+  }
+  ```
+- Failed response:
+
+  ```json
+  {
+    "error": "email is already taken"
+  }
+  ```
+
+  ```json
+  {
+    "error": "lecturer not found"
+  }
+  ```
+
+#### Verify email to change lecturer email
+
+- Method: `POST /lecturers/:lecturerId/verify`
+- Params:
+  - lecturerId: a string contains 24 charaters
+- Body:
+  - email
+  - key
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/lecturers/60bf19957952b970b11b9f58/verify
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60b9d65d0ab2a19495ec1211",
+    "email": "kietdg99@gmail.com",
+    "updatedAt": "2021-06-05T03:34:29.801Z"
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "incorrect email or key"
+  }
+  ```
+  ```json
+  {
+    "error": "lecturer not found"
+  }
+  ```
+
+#### Change lecturer password
+
+- Method: `PATCH /lecturers/:lecturerId/password`
+- Params:
+  - lecturerId: a string contains 24 charaters
+- Body:
+  - currentPassword
+  - newPassword
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/lecturers/60bf19957952b970b11b9f58/password
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60bf19957952b970b11b9f58",
+    "username": "giakiet99",
+    "password": "$2a$10$UUrEV.6t7Z5PA3ICLnxb1.7AMzg03MH58b8GJxdjce0trJqRc54oi",
+    "updatedAt": "2021-06-08T08:23:47.458Z"
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "Incorrect password"
+  }
+  ```
+  ```json
+  {
+    "error": "lecturer not found"
+  }
+  ```
+
 ### Course API
 
 #### Get Courses
@@ -851,9 +993,11 @@ Online Academy Project:
     "createdAt": 1622900554039
   }
   ```
+
 #### Get lesson info of the course
+
 - Method: `GET /courses/:courseId/lessons/:lessonId`
-- Headers: 
+- Headers:
   - x-access-token
 - Params:
   - courseId
@@ -875,7 +1019,7 @@ Online Academy Project:
     "isFinish": true
   }
   ```
-- Failed Response: 
+- Failed Response:
   ```json
   {
     "error": "user haven't registered the course yet"
@@ -1345,15 +1489,26 @@ Online Academy Project:
 - Success response:
 
   ```json
-  [
-    {
-      "categoryName": "string",
-      "level": "WEB",
-      "isDeleted": "bool",
-      "createdAt": "date-string",
-      "updatedAt": "date-string"
-    }
-  ]
+  {
+    "web": [
+      {
+        "categoryName": "string",
+        "level": "WEB",
+        "isDeleted": "bool",
+        "createdAt": "date-string",
+        "updatedAt": "date-string"
+      }
+    ],
+    "mobile": [
+      {
+        "categoryName": "string",
+        "level": "mobile",
+        "isDeleted": "bool",
+        "createdAt": "date-string",
+        "updatedAt": "date-string"
+      }
+    ]
+  }
   ```
 
 ##### Get Category Detail
