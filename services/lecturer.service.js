@@ -1,9 +1,10 @@
 "use strict";
 const bcrypt = require("bcryptjs");
-const LecturerModel = require("../models/lecturer.model");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
 
+const LecturerModel = require("../models/lecturer.model");
+const Config = require("../configs/constraints");
 // const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
@@ -57,6 +58,33 @@ module.exports = {
 
   removeCourseFromTeachingCoursesForAllLecturer: async (courseId) => {
     return await mRemoveCourseFromTeachingCoursesForAllLecturer(courseId);
+  },
+
+  findAndUpdate: async (lecturerId, newInfo) => {
+    let lecturer = null;
+    try {
+      const query = {
+        _id: lecturerId,
+        status: Config.ACCOUNT_STATUS.ACTIVE
+      };
+      const update = {
+        ...newInfo,
+        updatedAt: Date.now()
+      };
+      const option = {
+        new: true
+      };
+      lecturer = await LecturerModel.findOneAndUpdate(query, update, option)
+        .select([
+          "fullName",
+          "phone",
+          "address",
+          "udpatedAt"
+        ]).exec();
+    } catch (error) {
+      console.error(error);
+    }
+    return lecturer;
   }
 };
 
@@ -82,7 +110,7 @@ async function isValidRfToken(userId, refreshToken) {
  */
 async function mRemoveCourseFromTeachingCoursesForAllLecturer(courseId) {
   const lecturers = await LecturerModel.find({
-    teachingCourses: {_id: courseId}
+    teachingCourses: { _id: courseId }
   });
 
 

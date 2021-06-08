@@ -23,7 +23,23 @@ module.exports = {
     } else {
       return res.json(result);
     }
+  },
+
+  updateLecturerInfo: async (req, res, next) => {
+    const lecturerId = req.params.lecturerId || 0;
+    const newInfo = req.body;
+    // console.log(newInfo);
+
+    const updatedLecturer = await LecturerService.findAndUpdate(lecturerId, newInfo);
+
+    if (updatedLecturer === null) {
+      return res.status(400).json({
+        error: "lecturer not found"
+      });
+    }
+    res.json(updatedLecturer);
   }
+
 }
 
 

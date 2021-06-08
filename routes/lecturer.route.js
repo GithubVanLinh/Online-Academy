@@ -9,4 +9,28 @@ const LecturerController = require("../controllers/lecturer.controller");
 router.post("/login", Validator.validateRequestBody("login"), LecturerController.login);
 router.post("/refresh", LecturerController.refreshAcToken);
 
+// update user info (fullName, phone, address)
+router.patch("/:lecturerId",
+  Validator.validateRequestBody("update_user_info"),
+  LecturerController.updateLecturerInfo
+);
+
+// // change user password
+// router.patch("/:userId/password",
+//   Validator.validateRequestBody("update_user_password"),
+//   UserController.updateUserPassword
+// );
+
+// // change user email
+// router.post("/:userId/email",
+//   Validator.validateRequestBody("update_user_email"),
+//   UserController.makeEmailVerification
+// );
+
+// // verify change email
+// router.post("/:userId/verify",
+//   Validator.validateRequestBody("validate_student"),
+//   UserController.verifyAndUpdateEmail
+// );
+
 module.exports = router;
