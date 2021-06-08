@@ -39,7 +39,7 @@ const course1 = {
   courseName: "React - The Complete Guide (incl Hooks, React Router, Redux)",
   courseImage: "url(string)",
   courseLecturers: [],
-  category: "60b73923a651451b6f25b374",
+  category: "",
   price: 100000,
   promotionalPrice: 10,
   briefDescription: "Dive in and learn React.js from scratch! Learn Reactjs,",
@@ -62,7 +62,7 @@ const course2 = {
   courseName: "React Redux)",
   courseImage: "url(string)",
   courseLecturers: [],
-  category: "60b73923a651451b6f25b374",
+  category: "",
   price: 200000,
   promotionalPrice: 10,
   briefDescription: "Dive in and learn React.js from scratch! Learn Reactjs,",
@@ -111,7 +111,7 @@ const lecturer1 = {
   teachingCourses: [],
   rfToken:
     "NRxCUvG8NxRvjg43q5A1jdYY5rKFrI5k9MzeoQLcCTq4EClFntLzyeWertMAZ9GgeRMeEk0iEx3HVHvO"
-}
+};
 
 const lecturer2 = {
   _id: "60b745c0925c8e4710e80c6a",
@@ -130,7 +130,7 @@ const lecturer2 = {
   teachingCourses: [],
   rfToken:
     "NRxCUvG8NxRvjg43q5A1jdYY5rKFrI5k9MzeoQLcCTq4EClFntLzyeWertMAZ9GgeRMeEk0iEx3HVHvO"
-}
+};
 
 const admin1 = {
   _id: "60b8d2958e620084208ebe83",
@@ -156,13 +156,32 @@ const admin2 = {
     "a6NiCbIayUa6CWJ8rzwX2ZpWZJwzojkvCOQNAZHxohUPCXpn9HSoENw8qwg7zVHcgvm3OTm2HExNd9sK"
 };
 
+const category1 = {
+  _id: "60b738eba651451b6f25b373",
+  categoryName: "JavaScript",
+  level: "WEB",
+  isDeleted: false,
+  createdAt: "2021-05-30T04:08:57.918Z",
+  updatedAt: "2021-05-30T04:08:57.918Z"
+};
+
+const category2 = {
+  _id: "60b738eba651451b1125b373",
+  categoryName: "Java",
+  level: "WEB",
+  isDeleted: false,
+  createdAt: "2021-05-30T04:08:57.918Z",
+  updatedAt: "2021-05-30T04:08:57.918Z"
+};
 
 // ref
 user1.wishList.push(course1._id, course2._id);
 user2.wishList.push(course2._id);
 
 course1.courseLecturers.push(lecturer1._id, lecturer2._id);
-course2.courseLecturers.push(lecturer1._id)
+course2.courseLecturers.push(lecturer1._id);
+course1.category = category1._id;
+course2.category = category1._id;
 
 lecturer1.teachingCourses.push(course1._id, course2._id);
 lecturer2.teachingCourses.push(course1._id);
@@ -172,11 +191,14 @@ enroll1.userId = user1._id;
 enroll2.courseId = course1._id;
 enroll2.userId = user2._id;
 
+
+
 module.exports = {
   users: [user1, user2],
   lecturers: [lecturer1, lecturer2],
   courses: [course1, course2],
   enrollments: [enroll1, enroll2],
   verifies: [],
-  admins: [admin1, admin2]
-}
+  admins: [admin1, admin2],
+  categories: [category1, category2]
+};

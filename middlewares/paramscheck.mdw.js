@@ -32,7 +32,7 @@ module.exports = {
       }
     } catch (error) {
       return res.status(404).json({
-        "error_message": "Invalid categoryId"
+        "error_message": "invalid categoryId"
       })
     }
   }

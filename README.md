@@ -831,9 +831,11 @@ Online Academy Project:
     "createdAt": 1622900554039
   }
   ```
+
 #### Get lesson info of the course
+
 - Method: `GET /courses/:courseId/lessons/:lessonId`
-- Headers: 
+- Headers:
   - x-access-token
 - Params:
   - courseId
@@ -855,7 +857,7 @@ Online Academy Project:
     "isFinish": true
   }
   ```
-- Failed Response: 
+- Failed Response:
   ```json
   {
     "error": "user haven't registered the course yet"
@@ -1325,15 +1327,26 @@ Online Academy Project:
 - Success response:
 
   ```json
-  [
-    {
-      "categoryName": "string",
-      "level": "WEB",
-      "isDeleted": "bool",
-      "createdAt": "date-string",
-      "updatedAt": "date-string"
-    }
-  ]
+  {
+    "web": [
+      {
+        "categoryName": "string",
+        "level": "WEB",
+        "isDeleted": "bool",
+        "createdAt": "date-string",
+        "updatedAt": "date-string"
+      }
+    ],
+    "mobile": [
+      {
+        "categoryName": "string",
+        "level": "mobile",
+        "isDeleted": "bool",
+        "createdAt": "date-string",
+        "updatedAt": "date-string"
+      }
+    ]
+  }
   ```
 
 ##### Get Category Detail
