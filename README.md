@@ -538,6 +538,143 @@ Online Academy Project:
   }
   ```
 
+#### Update lecturer information
+
+- Method: `PATCH /lecturers/:lecturerId`
+- Params:
+  - lecturerId: a string contains 24 charaters
+- Body:
+  - fullName
+  - phone
+  - address
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/lecturers/60bf19957952b970b11b9f58
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60bf19957952b970b11b9f58",
+    "fullName": "Gia Kiet",
+    "address": "tp hcm",
+    "phone": "0338339593"
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "lecturer not found"
+  }
+  ```
+
+#### Send change lecturer email request
+
+- Method: `POST /lecturers/:lecturerId/email`
+- Params:
+  - lecturerId: a string contains 24 charaters
+- Body:
+  - email
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/lecturers/60bf19957952b970b11b9f58/email
+  ```
+- Success response:
+  ```json
+  {
+    "message": "verify your email"
+  }
+  ```
+- Failed response:
+
+  ```json
+  {
+    "error": "email is already taken"
+  }
+  ```
+
+  ```json
+  {
+    "error": "lecturer not found"
+  }
+  ```
+
+#### Verify email to change lecturer email
+
+- Method: `POST /lecturers/:lecturerId/verify`
+- Params:
+  - lecturerId: a string contains 24 charaters
+- Body:
+  - email
+  - key
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/lecturers/60bf19957952b970b11b9f58/verify
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60b9d65d0ab2a19495ec1211",
+    "email": "kietdg99@gmail.com",
+    "updatedAt": "2021-06-05T03:34:29.801Z"
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "incorrect email or key"
+  }
+  ```
+  ```json
+  {
+    "error": "lecturer not found"
+  }
+  ```
+
+#### Change lecturer password
+
+- Method: `PATCH /lecturers/:lecturerId/password`
+- Params:
+  - lecturerId: a string contains 24 charaters
+- Body:
+  - currentPassword
+  - newPassword
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Sample:
+  ```code
+  http://localhost:8080/lecturers/60bf19957952b970b11b9f58/password
+  ```
+- Success response:
+  ```json
+  {
+    "_id": "60bf19957952b970b11b9f58",
+    "username": "giakiet99",
+    "password": "$2a$10$UUrEV.6t7Z5PA3ICLnxb1.7AMzg03MH58b8GJxdjce0trJqRc54oi",
+    "updatedAt": "2021-06-08T08:23:47.458Z"
+  }
+  ```
+- Failed response:
+  ```json
+  {
+    "error": "Incorrect password"
+  }
+  ```
+  ```json
+  {
+    "error": "lecturer not found"
+  }
+  ```
+
 ### Course API
 
 #### Get Courses

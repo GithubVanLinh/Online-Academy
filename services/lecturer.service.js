@@ -1,10 +1,13 @@
 "use strict";
 const bcrypt = require("bcryptjs");
-const LecturerModel = require("../models/lecturer.model");
 const jwt = require("jsonwebtoken");
 const randomstring = require("randomstring");
 
-// const salt = bcrypt.genSaltSync(10);
+const VerifyService = require("../services/verify.service");
+const LecturerModel = require("../models/lecturer.model");
+const Config = require("../configs/constraints");
+
+const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
   logIn: async (loginInfo) => {
@@ -57,7 +60,102 @@ module.exports = {
 
   removeCourseFromTeachingCoursesForAllLecturer: async (courseId) => {
     return await mRemoveCourseFromTeachingCoursesForAllLecturer(courseId);
+  },
+
+  findById: async (lecturerId) => {
+    let lecturer = null;
+    try {
+      lecturer = await LecturerModel.findById(lecturerId).exec();
+    } catch (error) {
+      console.error(error);
+    }
+    return lecturer;
+  },
+
+  findAndUpdate: async (lecturerId, newInfo) => {
+    let lecturer = null;
+    try {
+      const query = {
+        _id: lecturerId,
+        status: Config.ACCOUNT_STATUS.ACTIVE
+      };
+      const update = {
+        ...newInfo,
+        updatedAt: Date.now()
+      };
+      const option = {
+        new: true
+      };
+      lecturer = await LecturerModel.findOneAndUpdate(query, update, option)
+        .select([
+          "fullName",
+          "phone",
+          "address",
+          "udpatedAt"
+        ]).exec();
+    } catch (error) {
+      console.error(error);
+    }
+    return lecturer;
+  },
+
+  updatePassword: async (lecturerId, newPassword) => {
+    try {
+      const hashPassword = await bcrypt.hash(newPassword, salt);
+      return await LecturerModel.findOneAndUpdate(
+        { _id: lecturerId },
+        { password: hashPassword, updatedAt: Date.now() },
+        { new: true }
+      ).select(["username", "password", "updatedAt"]);
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  /**
+ *
+ * @param {string} newEmail
+ * @return {object}
+ */
+  makeChangeEmailVerification: async (newEmail) => {
+    try {
+      const isValidEmail = await checkEmailExists(newEmail);
+      if (isValidEmail) {
+        const verification = await VerifyService.createNewValidateRequestV2(
+          newEmail
+        );
+        return verification;
+      }
+      return null;
+    } catch (error) {
+      throw Error(error);
+    }
+  },
+
+  /**
+ *
+ * @param {string} lecturerId
+ * @param {string} email
+ * @param {string} key
+ * @return {object}
+ */
+  verifyEmail: async (lecturerId, email, key) => {
+    let lecturer = null;
+    try {
+      const result = await VerifyService.validateUser(email, key);
+      if (result === true) {
+        lecturer = await LecturerModel.findOneAndUpdate(
+          { _id: lecturerId },
+          { email: email, updatedAt: Date.now() },
+          { new: true }
+        ).select(["email", "updatedAt"]);
+      }
+    } catch (error) {
+      throw Error(error);
+    }
+    return lecturer;
   }
+
 };
 
 /**
@@ -82,7 +180,7 @@ async function isValidRfToken(userId, refreshToken) {
  */
 async function mRemoveCourseFromTeachingCoursesForAllLecturer(courseId) {
   const lecturers = await LecturerModel.find({
-    teachingCourses: {_id: courseId}
+    teachingCourses: { _id: courseId }
   });
 
 
@@ -122,4 +220,21 @@ async function mDeleteCourseFromTeachingCourses(lecturerId, courseId) {
 async function mGetListTechingCourses(lecturerId) {
   const res = await LecturerModel.findById(lecturerId);
   return res.teachingCourses;
+}
+
+/**
+ * 
+ * @param {String} email 
+ * @return {bool}
+ */
+async function checkEmailExists(email) {
+  try {
+    const result = await LecturerModel.findOne({ email: email }).exec();
+    if (!result) {
+      return true;
+    }
+  } catch (error) {
+    throw Error(error);
+  }
+  return false;
 }
