@@ -3,24 +3,71 @@ const SectionModel = require("../models/section.model");
 
 /**
  *
- * @param {string} courseId
+ * @param {string} sectionId
+ * @return {Promise<null>}
+ */
+async function getById(sectionId) {
+  let section = null;
+  try {
+    section = await SectionModel.findById(sectionId).exec();
+  } catch (e) {
+    console.error(e);
+  }
+  return section;
+}
+
+/**
+ *
+ * @param {string} title
+ * @return {Promise<null>}
+ */
+async function getByTitle(title) {
+  let section = null;
+  try {
+    section = await SectionModel.findOne({
+      title: title
+    }).exec();
+  } catch (e) {
+    console.error(e);
+  }
+  return section;
+}
+
+/**
+ *
  * @param {string} sectionInfo
  * @return {Promise<object>}
  */
-const add = async (courseId, sectionInfo) => {
-  let section = null;
+async function add(sectionInfo) {
   try {
-    section = await SectionModel.create({
-      courseId, ...sectionInfo
+    const section = await SectionModel.create({
+      ...sectionInfo
+    });
+    return section;
+  } catch (e) {
+    throw Error(e);
+  }
+}
+
+/**
+ *
+ * @param {string} sectionId
+ * @return {Promise<void>}
+ */
+async function modifyUpdatedTime(sectionId) {
+  try {
+    await SectionModel.findByIdAndUpdate(sectionId, {
+      updatedAt: Date.now()
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
-  return section;
-};
-
+}
 
 
 module.exports = {
-  add: add
-}
+  add,
+  getByTitle,
+  getById,
+  modifyUpdatedTime
+};
