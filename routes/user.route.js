@@ -2,7 +2,7 @@
 const express = require("express");
 // eslint-disable-next-line new-cap
 const router = express.Router();
-
+const upload = require("../configs/multer.config");
 const UserController = require("../controllers/user.controller");
 const Validator = require("../middlewares/validator.mdw");
 
@@ -45,6 +45,8 @@ router.patch("/:userId/wishList", UserController.deleteUserCoursesFromWishList);
 // get registered courses
 router.get("/:userId/registeredList", UserController.getUserRegisteredList);
 
+// user change avatar
+router.post("/:userId/avatar", upload.single("avaImage"), UserController.changeAvatar);
 
 
 module.exports = router;

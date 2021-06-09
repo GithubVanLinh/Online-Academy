@@ -53,7 +53,7 @@ module.exports = {
       return res.json(lecturer);
     } catch (e) {
       console.log(e);
-      return res.status(400).json({ error: e });
+      return res.status(400).json({error: "lecturer not found"});
     }
   },
 
