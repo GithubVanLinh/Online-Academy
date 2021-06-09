@@ -174,6 +174,16 @@ module.exports = {
       throw Error(error);
     }
     return lecturer;
+  },
+
+  addCourseToTeachingCourses: async (lecturerId, courseId) => {
+    try {
+      const lecturer = await LecturerModel.findByIdAndUpdate(lecturerId, {$addToSet: {teachingCourses: courseId}});
+      return lecturer;
+    } catch(e) {
+      console.log(e);
+      return null;
+    }
   }
 
 };
