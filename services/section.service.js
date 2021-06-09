@@ -39,17 +39,14 @@ async function getByTitle(title) {
  * @return {Promise<object>}
  */
 async function add(sectionInfo) {
-  let section = null;
   try {
-    if (await getByTitle(sectionInfo.title) === null) {
-      section = await SectionModel.create({
-        ...sectionInfo
-      });
-    }
+    const section = await SectionModel.create({
+      ...sectionInfo
+    });
+    return section;
   } catch (e) {
-    console.log(e);
+    throw Error(e);
   }
-  return section;
 }
 
 /**

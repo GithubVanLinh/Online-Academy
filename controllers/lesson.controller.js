@@ -54,13 +54,13 @@ module.exports = {
       if (lesson === null) {
         error = "lesson's title is already exists";
       } else {
-        status = 200;
+        status = 201;
         ret = lesson;
       }
     } else {
       error = "invalid courseId or sectionId";
     }
 
-    res.status(status).json((status === 200) ? ret : { error });
+    res.status(status).json((status === 201) ? ret : { error });
   }
 };

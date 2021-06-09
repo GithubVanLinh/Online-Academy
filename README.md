@@ -737,7 +737,7 @@ Online Academy Project:
   - briefDescription
   - detailDescription
 - Status Code:
-  - Success: `200`
+  - Success: `201`
   - Failure: `400`
 - Sample:
   ```code
@@ -1115,6 +1115,90 @@ Online Academy Project:
   ```json
   {
     "error": "incorrect lessonId"
+  }
+  ```
+
+### Section API
+#### Create section
+- Method: `GET /sections`
+- Status Code:
+  - Success: `201`
+  - Failure: `400`
+- Params:
+  - courseId
+  - title
+  - order
+- Sample:
+  ```code
+  http://localhost:8080/sections/
+  ```
+- Success Response Example
+  ```json
+  {
+    "isDeleted": false,
+    "_id": "60c092e3da22c442a37d0f21",
+    "courseId": "60bf43c55d61c8652a551042",
+    "title": "Conclusion",
+    "order": 3,
+    "createdAt": "2021-06-09T10:07:31.725Z",
+    "updatedAt": "2021-06-09T10:07:31.725Z",
+    "__v": 0
+  }
+  ```
+- Failure Response Example
+  ```json
+  {
+    "error": "section is already exists"
+  }
+  ```
+  ```json
+  {
+    "error": "course not found"
+  }
+  ```
+
+### Lesson API
+#### Create section
+- Method: `GET /lessons`
+- Status Code:
+  - Success: `201`
+  - Failure: `400`
+- Params:
+  - courseId
+  - sectionId
+  - title
+  - totalLength
+  - videoUrl
+  - order
+- Sample:
+  ```code
+  http://localhost:8080/lessons
+  ```
+- Success Response Example
+  ```json
+  {
+    "isPreview": false,
+    "isDeleted": false,
+    "_id": "60c094c5dd4cf455be22e8a4",
+    "courseId": "60bf43c55d61c8652a551042",
+    "sectionId": "60c0510d696592220863c962",
+    "title": "What will you learn in this course?",
+    "totalLength": 12,
+    "videoUrl": "https://vimeo.com/559571102",
+    "order": 1,
+    "createdAt": "2021-06-09T10:15:33.018Z",
+    "__v": 0
+  }
+  ```
+- Failure Response Example
+  ```json
+  {
+    "error": "lesson's title is already exists"
+  }
+  ```
+  ```json
+  {
+    "error": "invalid courseId or sectionId"
   }
   ```
 
