@@ -58,9 +58,9 @@ module.exports = {
   },
 
   /**
- *
- * @return {Array} top 10 newest courses of the week
- */
+   *
+   * @return {Array} top 10 newest courses of the week
+   */
   getTenNewestCourses: async () => {
     let courses = [];
     try {
@@ -101,9 +101,9 @@ module.exports = {
   },
 
   /**
- *
- * @return {Array} most viewed courses
- */
+   *
+   * @return {Array} most viewed courses
+   */
   getTenMostViewedCourse: async () => {
     try {
       const courses = await CourseModel.find({
@@ -182,13 +182,13 @@ module.exports = {
       }
       // console.log(result);
 
-      const arr = []
+      const arr = [];
       // eslint-disable-next-line guard-for-in
       for (const prop in result) {
         arr.push(result[prop]);
       }
 
-      arr.sort(function (a, b) {
+      arr.sort(function(a, b) {
         if (a.count < b.count) {
           return 1;
         }
@@ -196,7 +196,7 @@ module.exports = {
           return -1;
         }
         return 0;
-      })
+      });
 
       arr.length = 3; // top 3 featured courses
       const Ids = arr.map(e => e.content._id);
@@ -281,6 +281,38 @@ module.exports = {
 
   /**
    *
+   * @param {string} courseId name of course
+   * @return {Promise<object>}
+   */
+  getCourseById: async (courseId) => {
+    let course = null;
+    try {
+      course = await CourseModel.findOne({
+        _id: courseId
+      }).exec();
+    } catch (error) {
+      console.error(error);
+    }
+    return course;
+  },
+
+  /**
+   *
+   * @param {string} courseId
+   * @return {Promise<void>}
+   */
+  modifyUpdatedTime: async (courseId) => {
+    try {
+      await CourseModel.findByIdAndUpdate(courseId,
+        { updatedAt: Date.now() }
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  /**
+   *
    * @param {object} courseInfo
    * @param {string} lecturerId id of lecturer
    * @return {Promise<object>}
@@ -291,7 +323,7 @@ module.exports = {
       const dataToCreate = {
         ...courseInfo,
         courseLecturers: [lecturerId]
-      }
+      };
       console.log(dataToCreate);
       course = await CourseModel.create(dataToCreate);
       await LecturerService.addCourseToTeachingCourses(lecturerId, course._id);
@@ -397,6 +429,7 @@ async function mGetCoursesByFilter(type, condition, page, sort) {
       break;
   }
 }
+
 /**
  * Check valid rfToken by userId
  * @param {object} course refreshToken

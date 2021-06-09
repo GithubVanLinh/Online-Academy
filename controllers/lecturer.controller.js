@@ -100,30 +100,29 @@ module.exports = {
 
   },
 
-  makeEmailVerification:
-    async (req, res, next) => {
-      const email = req.body.email;
-      const lecturerId = req.params.lecturerId;
+  makeEmailVerification: async (req, res, next) => {
+    const email = req.body.email;
+    const lecturerId = req.params.lecturerId;
 
-      const lecturer = await LecturerService.findById(lecturerId);
-      // console.log(lecturer);
-      if (lecturer) {
-        const verification = await LecturerService.makeChangeEmailVerification(email);
-        if (verification) {
-          return res.json({
-            message: "verify your email"
-          });
-        } else {
-          return res.status(400).json({
-            error: "email is already taken"
-          });
-        }
+    const lecturer = await LecturerService.findById(lecturerId);
+    // console.log(lecturer);
+    if (lecturer) {
+      const verification = await LecturerService.makeChangeEmailVerification(email);
+      if (verification) {
+        return res.json({
+          message: "verify your email"
+        });
       } else {
-        res.status(400).json({
-          error: "lecturer not found"
+        return res.status(400).json({
+          error: "email is already taken"
         });
       }
-    },
+    } else {
+      res.status(400).json({
+        error: "lecturer not found"
+      });
+    }
+  },
 
   verifyAndUpdateEmail: async (req, res, next) => {
     const lecturerId = req.params.lecturerId;
