@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "courseId": {
+      "type": "string"
+    },
+    "sectionId": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "totalLength": {
+      "type": "number"
+    },
+    "videoUrl": {
+      "type": "string",
+      "format": "url"
+    },
+    "order": {
+      "type": "number"
+    },
+    "isPreview": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "courseId",
+    "sectionId",
+    "title",
+    "totalLength",
+    "videoUrl",
+    "order"
+  ],
+  "additionalProperties": false
+}

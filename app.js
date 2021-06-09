@@ -34,6 +34,7 @@ const lecturerRouter = require("./routes/lecturer.route");
 const enrollmentRouter = require("./routes/enrollment.route");
 const progressRouter = require("./routes/progress.route");
 const sectionRouter = require("./routes/section.route");
+const lessonRouter = require("./routes/lesson.route");
 app.use("/api/search", searchRouter);
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
@@ -44,6 +45,7 @@ app.use("/lecturers", lecturerRouter);
 app.use("/enrollments", enrollmentRouter);
 app.use("/progresses", progressRouter);
 app.use("/sections", sectionRouter);
+app.use("/lessons", lessonRouter);
 
 // define error route handler
 app.use((req, res, next) => {
