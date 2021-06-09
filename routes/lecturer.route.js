@@ -2,14 +2,23 @@
 const express = require("express");
 // eslint-disable-next-line new-cap
 const router = express.Router();
+
 const upload = require("../configs/multer.config");
 const Validator = require("../middlewares/validator.mdw");
 const LecturerController = require("../controllers/lecturer.controller");
+const paramValidation = require("../middlewares/paramscheck.mdw");
 //
 // router.post("/login", Validator.validateRequestBody("login"), LecturerController.login);
 // router.post("/refresh", LecturerController.refreshAcToken);
+
+router.use("/:lecturerId", paramValidation.validateLecturerId);
+
 router.get("/:lecturerId/courses", LecturerController.getCourses);
-router.post("/:lecturerId/avatar", upload.single("avaImage"), LecturerController.changeAvatar);
+
+router.post("/:lecturerId/avatar",
+  upload.single("avaImage"),
+  LecturerController.changeAvatar
+);
 
 // update lecturer info (fullName, phone, address)
 router.patch("/:lecturerId",
@@ -40,4 +49,6 @@ router.post("/:lecturerId/courses",
   Validator.validateRequestBody("new_course"),
   LecturerController.uploadNewCourse
 );
+
+
 module.exports = router;
