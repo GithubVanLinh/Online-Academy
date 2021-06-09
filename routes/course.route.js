@@ -2,6 +2,7 @@
 const express = require("express");
 // eslint-disable-next-line new-cap
 const router = express.Router();
+const upload = require("../configs/multer.config");
 
 const Validator = require("../middlewares/validator.mdw");
 const paramsValidate = require("../middlewares/paramscheck.mdw");
@@ -31,6 +32,8 @@ router.post("/:courseId/sections",
   Validator.validateRequestBody("new_section"),
   SectionController.createSection
 );
+
+router.post("/:courseId/courseImage", upload.single("courseImage"), CourseController.updateCourseImage);
 
 
 module.exports = router;
