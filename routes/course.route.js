@@ -26,10 +26,11 @@ router.post("/:courseId/feedback", Validator.validateRequestBody("send_feedback"
 // get lesson info
 router.get("/:courseId/lessons/:lessonId", auth, LessonController.getLessonById);
 
-// create section
+// Add section to course
 router.post("/:courseId/sections",
   Validator.validateRequestBody("new_section"),
   SectionController.createSection
 );
+
 
 module.exports = router;
