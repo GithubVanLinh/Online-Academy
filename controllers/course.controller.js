@@ -93,5 +93,26 @@ module.exports = {
       console.log(e);
       return res.status(400).json({error: "Course not found"});
     }
+  },
+  markCompleted: async (req, res, next) => {
+    try {
+      const courseId = req.params.courseId;
+      const course = await CourseService.markCourseComplete(courseId);
+      return res.json(course);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({error: "Course not found"});
+    }
+  },
+  updateDescription: async (req, res, next) => {
+    try {
+      const courseId = req.params.courseId;
+      const descriptions = req.body;
+      const course = await CourseService.changeCourseDescription(courseId, descriptions);
+      return res.json(course);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({error: "Course not found"});
+    }
   }
 }

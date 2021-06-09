@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "briefDescription": {
+      "type": "string"
+    },
+    "detailDescription": {
+      "type": "string"
+    }
+  },
+  "minProperties": 1,
+  "additionalProperties": false
+}

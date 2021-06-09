@@ -20,6 +20,7 @@ const feedbackSchema = require("../utils/schemas/send_feedback.schema.json");
 const categorySchema = require("../utils/schemas/category.schema.json");
 const newCourseSchema = require("../utils/schemas/new_course.schema.json");
 const newSectionSchema = require("../utils/schemas/new_section.schema.json");
+const updateDescriptionSchema = require("../utils/schemas/update_course_description.schema.json");
 
 ajv.addSchema(registerSchema, "register_student");
 ajv.addSchema(updateSchema, "user");
@@ -34,5 +35,6 @@ ajv.addSchema(feedbackSchema, "send_feedback");
 ajv.addSchema(categorySchema, "category");
 ajv.addSchema(newCourseSchema, "new_course");
 ajv.addSchema(newSectionSchema, "new_section");
+ajv.addSchema(updateDescriptionSchema, "update_description");
 
 module.exports = ajv;

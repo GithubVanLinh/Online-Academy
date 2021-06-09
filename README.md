@@ -42,6 +42,8 @@ Online Academy Project:
   - [Get List Lecturer Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-lecturer-of-course)
   - [Get List Feedback Of Course](https://github.com/GithubVanLinh/Online-Academy#get-list-feedback-of-course)
   - [Send feedback](https://github.com/GithubVanLinh/Online-Academy#send-feedback)
+  - [Set complete status](https://github.com/GithubVanLinh/Online-Academy#set-complete-status)
+  - [Update course descriptions](https://github.com/GithubVanLinh/Online-Academy#update-course-description)
 - [Search API](https://github.com/GithubVanLinh/Online-Academy#search-api)
   - [Search By course name](https://github.com/GithubVanLinh/Online-Academy#search-by-course-name)
   - [Search By category name](https://github.com/GithubVanLinh/Online-Academy#search-by-category-name)
@@ -1117,6 +1119,51 @@ Online Academy Project:
     "error": "incorrect lessonId"
   }
   ```
+### Set complete status
+- Method: `POST /courses/:courseId/completion`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Params:
+  - courseId
+- Sample:
+  ```code
+  curl --location --request POST 'localhost:8080/courses/60bf43c55d61c8652a551042/completion'
+  ```
+- Success Response:
+  ```json
+  {
+    "status": "COMPLETE",
+    "_id": "60bf43c55d61c8652a551042"
+  }
+  ```
+### Update course descriptions
+- Method: `POST /courses/:courseId/description`
+- Status Code:
+  - Success: `200`
+  - Failure: `400`
+- Params:
+  - courseId
+- Body(at least 1 of):
+  - briefDescription
+  - detailDescription
+- Sample:
+  ```code
+  curl --location --request POST  localhost:8080/courses/60bf43c55d61c8652a551042/description' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "detailDescription":"longer",
+  "briefDescription":"short"
+  }'
+  ```
+- Success Response:
+  ```json
+  {
+    "briefDescription": "short",
+    "detailDescription": "longer",
+    "_id": "60bf43c55d61c8652a551042"
+  }
+  ```
 
 ### Search API
 
@@ -1126,7 +1173,7 @@ Online Academy Project:
 - Status Code:
   - Success: `200`
   - Failure: `400`
-- Params:
+- Query:
   - keyword
   - page
   - sortBy: ratingDesc / priceAsc
@@ -1176,7 +1223,7 @@ Online Academy Project:
 - Status Code:
   - Success: `200`
   - Failure: `400`
-- Params:
+- Query:
   - keyword
   - page
   - sortBy: ratingDesc / priceAsc

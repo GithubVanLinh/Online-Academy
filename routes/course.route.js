@@ -34,6 +34,10 @@ router.post("/:courseId/sections",
 );
 
 router.post("/:courseId/courseImage", upload.single("courseImage"), CourseController.updateCourseImage);
+router.post("/:courseId/completion", CourseController.markCompleted);
+router.post("/:courseId/description",
+  Validator.validateRequestBody("update_description"),
+  CourseController.updateDescription);
 
 
 module.exports = router;

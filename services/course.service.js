@@ -72,7 +72,7 @@ module.exports = {
           ]
         }
       })
-        .sort({ createdAt: "desc" })
+        .sort({createdAt: "desc"})
         .limit(10)
         .populate([
           {
@@ -114,7 +114,7 @@ module.exports = {
           ]
         }
       })
-        .sort({ view: "desc" })
+        .sort({view: "desc"})
         .limit(10)
         .populate([
           {
@@ -188,7 +188,7 @@ module.exports = {
         arr.push(result[prop]);
       }
 
-      arr.sort(function(a, b) {
+      arr.sort(function (a, b) {
         if (a.count < b.count) {
           return 1;
         }
@@ -240,13 +240,13 @@ module.exports = {
   },
 
   createFeedback: async (courseId, feedbackData) => {
-    const { userId, content, ratingPoint } = feedbackData;
-    const haveEnrollment = await enrollmentModel.find({ userId: userId, courseId: courseId }).exec();
+    const {userId, content, ratingPoint} = feedbackData;
+    const haveEnrollment = await enrollmentModel.find({userId: userId, courseId: courseId}).exec();
     if (haveEnrollment.length) {
-      const newFeedback = { userId, content, ratingPoint, createdAt: Date.now() };
+      const newFeedback = {userId, content, ratingPoint, createdAt: Date.now()};
       const course = await CourseModel.findByIdAndUpdate(courseId,
-        { $push: { feedbacks: newFeedback } },
-        { new: true }).exec();
+        {$push: {feedbacks: newFeedback}},
+        {new: true}).exec();
       updateRatingPoint(course);
       await course.save();
       return newFeedback;
@@ -304,7 +304,7 @@ module.exports = {
   modifyUpdatedTime: async (courseId) => {
     try {
       await CourseModel.findByIdAndUpdate(courseId,
-        { updatedAt: Date.now() }
+        {updatedAt: Date.now()}
       );
     } catch (e) {
       console.error(e);
@@ -333,13 +333,29 @@ module.exports = {
     return course;
   },
 
-  changeCourseImage: async(courseId, imagePath) =>{
+  changeCourseImage: async (courseId, imagePath) => {
     const newImageUrl = await ImgUtil.getNewFileUrl(imagePath);
     fs.unlinkSync(imagePath);
     const result = CourseModel.findByIdAndUpdate(
       courseId,
       {courseImage: newImageUrl, updatedAt: Date.now()},
       {new: true}).select("courseImage");
+    return result;
+  },
+
+  markCourseComplete: async (courseId) => {
+    const result = await CourseModel.findByIdAndUpdate(
+      courseId,
+      {status: "COMPLETE", updatedAt: Date.now()},
+      {new: true}).select("status");
+    return result;
+  },
+
+  changeCourseDescription: async (courseId, descriptions) => {
+    const result = await CourseModel.findByIdAndUpdate(
+      courseId,
+      {...descriptions, updatedAt: Date.now()},
+      {new: true}).select(["briefDescription", "detailDescription"]);
     return result;
   }
 
