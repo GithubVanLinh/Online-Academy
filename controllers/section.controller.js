@@ -3,11 +3,10 @@ const SectionService = require("../services/section.service");
 const CourseService = require("../services/course.service");
 
 const createSection = async (req, res) => {
-  const courseId = req.params.courseId;
   const sectionInfo = req.body;
 
   // check if course exists
-  const course = await CourseService.getCourseById(courseId);
+  const course = await CourseService.getCourseById(sectionInfo.courseId);
   if (course === null) {
     return res.status(400).json({
       error: "course not found"
@@ -15,14 +14,14 @@ const createSection = async (req, res) => {
   }
 
   // create new section to the course
-  const newSection = await SectionService.add(courseId, sectionInfo);
+  const newSection = await SectionService.add(sectionInfo);
   if (newSection === null) {
     return res.status(400).json({
       error: "invalid input"
     });
   } else {
     // update property "updatedAt" of course
-    await CourseService.modifyUpdatedTime(courseId);
+    await CourseService.modifyUpdatedTime(sectionInfo.courseId);
   }
   res.json(newSection);
 };

@@ -33,6 +33,7 @@ const statisticRouter = require("./routes/statistic.route");
 const lecturerRouter = require("./routes/lecturer.route");
 const enrollmentRouter = require("./routes/enrollment.route");
 const progressRouter = require("./routes/progress.route");
+const sectionRouter = require("./routes/section.route");
 app.use("/api/search", searchRouter);
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
@@ -42,6 +43,7 @@ app.use("/statistics", statisticRouter);
 app.use("/lecturers", lecturerRouter);
 app.use("/enrollments", enrollmentRouter);
 app.use("/progresses", progressRouter);
+app.use("/sections", sectionRouter);
 
 // define error route handler
 app.use((req, res, next) => {

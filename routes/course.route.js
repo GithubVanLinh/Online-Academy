@@ -10,7 +10,7 @@ const queryValidate = require("../middlewares/querycheck.mdw");
 
 const CourseController = require("../controllers/course.controller");
 const LessonController = require("../controllers/lesson.controller");
-const SectionController = require("../controllers/section.controller");
+// const SectionController = require("../controllers/section.controller");
 
 const auth = require("../middlewares/auth.mdw");
 
@@ -26,13 +26,7 @@ router.post("/:courseId/feedback", Validator.validateRequestBody("send_feedback"
 
 // get lesson info
 router.get("/:courseId/lessons/:lessonId", auth, LessonController.getLessonById);
-
-// Add section to course
-router.post("/:courseId/sections",
-  Validator.validateRequestBody("new_section"),
-  SectionController.createSection
-);
-
+// update course image
 router.post("/:courseId/courseImage", upload.single("courseImage"), CourseController.updateCourseImage);
 
 

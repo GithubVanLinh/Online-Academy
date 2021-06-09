@@ -3,24 +3,42 @@ const SectionModel = require("../models/section.model");
 
 /**
  *
- * @param {string} courseId
+ * @param {string} title
+ * @return {Promise<null>}
+ */
+async function getByTitle(title) {
+  let section = null;
+  try {
+    section = await SectionModel.findOne({
+      title: title
+    }).exec();
+  } catch (e) {
+    console.error(e);
+  }
+  return section;
+}
+
+/**
+ *
  * @param {string} sectionInfo
  * @return {Promise<object>}
  */
-const add = async (courseId, sectionInfo) => {
+async function add(sectionInfo) {
   let section = null;
   try {
-    section = await SectionModel.create({
-      courseId, ...sectionInfo
-    });
+    if (await getByTitle(sectionInfo.title) === null) {
+      section = await SectionModel.create({
+        ...sectionInfo
+      });
+    }
   } catch (e) {
     console.log(e);
   }
   return section;
-};
-
+}
 
 
 module.exports = {
-  add: add
-}
+  add,
+  getByTitle
+};

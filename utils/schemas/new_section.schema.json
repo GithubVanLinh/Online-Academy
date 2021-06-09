@@ -1,6 +1,9 @@
 {
   "type": "object",
   "properties": {
+    "courseId": {
+      "type": "string"
+    },
     "title": {
       "type": "string"
     },
@@ -9,6 +12,7 @@
     }
   },
   "required": [
+    "courseId",
     "title",
     "order"
   ],
