@@ -1,5 +1,7 @@
 "use strict";
 const UserService = require("../services/user.service");
+const EnrollmentService = require("../services/enrollment.service");
+const ProgressService = require("../services/progress.service");
 module.exports = {
   createNewStudent: async (req, res, next) => {
     const body = req.body;
@@ -170,6 +172,32 @@ module.exports = {
       console.log(e);
       return res.status(400).json({error: "user not found"});
     }
-  }
+  },
 
+  adminGetAllUser: async (req, res, next) => {
+    const resl = await UserService.getAllUser();
+    res.status(200).json(resl);
+  },
+
+  getUserDetail: async (req, res, next) => {
+    const {userId} = req.params;
+    const resl = await UserService.getUserByUserId(userId);
+    res.status(200).json(resl);
+  },
+  deleteUser: async (req, res, next) => {
+    const { userId} = req.params;
+    try {
+      await UserService.deleteUserByUserId(userId);
+      await EnrollmentService.mDeleteEnrollmentsByUserId(userId);
+      await ProgressService.mRemoveProgressByUserId(userId);
+      res.status(200).json({
+        message: "user has removed"
+      })
+    } catch (error) {
+      res.status(400).json({
+        error_message: "wrongs!"
+      })
+    }
+   
+  }
 };

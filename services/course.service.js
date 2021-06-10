@@ -454,3 +454,4 @@ function updateRatingPoint(course) {
   const totalPoints = course.feedbacks.reduce((total, single) => total + single.ratingPoint, 0);
   course.ratingPoint = totalPoints / course.feedbacks.length;
 }
+

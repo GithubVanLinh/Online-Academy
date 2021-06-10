@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha 'tests/*.test.js' --timeout 30000",
-    "sptest": "mocha 'tests/category.test.js' --timeout 30000",
+    "sptest": "mocha 'tests/administrator.test.js' --timeout 30000",
     "start": "node ./app.js",
     "dev": "nodemon ./app.js",
     "eslint": "eslint ."

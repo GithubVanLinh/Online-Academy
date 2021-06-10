@@ -184,6 +184,11 @@ module.exports = {
       console.log(e);
       return null;
     }
+  },
+
+  getAllLecturer: async () =>{
+    const resl = await LecturerModel.find({});
+    return resl;
   }
 
 };

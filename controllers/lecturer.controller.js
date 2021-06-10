@@ -134,6 +134,12 @@ module.exports = {
     }
 
     res.status(201).json(newCourse);
+  },
+
+  getAllLecturer: async (req, res, next) =>{
+    const resl = await LecturerService.getAllLecturer();
+
+    res.status(200).json(resl);
   }
 
 };

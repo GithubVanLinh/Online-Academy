@@ -3,6 +3,7 @@
 const CourseService = require("../services/course.service");
 const CategoryService = require("../services/category.service");
 const LecturerService = require("../services/lecturer.service");
+const UserService = require("../services/user.service");
 
 module.exports = {
   checkCourseId: async (req, res, next) => {
@@ -49,5 +50,22 @@ module.exports = {
         error: "Lecturer not found"
       });
     }
+  },
+
+  validateUserId: async (req, res, next) => {
+    const {userId} = req.params;
+    try {
+      const user = await UserService.getUserByUserId(userId);
+    if (user) {
+      next();
+    } else {
+      throw new Error("invalid userId")
+    }
+    } catch (error) {
+      res.status(400).json({
+        error_message: "invalid userId"
+      });
+    }
+    
   }
 };
