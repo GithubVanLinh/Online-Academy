@@ -35,6 +35,7 @@ const enrollmentRouter = require("./routes/enrollment.route");
 const progressRouter = require("./routes/progress.route");
 const sectionRouter = require("./routes/section.route");
 const lessonRouter = require("./routes/lesson.route");
+const adminRouter = require("./routes/admin.route");
 app.use("/api/search", searchRouter);
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
@@ -46,6 +47,7 @@ app.use("/enrollments", enrollmentRouter);
 app.use("/progresses", progressRouter);
 app.use("/sections", sectionRouter);
 app.use("/lessons", lessonRouter);
+app.use("/admin", adminRouter);
 
 // define error route handler
 app.use((req, res, next) => {

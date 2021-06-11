@@ -3,6 +3,7 @@
 const CourseService = require("../services/course.service");
 const CategoryService = require("../services/category.service");
 const LecturerService = require("../services/lecturer.service");
+const UserService = require("../services/user.service");
 
 module.exports = {
   checkCourseId: async (req, res, next) => {
@@ -17,7 +18,7 @@ module.exports = {
     } catch (error) {
       console.error(error);
       return res.status(404).json({
-        "error_message": "Invalid CourseId"
+        error_message: "Invalid CourseId"
       });
     }
   },
@@ -25,7 +26,9 @@ module.exports = {
   checkCategoryId: async (req, res, next) => {
     const categoryId = req.params.categoryId;
     try {
-      const category = await CategoryService.getCategoryByCategoryId(categoryId);
+      const category = await CategoryService.getCategoryByCategoryId(
+        categoryId
+      );
       if (category != null) {
         return next();
       } else {
@@ -33,7 +36,7 @@ module.exports = {
       }
     } catch (error) {
       return res.status(404).json({
-        "error_message": "invalid categoryId"
+        error_message: "invalid categoryId"
       });
     }
   },
@@ -47,6 +50,37 @@ module.exports = {
     } else {
       res.status(400).json({
         error: "Lecturer not found"
+      });
+    }
+  },
+
+  validateUserId: async (req, res, next) => {
+    const { userId } = req.params;
+    try {
+      const user = await UserService.getUserByUserId(userId);
+      if (user) {
+        next();
+      } else {
+        throw new Error("invalid userId");
+      }
+    } catch (error) {
+      res.status(400).json({
+        error_message: "invalid userId"
+      });
+    }
+  },
+  checkLecturerId: async (req, res, next) => {
+    const { lecturerId } = req.params;
+    try {
+      const lecturer = await LecturerService.findById(lecturerId);
+      if (lecturer) {
+        next();
+      } else {
+        throw new Error("invalid lecturerId");
+      }
+    } catch (error) {
+      res.status(400).json({
+        error_message: "invalid lecturerId"
       });
     }
   }

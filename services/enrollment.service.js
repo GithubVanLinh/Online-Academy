@@ -3,7 +3,7 @@ const EnrollmentModel = require("../models/enrollment.model");
 
 module.exports = {
   /**
-   * 
+   *
    * @param {String} userId id of user
    * @param {String} courseId id of course
    */
@@ -21,7 +21,7 @@ module.exports = {
   },
 
   /**
-   * 
+   *
    * @param {String} userId id of user
    * @param {String} courseId id of course
    */
@@ -53,8 +53,9 @@ module.exports = {
 
   deleteEnrollmentByCourseId: async (courseId) => {
     return await mDeleteEnrollHaveCourse(courseId);
-  }
-}
+  },
+  mDeleteEnrollmentsByUserId
+};
 
 /**
  * delete enrollment in database
@@ -84,9 +85,22 @@ async function mGetListEnrollmentHaveCourse(courseId) {
  * @return {Promise<number>}
  */
 async function mDeleteEnrollHaveCourse(courseId) {
-  const enrolls =await mGetListEnrollmentHaveCourse(courseId);
-  await enrolls.map(async (enroll)=>{
+  const enrolls = await mGetListEnrollmentHaveCourse(courseId);
+  await enrolls.map(async (enroll) => {
     await mDeleteEnrollment(enroll._id);
   });
   return enrolls.length;
+}
+
+/**
+ * delete enrollment
+ * @param {string} userId userId
+ * @return {Promise<number>}
+ */
+async function mDeleteEnrollmentsByUserId(userId) {
+  const filter = {
+    userId: userId
+  };
+  const res = await EnrollmentModel.deleteMany(filter);
+  return res;
 }
