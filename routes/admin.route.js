@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 
 const paramsValidator = require("../middlewares/paramscheck.mdw");
+const bodyValidator = require("../middlewares/validator.mdw");
 
 const LecturerController = require("../controllers/lecturer.controller");
 const CourseController = require("../controllers/course.controller");
@@ -29,4 +30,27 @@ router.delete(
   paramsValidator.validateUserId,
   UserController.deleteUser
 );
+
+router.get(
+  "/lecturers",
+  LecturerController.getAllLecturer
+)
+
+router.post(
+  "/lecturers",
+  bodyValidator.validateRequestBody("create_lecturer"),
+  LecturerController.createLecturer
+)
+
+router.get(
+  "/lecturers/:lecturerId",
+  paramsValidator.checkLecturerId,
+  LecturerController.getLecturerDetail
+)
+
+router.delete(
+  "/lecturers/:lecturerId",
+  paramsValidator.checkLecturerId,
+  LecturerController.deleteLecturer
+)
 module.exports = router;

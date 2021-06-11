@@ -41,7 +41,7 @@ const Lecturer = new mongoose.Schema({
       Config.ACCOUNT_STATUS.ACTIVE,
       Config.ACCOUNT_STATUS.DELETED
     ],
-    default: Config.ACCOUNT_STATUS.PENDING
+    default: Config.ACCOUNT_STATUS.ACTIVE
   },
   phone: {
     type: String,

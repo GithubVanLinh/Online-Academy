@@ -22,6 +22,7 @@ const newCourseSchema = require("../utils/schemas/new_course.schema.json");
 const newSectionSchema = require("../utils/schemas/new_section.schema.json");
 const updateDescriptionSchema = require("../utils/schemas/update_course_description.schema.json");
 const newLessonSchema = require("../utils/schemas/new_lesson.schema.json");
+const createLecturerSchema = require("../utils/schemas/lecturer.schema.json");
 
 ajv.addSchema(registerSchema, "register_student");
 ajv.addSchema(updateSchema, "user");
@@ -38,5 +39,6 @@ ajv.addSchema(newCourseSchema, "new_course");
 ajv.addSchema(newSectionSchema, "new_section");
 ajv.addSchema(updateDescriptionSchema, "update_description");
 ajv.addSchema(newLessonSchema, "new_lesson");
+ajv.addSchema(createLecturerSchema, "create_lecturer");
 
 module.exports = ajv;
