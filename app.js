@@ -3,8 +3,10 @@ const express = require("express");
 const morgan = require("morgan");
 require("express-async-errors");
 const dotenv = require("dotenv");
+const cors = require("cors");
 dotenv.config();
-const upload = require("./configs/multer.config")
+
+const upload = require("./configs/multer.config");
 
 // const multer = require("./configs/multer.config")
 require("./configs/db.config");
@@ -15,12 +17,12 @@ const app = express();
 
 const server = http.createServer(app);
 
+app.use(cors())
 app.use(express.json());
 app.use(morgan("dev"));
 
 app.use(upload.array());
 app.use(express.static("public"));
-
 
 // define routing
 // const guestRouter = require("./routes/guest.route");
@@ -64,7 +66,9 @@ app.use((err, req, res, next) => {
 });
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`${process.env.NODE_ENV} api is running at https://localhost:${PORT}`);
+  console.log(
+    `${process.env.NODE_ENV} api is running at https://localhost:${PORT}`
+  );
 });
 
 module.exports = app;
