@@ -24,6 +24,7 @@ app.use(morgan("dev"));
 app.use(upload.array());
 app.use(express.static("public"));
 
+
 // define routing
 // const guestRouter = require("./routes/guest.route");
 const userRouter = require("./routes/user.route");
