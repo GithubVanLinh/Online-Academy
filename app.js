@@ -3,6 +3,7 @@ const express = require("express");
 const morgan = require("morgan");
 require("express-async-errors");
 const dotenv = require("dotenv");
+const cors = require("cors");
 dotenv.config();
 const upload = require("./configs/multer.config")
 
@@ -12,6 +13,7 @@ require("./configs/model.config");
 
 const http = require("http");
 const app = express();
+app.use(cors());
 
 const server = http.createServer(app);
 
