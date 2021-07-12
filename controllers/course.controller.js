@@ -114,5 +114,16 @@ module.exports = {
       console.log(e);
       return res.status(400).json({error: "Course not found"});
     }
+  },
+  getCourseSections: async (req, res) => {
+    try {
+      const courseId = req.params.courseId;
+      const { userId } = req.accessTokenPayload;
+      const sections = await CourseService.getCourseSectionsById(courseId, userId);
+      return res.json(sections);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({error: "Course not found"});
+    }
   }
 }
