@@ -1,6 +1,18 @@
 "use strict";
 const UserService = require("../services/user.service");
 module.exports = {
+  getUser: async (req, res, next) => {
+    const { userId } = req.body;
+
+    try {
+      const user = await UserService.findUserById(userId);
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(400).json({
+        error_message: error
+      });
+    }
+  },
   createNewStudent: async (req, res, next) => {
     const body = req.body;
     const user = await UserService.createUser(body);
@@ -34,16 +46,22 @@ module.exports = {
 
   updateUserPassword: async (req, res, next) => {
     const userId = req.params.userId;
-    const {currentPassword, newPassword} = req.body;
+    const { currentPassword, newPassword } = req.body;
     console.log("Current password: " + currentPassword);
     console.log("New password: " + newPassword);
 
     try {
       const user = await UserService.findUserById(userId);
       if (user) {
-        const ret = await UserService.verifyPassword(currentPassword, user.password);
+        const ret = await UserService.verifyPassword(
+          currentPassword,
+          user.password
+        );
         if (ret) {
-          const newUser = await UserService.updatePassword(user._id, newPassword);
+          const newUser = await UserService.updatePassword(
+            user._id,
+            newPassword
+          );
           return res.json(newUser);
         } else {
           return res.status(400).json({
@@ -67,28 +85,30 @@ module.exports = {
       const user = await UserService.findUserById(userId);
       console.log(user);
       if (user) {
-        const verification = await UserService.makeChangeEmailVerification(email);
+        const verification = await UserService.makeChangeEmailVerification(
+          email
+        );
         if (verification) {
           return res.json({
             message: "verify your email"
-          })
+          });
         } else {
           return res.status(400).json({
             error: "email is already taken"
-          })
+          });
         }
       }
     } catch (error) {
       console.log(error);
       res.status(400).json({
         error: "user not found"
-      })
+      });
     }
   },
 
   verifyAndUpdateEmail: async (req, res, next) => {
     const userId = req.params.userId;
-    const {email, key} = req.body;
+    const { email, key } = req.body;
 
     try {
       const user = await UserService.findUserById(userId);
@@ -99,7 +119,7 @@ module.exports = {
         } else {
           res.status(400).json({
             error: "incorrect email or key"
-          })
+          });
         }
       }
     } catch (error) {
@@ -137,7 +157,10 @@ module.exports = {
     const userId = req.params.userId;
     const courseIds = req.body.courseIds;
 
-    const newWishList = await UserService.deleteCoursesFromWishList(userId, courseIds);
+    const newWishList = await UserService.deleteCoursesFromWishList(
+      userId,
+      courseIds
+    );
     if (newWishList) {
       return res.json({
         wishList: newWishList.wishList
@@ -152,7 +175,7 @@ module.exports = {
     const userId = req.params.userId;
     const registeredList = await UserService.getRegisteredList(userId);
     if (registeredList) {
-      const ret = registeredList.map(e => e.courseId);
+      const ret = registeredList.map((e) => e.courseId);
       return res.json(ret);
     }
     res.status(400).json({
@@ -168,8 +191,7 @@ module.exports = {
       return res.json(user);
     } catch (e) {
       console.log(e);
-      return res.status(400).json({error: "user not found"});
+      return res.status(400).json({ error: "user not found" });
     }
   }
-
 };
