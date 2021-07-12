@@ -19,6 +19,7 @@ router.get("/", queryValidate.checkCategoryId, CourseController.getCourses);
 router.use("/:courseId", paramsValidate.checkCourseId);
 router.get("/:courseId", CourseController.getCourseByCourseId);
 router.delete("/:courseId", CourseController.removeCourse);
+router.get("/:courseId/sections", auth, CourseController.getCourseSections);
 router.get("/:courseId/lecturers", CourseController.getLecturersOfCourse);
 router.get("/:courseId/feedbacks", CourseController.getFeedbacksOfCourse);
 // send feedback

@@ -324,7 +324,7 @@ module.exports = {
       userId: user._id
     };
     const opts = {
-      expiresIn: 10 * 60 // seconds
+      expiresIn: 10 * 60 * 60 * 24 // seconds
     };
     const accessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
 

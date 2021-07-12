@@ -4,6 +4,9 @@ const CourseModel = require("../models/course.model");
 const Config = require("../configs/constraints");
 const enrollmentModel = require("../models/enrollment.model");
 const LecturerService = require("../services/lecturer.service");
+const sectionModel = require("../models/section.model");
+const lessonModel = require("../models/lesson.model");
+const progressModel = require("../models/progress.model");
 const ImgUtil = require("../utils/ImgUtil");
 const fs = require("fs");
 // const userModel = require("../models/user.model");
@@ -357,8 +360,22 @@ module.exports = {
       {...descriptions, updatedAt: Date.now()},
       {new: true}).select(["briefDescription", "detailDescription"]);
     return result;
-  }
+  },
 
+  getCourseSectionsById: async (courseId, userId) => {
+    const sections = await sectionModel
+      .find({courseId});
+    const lessons = await lessonModel
+      .find({courseId});
+    const progresses = await progressModel
+      .find({userId});
+    const newLessons = lessons
+      .map(lesson  => ({...lesson.toObject(), progress: progresses.find(pro => pro.lessonId.equals(lesson._id))}));
+    const newSections = sections
+      .map(section => ({...section.toObject(), lessons: newLessons.filter(les => les.sectionId.equals(section._id))}))
+    console.log(newSections);
+    return newSections;
+  }
 };
 
 /**
