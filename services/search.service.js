@@ -23,15 +23,13 @@ module.exports = {
         options.sort = {price: "asc"};
       }
     }
-    let courses = [];
     try {
       const result = await CourseModel.paginate(query, options);
-      courses = [...result.docs];
+      return result;
     } catch (error) {
       console.log(error);
       throw new Error(error);
     }
-    return courses;
   },
 
   getCoursesByCate: async (filter) => {
@@ -42,7 +40,7 @@ module.exports = {
     }
     const categoriesQuery = await CategoryModel.paginate(cateQuery, {select: ["_id"]});
     const cateIds = categoriesQuery.docs.reduce((result, cate) => result = [...result, cate._id], []);
-    
+
     const query = {};
     query.category = {$in: cateIds}
     const options = {
@@ -58,15 +56,12 @@ module.exports = {
         options.sort = {price: "asc"};
       }
     }
-    let courses = [];
-
     try {
       const result = await CourseModel.paginate(query, options);
-      courses = [...result.docs];
+      return result;
     } catch (error) {
       console.log(error);
       throw new Error(error);
     }
-    return courses;
   }
 };
