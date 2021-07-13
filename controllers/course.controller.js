@@ -125,5 +125,15 @@ module.exports = {
       console.log(e);
       return res.status(400).json({error: "Course not found"});
     }
+  },
+  getCourseSectionsUnAuth: async (req, res) => {
+    try {
+      const courseId = req.params.courseId;
+      const sections = await CourseService.getCourseSectionsByIdUnAth(courseId);
+      return res.json(sections);
+    } catch (e) {
+      console.log(e);
+      return res.status(400).json({error: "Course not found"});
+    }
   }
 }
