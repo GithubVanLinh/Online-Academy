@@ -321,7 +321,11 @@ module.exports = {
       return {authenticated: false};
     }
     const payload = {
-      userId: user._id
+      userId: user._id,
+      username: user.username,
+      fullName: user.fullName,
+      email: user.email,
+      avatar: user.avatar
     };
     const opts = {
       expiresIn: 10 * 60 * 60 * 24 // seconds
