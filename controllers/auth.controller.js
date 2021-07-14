@@ -38,6 +38,26 @@ module.exports = {
     } else {
       return res.json(result);
     }
+  },
+
+  logout: async (req,res) => {
+    const logoutInfo = req.accessTokenPayload;
+    console.log(logoutInfo);
+    try {
+      const result = await UserService.logOut(logoutInfo);
+      if (!result) {
+        return res.status(400).json({
+          message: "Something wrong!"
+        });
+      } else {
+        return res.json({
+          message: "logged out"
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      return res.status(400);
+    }
   }
 
 };
