@@ -134,6 +134,18 @@ module.exports = {
     }
 
     res.status(201).json(newCourse);
+  },
+
+  getLecturer: async (req, res) => {
+    const lecturerId = req.params.lecturerId;
+    const lecturer = await LecturerService.findById(lecturerId);
+
+    if (!lecturer) {
+      return res.status(400).json({
+        error: "lecturer not found"
+      });
+    }
+    res.json(lecturer);
   }
 
 };
