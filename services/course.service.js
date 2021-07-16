@@ -469,5 +469,5 @@ async function mGetCoursesByFilter(type, condition, page, sort) {
  */
 function updateRatingPoint(course) {
   const totalPoints = course.feedbacks.reduce((total, single) => total + single.ratingPoint, 0);
-  course.ratingPoint = totalPoints / course.feedbacks.length;
+  course.ratingPoint = Math.round(totalPoints / course.feedbacks.length * 10) / 10;
 }

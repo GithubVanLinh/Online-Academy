@@ -23,7 +23,7 @@ router.get("/:courseId/sections", auth, CourseController.getCourseSections);
 router.get("/:courseId/lecturers", CourseController.getLecturersOfCourse);
 router.get("/:courseId/feedbacks", CourseController.getFeedbacksOfCourse);
 // send feedback
-router.post("/:courseId/feedback", Validator.validateRequestBody("send_feedback"), CourseController.addFeedback);
+router.post("/:courseId/feedbacks", Validator.validateRequestBody("send_feedback"), CourseController.addFeedback);
 
 // get lesson info
 router.get("/:courseId/lessons/:lessonId", auth, LessonController.getLessonById);
