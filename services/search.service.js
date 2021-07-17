@@ -42,7 +42,7 @@ module.exports = {
     }
     const categoriesQuery = await CategoryModel.paginate(cateQuery, {select: ["_id"]});
     const cateIds = categoriesQuery.docs.reduce((result, cate) => result = [...result, cate._id], []);
-    
+
     const query = {};
     query.category = {$in: cateIds}
     const options = {
@@ -68,5 +68,11 @@ module.exports = {
       throw new Error(error);
     }
     return courses;
+  },
+
+  getCategoryByName: async (keyword) => {
+    const pattern = `^${keyword}$`;
+    const categories = await CategoryModel.find({categoryName: { $regex : new RegExp(pattern, "i")}});
+    return categories[0];
   }
 };
