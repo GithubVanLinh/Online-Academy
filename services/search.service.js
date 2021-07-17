@@ -63,5 +63,11 @@ module.exports = {
       console.log(error);
       throw new Error(error);
     }
+  },
+
+  getCategoryByName: async (keyword) => {
+    const pattern = `^${keyword}$`;
+    const categories = await CategoryModel.find({categoryName: { $regex : new RegExp(pattern, "i")}});
+    return categories[0];
   }
 };
