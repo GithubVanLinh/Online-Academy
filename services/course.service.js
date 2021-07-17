@@ -373,7 +373,15 @@ module.exports = {
       .map(lesson  => ({...lesson.toObject(), progress: progresses.find(pro => pro.lessonId.equals(lesson._id))}));
     const newSections = sections
       .map(section => ({...section.toObject(), lessons: newLessons.filter(les => les.sectionId.equals(section._id))}))
-    console.log(newSections);
+    return newSections;
+  },
+  getCourseSectionsByIdUnAth: async (courseId) => {
+    const sections = await sectionModel
+      .find({courseId});
+    const lessons = await lessonModel
+      .find({courseId});
+    const newSections = sections
+      .map(section => ({...section.toObject(), lessons: lessons.filter(les => les.sectionId.equals(section._id))}))
     return newSections;
   }
 };

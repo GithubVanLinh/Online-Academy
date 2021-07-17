@@ -12,4 +12,7 @@ router.post("/",
   SectionController.createSection
 );
 
+router.get("/")
+
+
 module.exports = router;

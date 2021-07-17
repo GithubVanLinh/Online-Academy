@@ -13,6 +13,8 @@ const paramValidation = require("../middlewares/paramscheck.mdw");
 
 router.use("/:lecturerId", paramValidation.validateLecturerId);
 
+router.get("/:lecturerId", LecturerController.getLecturer);
+
 router.get("/:lecturerId/courses", LecturerController.getCourses);
 
 router.post("/:lecturerId/avatar",
