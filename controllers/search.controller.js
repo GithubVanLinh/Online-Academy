@@ -22,6 +22,10 @@ module.exports = {
   getCategoryByName: async (req, res) => {
     const keyword = req.query.keyword;
     const category = await searchService.getCategoryByName(keyword);
-    res.json(category);
+    if(category) {
+      return res.json(category);
+    } else {
+      return res.status(204).json();
+    }
   }
 };
