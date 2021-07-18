@@ -5,9 +5,7 @@ require("express-async-errors");
 const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
-const upload = require("./configs/multer.config")
 
-// const multer = require("./configs/multer.config")
 require("./configs/db.config");
 require("./configs/model.config");
 
@@ -17,12 +15,11 @@ app.use(cors());
 
 const server = http.createServer(app);
 
+app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.use(upload.array());
 app.use(express.static("public"));
-
 
 // define routing
 // const guestRouter = require("./routes/guest.route");
