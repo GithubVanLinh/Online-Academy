@@ -56,7 +56,7 @@ router.get("/:userId/registeredList", UserController.getUserRegisteredList);
 
 // user change avatar
 router.post(
-  "/:userId/avatar",
+  "/:/userIdavatar",
   upload.single("avaImage"),
   UserController.changeAvatar
 );
