@@ -114,7 +114,7 @@ module.exports = {
     try {
       const courses = await CourseModel.find({
         status: {
-          $in: [Config.COURSE_STATUS.INCOMPLETE, Config.COURSE_STATUS.COMPLETED]
+          $in: [Config.COURSE_STATUS.COMPLETED]
         }
       })
         .sort({ view: "desc" })
@@ -155,6 +155,9 @@ module.exports = {
         .find({
           registeredTime: {
             $gte: startDate
+          },
+          status: {
+            $in: [Config.COURSE_STATUS.COMPLETED]
           }
         })
         .populate({
