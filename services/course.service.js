@@ -75,7 +75,7 @@ module.exports = {
     try {
       courses = await CourseModel.find({
         status: {
-          $in: [Config.COURSE_STATUS.INCOMPLETE, Config.COURSE_STATUS.COMPLETED]
+          $in: [Config.COURSE_STATUS.COMPLETED]
         }
       })
         .sort({ createdAt: "desc" })
