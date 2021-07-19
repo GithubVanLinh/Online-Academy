@@ -155,9 +155,6 @@ module.exports = {
         .find({
           registeredTime: {
             $gte: startDate
-          },
-          status: {
-            $in: [Config.COURSE_STATUS.COMPLETED]
           }
         })
         .populate({
