@@ -5,6 +5,7 @@ const router = express.Router();
 const upload = require("../configs/multer.config");
 const UserController = require("../controllers/user.controller");
 const Validator = require("../middlewares/validator.mdw");
+const auth = require("../middlewares/auth.mdw");
 
 router.post(
   "/",
@@ -12,7 +13,7 @@ router.post(
   UserController.createNewStudent
 );
 
-router.get("/:userId", UserController.getUser);
+router.get("/:userId", auth, UserController.getUser);
 
 // update user info (fullName, phone, address)
 router.patch(

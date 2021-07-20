@@ -6,12 +6,15 @@ const router = express.Router();
 const paramsValidator = require("../middlewares/paramscheck.mdw");
 const bodyValidator = require("../middlewares/validator.mdw");
 const Validator = require("../middlewares/validator.mdw");
+const auth = require("../middlewares/auth.mdw");
+
 const adminController = require("../controllers/admin.controller");
 const LecturerController = require("../controllers/lecturer.controller");
 const CourseController = require("../controllers/course.controller");
 const UserController = require("../controllers/user.controller");
 
 router.post("/login", Validator.validateRequestBody("login"), adminController.login);
+router.get("/:id", auth, adminController.getAdminInfo)
 // lecturer refresh accessToken
 router.post("/refresh/lecturer", LecturerController.refreshAcToken);
 router.delete(

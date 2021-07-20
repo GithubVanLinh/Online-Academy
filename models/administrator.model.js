@@ -15,6 +15,9 @@ const Admin = new mongoose.Schema({
     type: String,
     require: true
   },
+  avatar: {
+    type: String
+  },
   createdAt: {
     type: Date,
     default: Date.now
