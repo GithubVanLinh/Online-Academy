@@ -42,7 +42,6 @@ module.exports = {
 
   logout: async (req,res) => {
     const logoutInfo = req.accessTokenPayload;
-    console.log(logoutInfo);
     try {
       const result = await UserService.logOut(logoutInfo);
       if (!result) {

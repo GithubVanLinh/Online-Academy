@@ -6,6 +6,7 @@ const ajv = require("../configs/ajv.config");
 
 const UserModel = require("../models/user.model");
 const LecturerModel = require("../models/lecturer.model");
+const AdminModel = require("../models/administrator.model");
 const CourseModel = require("../models/course.model");
 const EnrollmentModel = require("../models/enrollment.model");
 const Config = require("../configs/constraints");
@@ -382,6 +383,9 @@ module.exports = {
           rfToken: ""
         });
         return lecturer;
+      case "admin":
+        const admin = await AdminModel.findByIdAndUpdate(userId, { rfToken: "" });
+        return admin;
       default:
         return null;
     }
