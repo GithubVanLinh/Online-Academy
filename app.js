@@ -15,7 +15,8 @@ app.use(cors());
 
 const server = http.createServer(app);
 
-app.use(express.urlencoded({extended: true}));
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("dev"));
 
@@ -34,6 +35,7 @@ const enrollmentRouter = require("./routes/enrollment.route");
 const progressRouter = require("./routes/progress.route");
 const sectionRouter = require("./routes/section.route");
 const lessonRouter = require("./routes/lesson.route");
+const adminRouter = require("./routes/admin.route");
 app.use("/api/search", searchRouter);
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
@@ -45,6 +47,7 @@ app.use("/enrollments", enrollmentRouter);
 app.use("/progresses", progressRouter);
 app.use("/sections", sectionRouter);
 app.use("/lessons", lessonRouter);
+app.use("/admin", adminRouter);
 
 // define error route handler
 app.use((req, res, next) => {
@@ -61,7 +64,9 @@ app.use((err, req, res, next) => {
 });
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`${process.env.NODE_ENV} api is running at http://localhost:${PORT}`);
+  console.log(
+    `${process.env.NODE_ENV} api is running at http://localhost:${PORT}`
+  );
 });
 
 module.exports = app;

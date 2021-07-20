@@ -20,7 +20,7 @@ module.exports = {
       lecturer === null ||
       !bcrypt.compareSync(loginInfo.password, lecturer.password)
     ) {
-      return {authenticated: false};
+      return { authenticated: false };
     }
     const payload = {
       userId: lecturer._id,
@@ -46,8 +46,8 @@ module.exports = {
   },
 
   refreshAccessToken: async (refreshInfo) => {
-    const {accessToken, refreshToken} = refreshInfo;
-    const {userId} = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
+    const { accessToken, refreshToken } = refreshInfo;
+    const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
       ignoreExpiration: true
     });
     const lecturer = await isValidRfToken(userId, refreshToken);
@@ -63,7 +63,11 @@ module.exports = {
       const opts = {
         expiresIn: 10 * 60 * 60 * 24 // seconds
       };
-      const newAccessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
+      const newAccessToken = jwt.sign(
+        payload,
+        process.env.NOT_A_SECRET_KEY,
+        opts
+      );
       return {
         accessToken: newAccessToken
       };
@@ -76,7 +80,7 @@ module.exports = {
       .select("teachingCourses")
       .populate({
         path: "teachingCourses",
-        populate: {path: "teachingCourses"}
+        populate: { path: "teachingCourses" }
       });
     return lecturer.teachingCourses;
   },
@@ -86,8 +90,9 @@ module.exports = {
     fs.unlinkSync(imgFilePath);
     const result = LecturerModel.findByIdAndUpdate(
       lecturerId,
-      {avatar: newAvatarUrl, updatedAt: Date.now()},
-      {new: true}).select("avatar");
+      { avatar: newAvatarUrl, updatedAt: Date.now() },
+      { new: true }
+    ).select("avatar");
     return result;
   },
 
@@ -120,10 +125,8 @@ module.exports = {
         new: true
       };
       lecturer = await LecturerModel.findOneAndUpdate(query, update, option)
-        .select([
-          ...Object.keys(newInfo),
-          "updatedAt"
-        ]).exec();
+        .select([...Object.keys(newInfo), "updatedAt"])
+        .exec();
     } catch (error) {
       console.error(error);
     }
@@ -134,9 +137,9 @@ module.exports = {
     try {
       const hashPassword = await bcrypt.hash(newPassword, salt);
       return await LecturerModel.findOneAndUpdate(
-        {_id: lecturerId},
-        {password: hashPassword, updatedAt: Date.now()},
-        {new: true}
+        { _id: lecturerId },
+        { password: hashPassword, updatedAt: Date.now() },
+        { new: true }
       ).select(["username", "password", "updatedAt"]);
     } catch (error) {
       throw Error(error);
@@ -176,9 +179,9 @@ module.exports = {
       const result = await VerifyService.validateUser(email, key);
       if (result === true) {
         lecturer = await LecturerModel.findOneAndUpdate(
-          {_id: lecturerId},
-          {email: email, updatedAt: Date.now()},
-          {new: true}
+          { _id: lecturerId },
+          { email: email, updatedAt: Date.now() },
+          { new: true }
         ).select(["email", "updatedAt"]);
       }
     } catch (error) {
@@ -189,14 +192,30 @@ module.exports = {
 
   addCourseToTeachingCourses: async (lecturerId, courseId) => {
     try {
-      const lecturer = await LecturerModel.findByIdAndUpdate(lecturerId, {$addToSet: {teachingCourses: courseId}});
+      const lecturer = await LecturerModel.findByIdAndUpdate(lecturerId, {
+        $addToSet: { teachingCourses: courseId }
+      });
       return lecturer;
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       return null;
     }
-  }
+  },
 
+  getAllLecturer: async () => {
+    const resl = await LecturerModel.find({});
+    return resl;
+  },
+
+  // lecterer has valid
+  createLecturer: async (lecturer) => {
+    const newpass = bcrypt.hashSync(lecturer.password, salt);
+    const newLec = { ...lecturer, password: newpass };
+    return await LecturerModel.create(newLec);
+  },
+  mCheckUsernameExist,
+  mCheckEmailExist,
+  mUpdateLecturerToDelete
 };
 
 /**
@@ -221,15 +240,14 @@ async function isValidRfToken(userId, refreshToken) {
  */
 async function mRemoveCourseFromTeachingCoursesForAllLecturer(courseId) {
   const lecturers = await LecturerModel.find({
-    teachingCourses: {_id: courseId}
+    teachingCourses: { _id: courseId }
   });
-
 
   for (let index = 0; index < lecturers.length; index++) {
     await mDeleteCourseFromTeachingCourses(lecturers[index]._id, courseId);
   }
 
-  return lecturers.length
+  return lecturers.length;
 }
 
 /**
@@ -270,7 +288,7 @@ async function mGetListTechingCourses(lecturerId) {
  */
 async function checkEmailExists(email) {
   try {
-    const result = await LecturerModel.findOne({email: email}).exec();
+    const result = await LecturerModel.findOne({ email: email }).exec();
     if (!result) {
       return true;
     }
@@ -278,4 +296,44 @@ async function checkEmailExists(email) {
     throw Error(error);
   }
   return false;
+}
+
+/**
+ * check if username exists will return true
+ * @param {string} username string username
+ * @return {bool}
+ */
+async function mCheckUsernameExist(username) {
+  const res = await LecturerModel.find({ username: username });
+  if (res && res.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * check if email exists will return true
+ * @param {string} email string email
+ * @return {bool}
+ */
+async function mCheckEmailExist(email) {
+  const res = await LecturerModel.find({ email: email });
+  if (res && res.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * delete lecturer
+ * @param {string} lecturerId lecturer id
+ * @return {Promise<number>}
+ */
+async function mUpdateLecturerToDelete(lecturerId) {
+  const res = await LecturerModel.findByIdAndUpdate(lecturerId, {
+    status: "DELETED"
+  });
+  return res;
 }

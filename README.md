@@ -1672,7 +1672,7 @@ Online Academy Project:
 
 ##### Remove Course
 
-- Method: `DELETE /courses/:courseId`
+- Method: `DELETE /admin/courses/:courseId`
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -1700,7 +1700,7 @@ Online Academy Project:
 
 ##### Get All Category
 
-- Method: `GET /categories`
+- Method: `GET /admin/categories`
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -1731,7 +1731,7 @@ Online Academy Project:
 
 ##### Get Category Detail
 
-- Method: `GET /categories/:categoryId`
+- Method: `GET /admin/categories/:categoryId`
 - Params:
   - `category`: string id
 - Status Code:
@@ -1761,7 +1761,7 @@ Online Academy Project:
 
 `categoryName` and `level` is unique
 
-- Method: `POST /categories`
+- Method: `POST /admin/categories`
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -1798,7 +1798,7 @@ Online Academy Project:
 
 ##### Delete Category
 
-- Method: `DELETE /categories/:categoryId`
+- Method: `DELETE /admin/categories/:categoryId`
 - Params:
   - `category`: string id
 - Status Code:
@@ -1816,7 +1816,7 @@ Online Academy Project:
 
 `categoryName` and `level` is unique
 
-- Method: `PATCH /categories/:categoryId`
+- Method: `PATCH /admin/categories/:categoryId`
 - Params:
   - `categoryId`: string id
 - Status Code:
@@ -1847,7 +1847,7 @@ Online Academy Project:
 
 ##### Get All Student
 
-- Method: `GET /users`
+- Method: `GET /admin/users`
 - Status Code:
 
   - Success: `200`
@@ -1874,7 +1874,7 @@ Online Academy Project:
 
 ##### Get Student Detail
 
-- Method: `GET /users/:userId`
+- Method: `GET /admin/users/:userId`
 - Status Code:
 
   - Success: `200`
@@ -1907,7 +1907,7 @@ Online Academy Project:
 
 ##### Delete Student
 
-- Method: `DELETE /users/:userId`
+- Method: `DELETE /admin/users/:userId`
 - Status Code:
 
   - Success: `200`
@@ -1933,7 +1933,7 @@ Online Academy Project:
 
 ##### Get All Lecturer
 
-- Method: `GET /lecturers`
+- Method: `GET /admin/lecturers`
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -1959,7 +1959,7 @@ Online Academy Project:
 
 ##### Get Lecturer Detail
 
-- Method: `GET /lecturers/lecturerId`
+- Method: `GET /admin/lecturers/lecturerId`
 - Params:
   - `lecturerId`: string id
 - Status Code:
@@ -1993,7 +1993,7 @@ Online Academy Project:
 
 ##### Add Lecturer
 
-- Method: `POST /lecturers`
+- Method: `POST /admin/lecturers`
 - Status Code:
   - Success: `200`
   - Failure: `400`
@@ -2032,7 +2032,7 @@ Online Academy Project:
 
 ##### Delete Lecturer
 
-- Method: `DELETE /lecturers/:lecturerId`
+- Method: `DELETE /admin/lecturers/:lecturerId`
 - Params:
   - `lecturerId`: string id
 - Status Code:

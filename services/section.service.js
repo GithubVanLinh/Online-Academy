@@ -68,10 +68,25 @@ async function modifyUpdatedTime(sectionId) {
   }
 }
 
-
+/**
+ * detele many section
+ * @param {string} courseId course id
+ * @return {Promise<number>}
+ */
+ async function mRemoveSectionsByCourseId(courseId) {
+  const filter = {
+    courseId: courseId
+  };
+  const updateData = {
+    isDeleted: true
+  };
+  const res = await SectionModel.updateMany(filter, updateData);
+  return res;
+}
 module.exports = {
   add,
   getByTitle,
   getById,
-  modifyUpdatedTime
+  modifyUpdatedTime,
+  mRemoveSectionsByCourseId
 };

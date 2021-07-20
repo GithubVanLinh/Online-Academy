@@ -37,9 +37,9 @@ module.exports = {
     try {
       const hashPassword = await bcrypt.hash(newPassword, salt);
       return await UserModel.findOneAndUpdate(
-        {_id: userId},
-        {password: hashPassword, updatedAt: Date.now()},
-        {new: true}
+        { _id: userId },
+        { password: hashPassword, updatedAt: Date.now() },
+        { new: true }
       ).select(["username", "password"]);
     } catch (error) {
       throw Error(error);
@@ -67,13 +67,10 @@ module.exports = {
   updateUserInfo: async (userId, newInfo) => {
     try {
       return await UserModel.findOneAndUpdate(
-        {_id: userId},
-        {...newInfo, updatedAt: Date.now()},
-        {new: true}
-      ).select([
-        ...Object.keys(newInfo),
-        "updatedAt"
-      ]);
+        { _id: userId },
+        { ...newInfo, updatedAt: Date.now() },
+        { new: true }
+      ).select([...Object.keys(newInfo), "updatedAt"]);
     } catch (error) {
       throw Error(error);
     }
@@ -112,9 +109,9 @@ module.exports = {
       const result = await VerifyService.validateUser(email, key);
       if (result === true) {
         user = await UserModel.findOneAndUpdate(
-          {_id: userId},
-          {email: email, updatedAt: Date.now()},
-          {new: true}
+          { _id: userId },
+          { email: email, updatedAt: Date.now() },
+          { new: true }
         ).select(["email", "updatedAt"]);
       }
     } catch (error) {
@@ -180,8 +177,8 @@ module.exports = {
     try {
       const user = await UserModel.findByIdAndUpdate(
         userId,
-        {$addToSet: {wishList: courseId}},
-        {new: true}
+        { $addToSet: { wishList: courseId } },
+        { new: true }
       )
         .select("wishList")
         .exec();
@@ -207,7 +204,7 @@ module.exports = {
             }
           }
         },
-        {new: true}
+        { new: true }
       )
         .select("wishList")
         .exec();
@@ -319,7 +316,7 @@ module.exports = {
       user === null ||
       !bcrypt.compareSync(loginInfo.password, user.password)
     ) {
-      return {authenticated: false};
+      return { authenticated: false };
     }
     const payload = {
       userId: user._id,
@@ -335,7 +332,7 @@ module.exports = {
     const accessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
 
     const refreshToken = randomstring.generate(80);
-    await UserModel.findByIdAndUpdate(user._id, {rfToken: refreshToken});
+    await UserModel.findByIdAndUpdate(user._id, { rfToken: refreshToken });
     return {
       authenticated: true,
       accessToken,
@@ -344,8 +341,8 @@ module.exports = {
   },
 
   refreshAccessToken: async (refreshInfo) => {
-    const {accessToken, refreshToken} = refreshInfo;
-    const {userId} = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
+    const { accessToken, refreshToken } = refreshInfo;
+    const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
       ignoreExpiration: true
     });
     const user = await isValidRfToken(userId, refreshToken);
@@ -361,7 +358,11 @@ module.exports = {
       const opts = {
         expiresIn: 10 * 60 * 60 * 24 // seconds
       };
-      const newAccessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts );
+      const newAccessToken = jwt.sign(
+        payload,
+        process.env.NOT_A_SECRET_KEY,
+        opts
+      );
       return {
         accessToken: newAccessToken
       };
@@ -374,10 +375,12 @@ module.exports = {
     const { userId, type } = logoutInfo;
     switch (type) {
       case "student":
-        const user = await UserModel.findByIdAndUpdate(userId, {rfToken: ""});
+        const user = await UserModel.findByIdAndUpdate(userId, { rfToken: "" });
         return user;
       case "lecturer":
-        const lecturer = await LecturerModel.findByIdAndUpdate(userId, {rfToken: ""});
+        const lecturer = await LecturerModel.findByIdAndUpdate(userId, {
+          rfToken: ""
+        });
         return lecturer;
       default:
         return null;
@@ -393,11 +396,43 @@ module.exports = {
     fs.unlinkSync(imgFilePath);
     const result = UserModel.findByIdAndUpdate(
       userId,
-      {avatar: newAvatarUrl, updatedAt: Date.now()},
-      {new: true}).select("avatar");
+      { avatar: newAvatarUrl, updatedAt: Date.now() },
+      { new: true }
+    ).select("avatar");
     return result;
+  },
+
+  getAllUser: async () => {
+    return await getAllUsers();
+  },
+
+  getUserByUserId: async (userId) => {
+    return await mGetUserById(userId);
+  },
+
+  deleteUserByUserId: async (userId) => {
+    return await mDeleteUserById(userId);
   }
 };
+
+/**
+ * get All user in db
+ * @return {Promise<Array<object>>}
+ */
+async function getAllUsers() {
+  const resl = await UserModel.find({}).select([
+    "username",
+    "fullName",
+    "email",
+    "avatar",
+    "address",
+    "createdAt",
+    "updatedAt",
+    "status",
+    "wishList"
+  ]);
+  return resl;
+}
 
 /**
  * check username is registed
@@ -405,7 +440,7 @@ module.exports = {
  * @return {bool}
  */
 async function mCheckUsernameIsValid(username) {
-  const res = await UserModel.findOne({username: username});
+  const res = await UserModel.findOne({ username: username });
   if (res) {
     return false;
   } else {
@@ -494,7 +529,7 @@ async function checkValidEmail(user) {
  */
 async function checkEmailExists(email) {
   try {
-    const result = await UserModel.findOne({email: email}).exec();
+    const result = await UserModel.findOne({ email: email }).exec();
     if (!result) {
       return true;
     }
@@ -519,7 +554,6 @@ async function isValidRfToken(userId, refreshToken) {
   }
 }
 
-
 /**
  * Delete course
  * @param {string} courseId id of course
@@ -527,15 +561,14 @@ async function isValidRfToken(userId, refreshToken) {
  */
 async function mRemoveCourseFromWishListForAllUser(courseId) {
   const users = await UserModel.find({
-    wishList: {_id: courseId}
+    wishList: { _id: courseId }
   });
 
   for (let index = 0; index < users.length; index++) {
     await mDeleteCourseFromWishList(users[index]._id, courseId);
-
   }
 
-  return users.length
+  return users.length;
 }
 
 /**
@@ -567,4 +600,26 @@ async function mDeleteCourseFromWishList(userId, courseId) {
 async function mGetWishList(userId) {
   const res = await UserModel.findById(userId);
   return res.wishList;
+}
+
+//  mGetUserDetail
+/**
+ * get user by Id
+ * @param {string} userId user id
+ * @return {Promise<object>}
+ */
+async function mGetUserById(userId) {
+  return await UserModel.findById(userId);
+}
+
+/**
+ * get user by Id
+ * @param {string} userId user id
+ * @return {Promise<number>}
+ */
+async function mDeleteUserById(userId) {
+  const updateInfo = {
+    isDeleted: true
+  };
+  return await UserModel.findByIdAndUpdate(userId, updateInfo);
 }

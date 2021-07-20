@@ -379,6 +379,7 @@ module.exports = {
     ).select(["briefDescription", "detailDescription"]);
     return result;
   },
+  removeAllLecturerFromCourses,
 
   getCourseSectionsById: async (courseId, userId) => {
     const sections = await sectionModel.find({ courseId });
@@ -501,4 +502,48 @@ function updateRatingPoint(course) {
   );
   course.ratingPoint =
     Math.round((totalPoints / course.feedbacks.length) * 10) / 10;
+}
+
+/**
+ * remove all courses
+ * @param {string} lecturerId id
+ */
+async function removeAllLecturerFromCourses(lecturerId) {
+  // TODO find courses
+  const courses = await mFindAllCoursesContainLecturer(lecturerId);
+  // TODO delete courses
+  for (const course of courses) {
+    await mRemoveLecturerFromCourse(course, lecturerId);
+  }
+}
+
+/**
+ * find all course contain lecturer
+ * @param {string} lecturerId lecturer id
+ * @return {Promise<Array>}
+ */
+async function mFindAllCoursesContainLecturer(lecturerId) {
+  const courses = await CourseModel.find({
+    courseLecturers: lecturerId
+  });
+  return courses;
+}
+
+/**
+ * remove lecturer from course by lecturerId
+ * @param {object} course course
+ * @param {string} lecturerId id
+ * @return {Promise}
+ */
+async function mRemoveLecturerFromCourse(course, lecturerId) {
+  const list = course.courseLecturers;
+  const index = list.indexOf(lecturerId);
+  console.log(list, lecturerId, "index", index);
+  if (index < 0){
+    throw new Error("lecturer not found");
+  }
+  list.splice(index, 1);
+
+  const res = await CourseModel.findByIdAndUpdate(course._id, {courseLecturers: list});
+  return res;
 }

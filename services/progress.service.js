@@ -51,5 +51,36 @@ module.exports = {
       console.error(error);
     }
     return progress;
-  }
+  },
+
+  deleteProgressesByCourseId: async (courseId) =>{
+    return await mRemoveProgressByCourseId(courseId);
+  },
+  mRemoveProgressByUserId
+}
+
+/**
+ * detele many progress
+ * @param {string} courseId course id
+ * @return {Promise<number>}
+ */
+ async function mRemoveProgressByCourseId(courseId) {
+  const filter = {
+    courseId: courseId
+  };
+  const res = await ProgressModel.deleteMany(filter);
+  return res;
+}
+
+/**
+ * detele many progress
+ * @param {string} userId user id
+ * @return {Promise<number>}
+ */
+ async function mRemoveProgressByUserId(userId) {
+  const filter = {
+    userId: userId
+  };
+  const res = await ProgressModel.deleteMany(filter);
+  return res;
 }

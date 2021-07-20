@@ -4,6 +4,9 @@ const CourseService = require("../services/course.service");
 const EnrollmentService = require("../services/enrollment.service");
 const LecturerService = require("../services/lecturer.service");
 const UserService = require("../services/user.service");
+const SectionService = require("../services/section.service");
+const LessonService = require("../services/lesson.service");
+const ProgressService = require("../services/progress.service");
 
 module.exports = {
   getCourseByCourseId: async (req, res, next) => {
@@ -88,6 +91,10 @@ module.exports = {
     );
     await EnrollmentService.deleteEnrollmentByCourseId(courseId);
     await UserService.removeCourseFromWishListForAllUser(courseId);
+    await SectionService.mRemoveSectionsByCourseId(courseId);
+    await LessonService.removeLessonsByCourseId(courseId);
+    await ProgressService.deleteProgressesByCourseId(courseId);
+    
     res.status(200).json({
       message: `${courseId} delete success`
     });

@@ -174,6 +174,63 @@ const category2 = {
   updatedAt: "2021-05-30T04:08:57.918Z"
 };
 
+const lesson1 = {
+  _id: "60b75041a651451b6f25b37b",
+  courseId: "",
+  sectionId: "",
+  title: "Welcome To The Course!",
+  totalLength: 61,
+  videoUrl: "https://vimeo.com/559574353/16f3f822b5",
+  isPreview: true,
+  order: 0,
+  createdAt: "2021-06-02T06:11:57.918Z"
+};
+const lesson2 = {
+  _id: "60b75041a651451b6f25b37c",
+  courseId: "",
+  sectionId: "",
+  title: "Welcome To The Course!",
+  totalLength: 61,
+  videoUrl: "https://vimeo.com/559574353/16f3f822b5",
+  isPreview: true,
+  order: 1,
+  createdAt: "2021-06-02T06:11:57.918Z"
+};
+const section1 = {
+  _id: "60b74da3a651451b6f25b378",
+  courseId: "",
+  title: "Getting Started",
+  totalLength: 0,
+  order: 0,
+  createdAt: "2021-06-02T06:11:57.918Z",
+  updatedAt: "2021-06-02T06:11:57.918Z"
+};
+const section2 = {
+  _id: "60b74da3a651451b6f25b379",
+  courseId: "",
+  title: "Getting Started",
+  totalLength: 0,
+  order: 1,
+  createdAt: "2021-06-02T06:11:57.918Z",
+  updatedAt: "2021-06-02T06:11:57.918Z"
+};
+const progress1 = {
+  _id: "60bb2fc802808615df013a89",
+  lessonId: "" ,
+  userId: "" ,
+  __v: 0,
+  isFinish: true,
+  progress: 28
+};
+const progress2 = {
+  _id: "60bb2fc802808615df013a8a",
+  lessonId: "" ,
+  userId: "" ,
+  __v: 0,
+  isFinish: false,
+  progress: 28
+};
+
 // ref
 user1.wishList.push(course1._id, course2._id);
 user2.wishList.push(course2._id);
@@ -183,6 +240,14 @@ course2.courseLecturers.push(lecturer1._id);
 course1.category = category1._id;
 course2.category = category1._id;
 
+section1.courseId = course1._id;
+section2.courseId = course1._id;
+
+lesson1.courseId = course1._id;
+lesson1.sectionId = section1._id;
+lesson2.courseId = course1._id;
+lesson2.sectionId = section1._id;
+
 lecturer1.teachingCourses.push(course1._id, course2._id);
 lecturer2.teachingCourses.push(course1._id);
 
@@ -191,7 +256,11 @@ enroll1.userId = user1._id;
 enroll2.courseId = course1._id;
 enroll2.userId = user2._id;
 
+progress1.userId = user1._id
+progress1.lessonId = lecturer1._id
 
+progress2.userId = user2._id
+progress2.lessonId = lecturer2._id
 
 module.exports = {
   users: [user1, user2],
@@ -200,5 +269,8 @@ module.exports = {
   enrollments: [enroll1, enroll2],
   verifies: [],
   admins: [admin1, admin2],
-  categories: [category1, category2]
+  categories: [category1, category2],
+  section: [section1, section2],
+  lesson: [lesson1, lesson2],
+  progress: [progress1, progress2]
 };

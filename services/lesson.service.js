@@ -35,9 +35,9 @@ module.exports = {
       lesson = await LessonModel.findOne({
         _id: lessonId,
         courseId: courseId
-      }).select([
-        "title", "videoUrl", "totalLength"
-      ]).exec();
+      })
+        .select(["title", "videoUrl", "totalLength"])
+        .exec();
     } catch (err) {
       console.error(err);
     }
@@ -52,10 +52,10 @@ module.exports = {
   add: async (lessonInfo) => {
     let lesson = null;
     try {
-      if (await getLessonByTitle(lessonInfo.title) === null) {
+      if ((await getLessonByTitle(lessonInfo.title)) === null) {
         lesson = await LessonModel.create(lessonInfo);
-        if(lesson) {
-          await SectionService.modifyUpdatedTime(lessonInfo.sectionId)
+        if (lesson) {
+          await SectionService.modifyUpdatedTime(lessonInfo.sectionId);
           await CourseService.modifyUpdatedTime(lessonInfo.courseId);
         }
       }
@@ -63,9 +63,28 @@ module.exports = {
       console.error(e);
     }
     return lesson;
-  }
+  },
 
+  removeLessonsByCourseId: async (courseId) => {
+    return await mRemoveLessonByCourseId(courseId);
+  }
 };
+
+/**
+ * detele many lesson
+ * @param {string} courseId course id
+ * @return {Promise<number>}
+ */
+async function mRemoveLessonByCourseId(courseId) {
+  const filter = {
+    courseId: courseId
+  };
+  const updateData = {
+    isDeleted: true
+  };
+  const res = await LessonModel.updateMany(filter, updateData);
+  return res;
+}
 
 /**
  *

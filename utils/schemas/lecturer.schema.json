@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "properties": {
+    "username": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "avatar": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "number",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "number",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVE", "DELETED"]
+    },
+    "phone": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "teachingCourses": {
+      "type": "array"
+    },
+    "rfToken": {
+      "type": "string"
+    }
+  },
+  "required": ["username", "password", "fullName", "email", "address", "phone", "description"],
+  "additionalProperties": false
+}
