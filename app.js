@@ -6,8 +6,6 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
 
-const upload = require("./configs/multer.config");
-
 require("./configs/db.config");
 require("./configs/model.config");
 
@@ -67,7 +65,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(
-    `${process.env.NODE_ENV} api is running at https://localhost:${PORT}`
+    `${process.env.NODE_ENV} api is running at http://localhost:${PORT}`
   );
 });
 
