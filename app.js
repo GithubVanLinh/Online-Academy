@@ -8,22 +8,21 @@ dotenv.config();
 
 const upload = require("./configs/multer.config");
 
-// const multer = require("./configs/multer.config")
 require("./configs/db.config");
 require("./configs/model.config");
 
 const http = require("http");
 const app = express();
+app.use(cors());
 
 const server = http.createServer(app);
 
-app.use(cors())
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("dev"));
 
-app.use(upload.array());
 app.use(express.static("public"));
-
 
 // define routing
 // const guestRouter = require("./routes/guest.route");

@@ -6,5 +6,6 @@ const SearchController = require("../controllers/search.controller");
 
 router.get("/course", SearchController.getCoursesByName);
 router.get("/byCategory", SearchController.getCoursesByCategory);
+router.get("/exactCategory", SearchController.getCategoryByName);
 
 module.exports = router;

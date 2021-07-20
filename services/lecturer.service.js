@@ -23,13 +23,17 @@ module.exports = {
       return { authenticated: false };
     }
     const payload = {
-      userId: lecturer._id
+      userId: lecturer._id,
+      username: lecturer.username,
+      fullName: lecturer.fullName,
+      email: lecturer.email,
+      avatar: lecturer.avatar,
+      type: "lecturer"
     };
     const opts = {
-      expiresIn: 10 * 60 // seconds
+      expiresIn: 10 * 60 * 60 * 24 // seconds
     };
     const accessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
-
     const refreshToken = randomstring.generate(80);
     await LecturerModel.findByIdAndUpdate(lecturer._id, {
       rfToken: refreshToken
@@ -46,12 +50,23 @@ module.exports = {
     const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
       ignoreExpiration: true
     });
-    const valid = await isValidRfToken(userId, refreshToken);
-    if (valid === true) {
+    const lecturer = await isValidRfToken(userId, refreshToken);
+    if (lecturer) {
+      const payload = {
+        userId: lecturer._id,
+        username: lecturer.username,
+        fullName: lecturer.fullName,
+        email: lecturer.email,
+        avatar: lecturer.avatar,
+        type: "lecturer"
+      };
+      const opts = {
+        expiresIn: 10 * 60 * 60 * 24 // seconds
+      };
       const newAccessToken = jwt.sign(
-        { userId },
+        payload,
         process.env.NOT_A_SECRET_KEY,
-        { expiresIn: 60 * 10 }
+        opts
       );
       return {
         accessToken: newAccessToken
@@ -194,8 +209,8 @@ module.exports = {
 
   // lecterer has valid
   createLecturer: async (lecturer) => {
-    const newpass = bcrypt.hashSync(lecturer.password, salt)
-    const newLec = {...lecturer, password: newpass}
+    const newpass = bcrypt.hashSync(lecturer.password, salt);
+    const newLec = { ...lecturer, password: newpass };
     return await LecturerModel.create(newLec);
   },
   mCheckUsernameExist,
@@ -212,9 +227,9 @@ module.exports = {
 async function isValidRfToken(userId, refreshToken) {
   const user = await LecturerModel.findById(userId).exec();
   if (user.rfToken === refreshToken) {
-    return true;
+    return user;
   } else {
-    return false;
+    return null;
   }
 }
 
@@ -302,7 +317,7 @@ async function mCheckUsernameExist(username) {
  * @param {string} email string email
  * @return {bool}
  */
- async function mCheckEmailExist(email) {
+async function mCheckEmailExist(email) {
   const res = await LecturerModel.find({ email: email });
   if (res && res.length > 0) {
     return true;

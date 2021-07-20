@@ -159,6 +159,18 @@ module.exports = {
     res.status(201).json(newCourse);
   },
 
+  getLecturer: async (req, res) => {
+    const lecturerId = req.params.lecturerId;
+    const lecturer = await LecturerService.findById(lecturerId);
+
+    if (!lecturer) {
+      return res.status(400).json({
+        error: "lecturer not found"
+      });
+    }
+    res.json(lecturer);
+  },
+
   getAllLecturer: async (req, res, next) => {
     const resl = await LecturerService.getAllLecturer();
 
@@ -197,21 +209,21 @@ module.exports = {
   },
 
   deleteLecturer: async (req, res, next) => {
-    const {lecturerId} = req.params;
+    const { lecturerId } = req.params;
     try {
-    // TODO delete lecturer in lecturer table
-    await LecturerService.mUpdateLecturerToDelete(lecturerId);
-    // TODO remove lecturer from courses
-    await CourseService.removeAllLecturerFromCourses(lecturerId);
+      // TODO delete lecturer in lecturer table
+      await LecturerService.mUpdateLecturerToDelete(lecturerId);
+      // TODO remove lecturer from courses
+      await CourseService.removeAllLecturerFromCourses(lecturerId);
 
-    res.status(200).json({
-      message: "lecturer has removed"
-    })
+      res.status(200).json({
+        message: "lecturer has removed"
+      });
     } catch (error) {
       console.log("error", error);
       res.status(500).json({
         error_message: "server Error"
-      })
+      });
     }
   }
 };

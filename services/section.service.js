@@ -16,6 +16,10 @@ async function getById(sectionId) {
   return section;
 }
 
+async function getSectionsByCourseId(courseId) {
+  {}
+}
+
 /**
  *
  * @param {string} title

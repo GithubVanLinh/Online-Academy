@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const ajv = require("../configs/ajv.config");
 
 const UserModel = require("../models/user.model");
+const LecturerModel = require("../models/lecturer.model");
 const CourseModel = require("../models/course.model");
 const EnrollmentModel = require("../models/enrollment.model");
 const Config = require("../configs/constraints");
@@ -318,10 +319,15 @@ module.exports = {
       return { authenticated: false };
     }
     const payload = {
-      userId: user._id
+      userId: user._id,
+      username: user.username,
+      fullName: user.fullName,
+      email: user.email,
+      avatar: user.avatar,
+      type: "student"
     };
     const opts = {
-      expiresIn: 10 * 60 // seconds
+      expiresIn: 10 * 60 * 60 * 24 // seconds
     };
     const accessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
 
@@ -339,18 +345,46 @@ module.exports = {
     const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
       ignoreExpiration: true
     });
-    const valid = await isValidRfToken(userId, refreshToken);
-    if (valid === true) {
+    const user = await isValidRfToken(userId, refreshToken);
+    if (user) {
+      const payload = {
+        userId: user._id,
+        username: user.username,
+        fullName: user.fullName,
+        email: user.email,
+        avatar: user.avatar,
+        type: "student"
+      };
+      const opts = {
+        expiresIn: 10 * 60 * 60 * 24 // seconds
+      };
       const newAccessToken = jwt.sign(
-        { userId },
+        payload,
         process.env.NOT_A_SECRET_KEY,
-        { expiresIn: 60 * 10 }
+        opts
       );
       return {
         accessToken: newAccessToken
       };
+    } else {
+      return null;
     }
-    return null;
+  },
+
+  logOut: async (logoutInfo) => {
+    const { userId, type } = logoutInfo;
+    switch (type) {
+      case "student":
+        const user = await UserModel.findByIdAndUpdate(userId, { rfToken: "" });
+        return user;
+      case "lecturer":
+        const lecturer = await LecturerModel.findByIdAndUpdate(userId, {
+          rfToken: ""
+        });
+        return lecturer;
+      default:
+        return null;
+    }
   },
 
   removeCourseFromWishListForAllUser: async (courseId) => {
@@ -386,8 +420,8 @@ module.exports = {
  * @return {Promise<Array<object>>}
  */
 async function getAllUsers() {
-  const resl = await UserModel.find({}).select(
-    ["username",
+  const resl = await UserModel.find({}).select([
+    "username",
     "fullName",
     "email",
     "avatar",
@@ -395,8 +429,8 @@ async function getAllUsers() {
     "createdAt",
     "updatedAt",
     "status",
-    "wishList"]
-  );
+    "wishList"
+  ]);
   return resl;
 }
 
@@ -514,9 +548,9 @@ async function checkEmailExists(email) {
 async function isValidRfToken(userId, refreshToken) {
   const user = await UserModel.findById(userId).exec();
   if (user.rfToken === refreshToken) {
-    return true;
+    return user;
   } else {
-    return false;
+    return null;
   }
 }
 
@@ -579,13 +613,13 @@ async function mGetUserById(userId) {
 }
 
 /**
-* get user by Id
-* @param {string} userId user id
-* @return {Promise<number>}
-*/
+ * get user by Id
+ * @param {string} userId user id
+ * @return {Promise<number>}
+ */
 async function mDeleteUserById(userId) {
   const updateInfo = {
     isDeleted: true
-  }
- return await UserModel.findByIdAndUpdate(userId, updateInfo);
+  };
+  return await UserModel.findByIdAndUpdate(userId, updateInfo);
 }

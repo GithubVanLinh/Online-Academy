@@ -4,6 +4,9 @@ const CourseModel = require("../models/course.model");
 const Config = require("../configs/constraints");
 const enrollmentModel = require("../models/enrollment.model");
 const LecturerService = require("../services/lecturer.service");
+const sectionModel = require("../models/section.model");
+const lessonModel = require("../models/lesson.model");
+const progressModel = require("../models/progress.model");
 const ImgUtil = require("../utils/ImgUtil");
 const fs = require("fs");
 // const userModel = require("../models/user.model");
@@ -17,6 +20,12 @@ module.exports = {
   getCourseByCourseId: async (courseId) => {
     const resl = await mGetCourseByCourseId(courseId);
     return resl;
+  },
+
+  seen: async (courseId, view) => {
+    await CourseModel.findByIdAndUpdate(courseId, {
+      view: view + 1
+    });
   },
 
   /**
@@ -66,13 +75,10 @@ module.exports = {
     try {
       courses = await CourseModel.find({
         status: {
-          $in: [
-            Config.COURSE_STATUS.INCOMPLETE,
-            Config.COURSE_STATUS.COMPLETED
-          ]
+          $in: [Config.COURSE_STATUS.COMPLETED]
         }
       })
-        .sort({createdAt: "desc"})
+        .sort({ createdAt: "desc" })
         .limit(10)
         .populate([
           {
@@ -108,13 +114,10 @@ module.exports = {
     try {
       const courses = await CourseModel.find({
         status: {
-          $in: [
-            Config.COURSE_STATUS.INCOMPLETE,
-            Config.COURSE_STATUS.COMPLETED
-          ]
+          $in: [Config.COURSE_STATUS.COMPLETED]
         }
       })
-        .sort({view: "desc"})
+        .sort({ view: "desc" })
         .limit(10)
         .populate([
           {
@@ -148,25 +151,27 @@ module.exports = {
     const startDate = new Date(Date.now() - aWeek);
 
     try {
-      const enrollments = await enrollmentModel.find({
-        registeredTime: {
-          $gte: startDate
-        }
-      }).populate({
-        path: "courseId",
-        select: [
-          "courseName",
-          "category",
-          "courseLecturers",
-          "ratingPoint",
-          "ratedNumber",
-          "courseImage",
-          "price",
-          "promotionalPrice"
-        ]
-      });
+      const enrollments = await enrollmentModel
+        .find({
+          registeredTime: {
+            $gte: startDate
+          }
+        })
+        .populate({
+          path: "courseId",
+          select: [
+            "courseName",
+            "category",
+            "courseLecturers",
+            "ratingPoint",
+            "ratedNumber",
+            "courseImage",
+            "price",
+            "promotionalPrice"
+          ]
+        });
 
-      const courses = enrollments.map(enroll => enroll.courseId);
+      const courses = enrollments.map((enroll) => enroll.courseId);
       // console.log(courses);
 
       const result = {};
@@ -199,31 +204,33 @@ module.exports = {
       });
 
       arr.length = 3; // top 3 featured courses
-      const Ids = arr.map(e => e.content._id);
+      const Ids = arr.map((e) => e.content._id);
 
       const ret = await CourseModel.find({
         _id: {
           $in: Ids
         }
-      }).populate([
-        {
-          path: "courseLecturers",
-          select: "fullName"
-        },
-        {
-          path: "category",
-          select: "categoryName"
-        }
-      ]).select([
-        "courseName",
-        "category",
-        "courseLecturers",
-        "ratingPoint",
-        "ratedNumber",
-        "courseImage",
-        "price",
-        "promotionalPrice"
-      ]);
+      })
+        .populate([
+          {
+            path: "courseLecturers",
+            select: "fullName"
+          },
+          {
+            path: "category",
+            select: "categoryName"
+          }
+        ])
+        .select([
+          "courseName",
+          "category",
+          "courseLecturers",
+          "ratingPoint",
+          "ratedNumber",
+          "courseImage",
+          "price",
+          "promotionalPrice"
+        ]);
 
       console.log(arr);
       // console.log(ret);
@@ -235,25 +242,38 @@ module.exports = {
   },
 
   getCoursesSortBySoldNumber: async (categoryId) => {
-    const resl = await mGetCoursesByFilter("category", categoryId, 1, "-soldNumer");
+    const resl = await mGetCoursesByFilter(
+      "category",
+      categoryId,
+      1,
+      "-soldNumer"
+    );
     return resl;
   },
 
   createFeedback: async (courseId, feedbackData) => {
-    const {userId, content, ratingPoint} = feedbackData;
-    const haveEnrollment = await enrollmentModel.find({userId: userId, courseId: courseId}).exec();
+    const { userId, content, ratingPoint } = feedbackData;
+    const haveEnrollment = await enrollmentModel
+      .find({ userId: userId, courseId: courseId })
+      .exec();
     if (haveEnrollment.length) {
-      const newFeedback = {userId, content, ratingPoint, createdAt: Date.now()};
-      const course = await CourseModel.findByIdAndUpdate(courseId,
-        {$push: {feedbacks: newFeedback}},
-        {new: true}).exec();
+      const newFeedback = {
+        userId,
+        content,
+        ratingPoint,
+        createdAt: Date.now()
+      };
+      const course = await CourseModel.findByIdAndUpdate(
+        courseId,
+        { $push: { feedbacks: newFeedback } },
+        { new: true }
+      ).exec();
       updateRatingPoint(course);
       await course.save();
       return newFeedback;
     }
     return null;
   },
-
 
   deleteCourse: async (courseId) => {
     const res = await CourseModel.findByIdAndUpdate(courseId, {
@@ -303,9 +323,7 @@ module.exports = {
    */
   modifyUpdatedTime: async (courseId) => {
     try {
-      await CourseModel.findByIdAndUpdate(courseId,
-        {updatedAt: Date.now()}
-      );
+      await CourseModel.findByIdAndUpdate(courseId, { updatedAt: Date.now() });
     } catch (e) {
       console.error(e);
     }
@@ -338,28 +356,54 @@ module.exports = {
     fs.unlinkSync(imagePath);
     const result = CourseModel.findByIdAndUpdate(
       courseId,
-      {courseImage: newImageUrl, updatedAt: Date.now()},
-      {new: true}).select("courseImage");
+      { courseImage: newImageUrl, updatedAt: Date.now() },
+      { new: true }
+    ).select("courseImage");
     return result;
   },
 
   markCourseComplete: async (courseId) => {
     const result = await CourseModel.findByIdAndUpdate(
       courseId,
-      {status: "COMPLETE", updatedAt: Date.now()},
-      {new: true}).select("status");
+      { status: "COMPLETE", updatedAt: Date.now() },
+      { new: true }
+    ).select("status");
     return result;
   },
 
   changeCourseDescription: async (courseId, descriptions) => {
     const result = await CourseModel.findByIdAndUpdate(
       courseId,
-      {...descriptions, updatedAt: Date.now()},
-      {new: true}).select(["briefDescription", "detailDescription"]);
+      { ...descriptions, updatedAt: Date.now() },
+      { new: true }
+    ).select(["briefDescription", "detailDescription"]);
     return result;
   },
-  removeAllLecturerFromCourses
+  removeAllLecturerFromCourses,
 
+  getCourseSectionsById: async (courseId, userId) => {
+    const sections = await sectionModel.find({ courseId });
+    const lessons = await lessonModel.find({ courseId });
+    const progresses = await progressModel.find({ userId });
+    const newLessons = lessons.map((lesson) => ({
+      ...lesson.toObject(),
+      progress: progresses.find((pro) => pro.lessonId.equals(lesson._id))
+    }));
+    const newSections = sections.map((section) => ({
+      ...section.toObject(),
+      lessons: newLessons.filter((les) => les.sectionId.equals(section._id))
+    }));
+    return newSections;
+  },
+  getCourseSectionsByIdUnAth: async (courseId) => {
+    const sections = await sectionModel.find({ courseId });
+    const lessons = await lessonModel.find({ courseId });
+    const newSections = sections.map((section) => ({
+      ...section.toObject(),
+      lessons: lessons.filter((les) => les.sectionId.equals(section._id))
+    }));
+    return newSections;
+  }
 };
 
 /**
@@ -452,8 +496,12 @@ async function mGetCoursesByFilter(type, condition, page, sort) {
  * @param {object} course refreshToken
  */
 function updateRatingPoint(course) {
-  const totalPoints = course.feedbacks.reduce((total, single) => total + single.ratingPoint, 0);
-  course.ratingPoint = totalPoints / course.feedbacks.length;
+  const totalPoints = course.feedbacks.reduce(
+    (total, single) => total + single.ratingPoint,
+    0
+  );
+  course.ratingPoint =
+    Math.round((totalPoints / course.feedbacks.length) * 10) / 10;
 }
 
 /**
