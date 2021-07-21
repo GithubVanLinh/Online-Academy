@@ -384,7 +384,9 @@ module.exports = {
         });
         return lecturer;
       case "admin":
-        const admin = await AdminModel.findByIdAndUpdate(userId, { rfToken: "" });
+        const admin = await AdminModel.findByIdAndUpdate(userId, {
+          rfToken: ""
+        });
         return admin;
       default:
         return null;
@@ -424,17 +426,19 @@ module.exports = {
  * @return {Promise<Array<object>>}
  */
 async function getAllUsers() {
-  const resl = await UserModel.find({}).select([
-    "username",
-    "fullName",
-    "email",
-    "avatar",
-    "address",
-    "createdAt",
-    "updatedAt",
-    "status",
-    "wishList"
-  ]);
+  const resl = await UserModel.find({})
+    .select([
+      "username",
+      "fullName",
+      "email",
+      "avatar",
+      "address",
+      "createdAt",
+      "updatedAt",
+      "status",
+      "wishList"
+    ])
+    .populate("wishList");
   return resl;
 }
 
