@@ -203,7 +203,7 @@ module.exports = {
   },
 
   getAllLecturer: async () => {
-    const resl = await LecturerModel.find({});
+    const resl = await LecturerModel.find({}).populate("teachingCourses");
     return resl;
   },
 
