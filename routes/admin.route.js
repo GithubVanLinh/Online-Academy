@@ -13,8 +13,11 @@ const LecturerController = require("../controllers/lecturer.controller");
 const CourseController = require("../controllers/course.controller");
 const UserController = require("../controllers/user.controller");
 
-router.post("/login", Validator.validateRequestBody("login"), adminController.login);
-router.get("/:id", auth, adminController.getAdminInfo)
+router.post(
+  "/login",
+  Validator.validateRequestBody("login"),
+  adminController.login
+);
 // lecturer refresh accessToken
 router.post("/refresh/lecturer", LecturerController.refreshAcToken);
 router.delete(
@@ -36,26 +39,26 @@ router.delete(
   UserController.deleteUser
 );
 
-router.get(
-  "/lecturers",
-  LecturerController.getAllLecturer
-)
+router.get("/lecturers", LecturerController.getAllLecturer);
 
 router.post(
   "/lecturers",
   bodyValidator.validateRequestBody("create_lecturer"),
   LecturerController.createLecturer
-)
+);
 
 router.get(
   "/lecturers/:lecturerId",
   paramsValidator.checkLecturerId,
   LecturerController.getLecturerDetail
-)
+);
 
 router.delete(
   "/lecturers/:lecturerId",
   paramsValidator.checkLecturerId,
   LecturerController.deleteLecturer
-)
+);
+
+router.get("/:id", auth, adminController.getAdminInfo);
+
 module.exports = router;
