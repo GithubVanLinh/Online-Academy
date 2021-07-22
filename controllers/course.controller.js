@@ -30,13 +30,18 @@ module.exports = {
     res.json(feedbacks);
   },
   getCourses: async (req, res, next) => {
-    const { categoryId } = req.query;
+    const { categoryId, options } = req.query;
+
     const page = +req.query.page || 1;
     if (categoryId) {
-      const resl = await CourseService.getCoursesByCategory(categoryId, page);
+      const resl = await CourseService.getCoursesByCategory(
+        categoryId,
+        page,
+        options
+      );
       return res.json(resl);
     } else {
-      const resl = await CourseService.getCourses();
+      const resl = await CourseService.getCourses(page, options);
       return res.json(resl);
     }
   },
@@ -94,7 +99,7 @@ module.exports = {
     await SectionService.mRemoveSectionsByCourseId(courseId);
     await LessonService.removeLessonsByCourseId(courseId);
     await ProgressService.deleteProgressesByCourseId(courseId);
-    
+
     res.status(200).json({
       message: `${courseId} delete success`
     });

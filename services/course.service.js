@@ -50,9 +50,14 @@ module.exports = {
     return feedbacks;
   },
 
-  getCourses: async (page) => {
-    const resl = await mGetCourses(page);
-    return resl;
+  getCourses: async (page, options) => {
+    if (options === "all") {
+      const resl = await mGetAllCourses();
+      return resl;
+    } else {
+      const resl = await mGetCourses(page);
+      return resl;
+    }
   },
 
   /**
@@ -467,6 +472,42 @@ async function mGetCourses(page, filter, sort) {
   // return resl;
 }
 
+/** get all courses
+ * @param {string} filter condition query
+ * @param {string} sort sort string
+ * @return {Promise<[object]>} list course
+ */
+async function mGetAllCourses() {
+  // const options = {
+  //   limit: 5,
+  //   sort: sort,
+  //   populate: [
+  //     {
+  //       path: "courseLecturers",
+  //       select: [
+  //         "avatar",
+  //         "username",
+  //         "fullName",
+  //         "email",
+  //         "address",
+  //         "phone",
+  //         "description"
+  //       ]
+  //     },
+  //     "feedbacks",
+  //     "category"
+  //   ],
+  //   page: page
+  // };
+  // const resl = await CourseModel.paginate(filter, options);
+  // return resl;
+  const resl = await CourseModel.find({})
+    .populate("courseLecturers")
+    .populate("feedbacks")
+    .populate("category");
+  return resl;
+}
+
 /**
  * get Courses with specitific condition
  * @param {string} type "category"|"lecturer"
@@ -539,11 +580,13 @@ async function mRemoveLecturerFromCourse(course, lecturerId) {
   const list = course.courseLecturers;
   const index = list.indexOf(lecturerId);
   console.log(list, lecturerId, "index", index);
-  if (index < 0){
+  if (index < 0) {
     throw new Error("lecturer not found");
   }
   list.splice(index, 1);
 
-  const res = await CourseModel.findByIdAndUpdate(course._id, {courseLecturers: list});
+  const res = await CourseModel.findByIdAndUpdate(course._id, {
+    courseLecturers: list
+  });
   return res;
 }
