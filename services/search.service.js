@@ -11,7 +11,16 @@ module.exports = {
       query.courseName = new RegExp(keyword, "gi");
     }
     const options = {
-      populate: ["category"],
+      populate: [
+        {
+          path: "category",
+          select: "categoryName"
+        },
+        {
+          path: "courseLecturers",
+          select: "fullName"
+        }
+      ],
       page: filter.page,
       limit: SEARCH_LIMIT
     };
@@ -44,7 +53,16 @@ module.exports = {
     const query = {};
     query.category = {$in: cateIds}
     const options = {
-      populate: ["category"],
+      populate: [
+        {
+          path: "category",
+          select: "categoryName"
+        },
+        {
+          path: "courseLecturers",
+          select: "fullName"
+        }
+      ],
       page: filter.page,
       limit: SEARCH_LIMIT
     };
