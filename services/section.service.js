@@ -15,21 +15,23 @@ async function getById(sectionId) {
   }
   return section;
 }
-
-async function getSectionsByCourseId(courseId) {
-  {}
-}
+//
+// async function getSectionsByCourseId(courseId) {
+//   {}
+// }
 
 /**
  *
  * @param {string} title
+ * @param {string} courseId
  * @return {Promise<null>}
  */
-async function getByTitle(title) {
+async function getByTitle(title, courseId) {
   let section = null;
   try {
     section = await SectionModel.findOne({
-      title: title
+      title: title,
+      courseId: courseId
     }).exec();
   } catch (e) {
     console.error(e);

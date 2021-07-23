@@ -13,7 +13,7 @@ const createSection = async (req, res) => {
   if (course === null) {
     error = "course not found";
   } else {
-    const section = await SectionService.getByTitle(sectionInfo.title);
+    const section = await SectionService.getByTitle(sectionInfo.title, sectionInfo.courseId);
 
     if (section) {
       error = "section is already exists";
