@@ -627,7 +627,7 @@ async function mGetUserById(userId) {
  */
 async function mDeleteUserById(userId) {
   const updateInfo = {
-    isDeleted: true
+    status: "DETELED"
   };
   return await UserModel.findByIdAndUpdate(userId, updateInfo);
 }
