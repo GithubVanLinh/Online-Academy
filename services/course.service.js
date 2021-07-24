@@ -314,7 +314,7 @@ module.exports = {
     try {
       course = await CourseModel.findOne({
         _id: courseId
-      }).populate({ path: "category", select: "categoryName" }).exec();
+      }).exec();
     } catch (error) {
       console.error(error);
     }
@@ -415,11 +415,7 @@ module.exports = {
       let lessons = await lessonModel.find({ courseId })
         .populate([
           {
-            path: "courseId",
-            populate: {
-              path: "category",
-              select: "categoryName"
-            }
+            path: "courseId"
           },
           {
             path: "sectionId"
@@ -454,6 +450,16 @@ module.exports = {
       throw Error(e);
     }
     return null;
+  },
+
+  updateCourseBasicInfo: async (courseId, newInfo) => {
+    try {
+      return CourseModel.findByIdAndUpdate(courseId, newInfo, {
+        new: true
+      });
+    } catch (e) {
+      throw Error(e);
+    }
   }
 
 }

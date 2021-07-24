@@ -165,5 +165,21 @@ module.exports = {
       console.log(e);
       return res.status(400).json({ error: "Course not found" });
     }
+  },
+  updateBasicInfo: async (req, res) => {
+    const userId = req.accessTokenPayload.userId;
+    const courseId = req.params.courseId;
+    const info = req.body;
+
+    if (await LecturerService.checkTeachingCourse(userId, courseId)) {
+      const course = await CourseService.updateCourseBasicInfo(courseId, info);
+      console.log(course);
+      return res.json(course);
+    } else {
+      return res.status(400).json({
+        error: "The course does not belong to the lecturer"
+      });
+    }
+
   }
 };
