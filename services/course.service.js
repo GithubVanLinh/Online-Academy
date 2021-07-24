@@ -314,7 +314,7 @@ module.exports = {
     try {
       course = await CourseModel.findOne({
         _id: courseId
-      }).exec();
+      }).populate({ path: "category", select: "categoryName" }).exec();
     } catch (error) {
       console.error(error);
     }

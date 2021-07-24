@@ -232,7 +232,10 @@ module.exports = {
     const courseId = req.params.courseId;
 
     if (await LecturerService.checkTeachingCourse(userId, courseId)) {
-      const course = await CourseService.getCourseDetail(courseId);
+      let course = await CourseService.getCourseDetail(courseId);
+      if (course === null) {
+        course = await CourseService.getCourseById(courseId);
+      }
       return res.json(course);
     } else {
       return res.status(400).json({
