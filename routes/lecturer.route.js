@@ -8,6 +8,9 @@ const Validator = require("../middlewares/validator.mdw");
 const LecturerController = require("../controllers/lecturer.controller");
 const paramValidation = require("../middlewares/paramscheck.mdw");
 const auth = require("../middlewares/auth.mdw");
+const lecturerAuth = require("../middlewares/lecturerAuth.mdw");
+
+router.get("/courses/:courseId", lecturerAuth, LecturerController.getCourse);
 
 router.use("/:lecturerId", paramValidation.validateLecturerId);
 

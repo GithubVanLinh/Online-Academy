@@ -198,7 +198,7 @@ module.exports = {
         arr.push(result[prop]);
       }
 
-      arr.sort(function (a, b) {
+      arr.sort(function(a, b) {
         if (a.count < b.count) {
           return 1;
         }
@@ -408,8 +408,56 @@ module.exports = {
       lessons: lessons.filter((les) => les.sectionId.equals(section._id))
     }));
     return newSections;
+  },
+
+  getCourseDetail: async (courseId) => {
+    try {
+      let lessons = await lessonModel.find({ courseId })
+        .populate([
+          {
+            path: "courseId",
+            populate: {
+              path: "category",
+              select: "categoryName"
+            }
+          },
+          {
+            path: "sectionId"
+          }
+        ]);
+      if (lessons.length > 0) {
+        lessons = JSON.parse(JSON.stringify(lessons));
+        const course = lessons[0].courseId;
+        const sections = lessons.reduce((sections, lesson) => {
+          const lessonInfo = {
+            title: lesson.title,
+            totalLength: lesson.totalLength,
+            videoUrl: lesson.videoUrl,
+            order: lesson.order,
+            isPreview: lesson.isPreview,
+            isDeleted: lesson.isDeleted,
+            createdAt: lesson.createdAt
+          };
+          const index = sections.findIndex(e => e._id === lesson.sectionId._id);
+          if (index === -1) {
+            sections.push(lesson.sectionId);
+            sections[sections.length - 1].lessons = [lessonInfo];
+          } else {
+            sections[index].lessons.push(lessonInfo);
+          }
+          return sections;
+        }, []);
+
+        return { ...course, sections };
+      }
+    } catch (e) {
+      throw Error(e);
+    }
+    return null;
   }
-};
+
+}
+;
 
 /**
  * get Course object member
