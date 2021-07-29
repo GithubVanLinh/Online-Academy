@@ -460,6 +460,18 @@ module.exports = {
     } catch (e) {
       throw Error(e);
     }
+  },
+
+  getCourseWithSections: async (courseId) => {
+    try {
+      const course = await CourseModel.findById(courseId);
+      const sections = await sectionModel.find({
+        courseId: courseId
+      });
+      return { ...JSON.parse(JSON.stringify(course)), sections };
+    } catch (e) {
+      throw Error(e);
+    }
   }
 
 }

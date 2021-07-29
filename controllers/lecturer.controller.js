@@ -234,7 +234,7 @@ module.exports = {
     if (await LecturerService.checkTeachingCourse(userId, courseId)) {
       let course = await CourseService.getCourseDetail(courseId);
       if (course === null) {
-        course = await CourseService.getCourseById(courseId);
+        course = await CourseService.getCourseWithSections(courseId);
       }
       return res.json(course);
     } else {
