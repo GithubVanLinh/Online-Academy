@@ -412,44 +412,27 @@ module.exports = {
 
   getCourseDetail: async (courseId) => {
     try {
-      let lessons = await lessonModel.find({ courseId })
-        .populate([
-          {
-            path: "courseId"
-          },
-          {
-            path: "sectionId"
-          }
-        ]);
-      if (lessons.length > 0) {
-        lessons = JSON.parse(JSON.stringify(lessons));
-        const course = lessons[0].courseId;
-        const sections = lessons.reduce((sections, lesson) => {
-          const lessonInfo = {
-            title: lesson.title,
-            totalLength: lesson.totalLength,
-            videoUrl: lesson.videoUrl,
-            order: lesson.order,
-            isPreview: lesson.isPreview,
-            isDeleted: lesson.isDeleted,
-            createdAt: lesson.createdAt
-          };
-          const index = sections.findIndex(e => e._id === lesson.sectionId._id);
-          if (index === -1) {
-            sections.push(lesson.sectionId);
-            sections[sections.length - 1].lessons = [lessonInfo];
-          } else {
-            sections[index].lessons.push(lessonInfo);
-          }
-          return sections;
-        }, []);
+      const course = await CourseModel.findById(courseId);
+      const sections = await sectionModel.find({ courseId: courseId }).exec();
+      const lessons = await lessonModel.find({ courseId: courseId }).exec();
 
-        return { ...course, sections };
-      }
+      const pCourse = JSON.parse(JSON.stringify(course));
+      let pSections = JSON.parse(JSON.stringify(sections));
+      const pLessons = JSON.parse(JSON.stringify(lessons));
+
+      pSections = pSections.map(section => ({ ...section, lessons: [] }));
+      pSections.forEach(section => {
+        pLessons.forEach(lesson => {
+          if (lesson.sectionId === section._id) {
+            section.lessons.push(lesson);
+          }
+        });
+      });
+      pCourse.sections = pSections;
+      return pCourse;
     } catch (e) {
       throw Error(e);
     }
-    return null;
   },
 
   updateCourseBasicInfo: async (courseId, newInfo) => {
