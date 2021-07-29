@@ -36,7 +36,7 @@ router.post("/:courseId/feedbacks", Validator.validateRequestBody("send_feedback
 router.get("/:courseId/lessons/:lessonId", auth, LessonController.getLessonById);
 // update course image
 router.post("/:courseId/courseImage", upload.single("courseImage"), CourseController.updateCourseImage);
-router.post("/:courseId/completion", CourseController.markCompleted);
+router.post("/:courseId/completion", lecturerAuth, CourseController.markCompleted);
 router.post("/:courseId/description",
   Validator.validateRequestBody("update_description"),
   CourseController.updateDescription);
