@@ -370,7 +370,7 @@ module.exports = {
   markCourseComplete: async (courseId) => {
     const result = await CourseModel.findByIdAndUpdate(
       courseId,
-      { status: "COMPLETE", updatedAt: Date.now() },
+      { status: Config.COURSE_STATUS.COMPLETED, updatedAt: Date.now() },
       { new: true }
     ).select("status");
     return result;
