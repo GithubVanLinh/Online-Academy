@@ -1,6 +1,7 @@
 "use strict";
 const CourseModel = require("../models/course.model");
 const CategoryModel = require("../models/category.model");
+const Config = require("../configs/constraints");
 const SEARCH_LIMIT = 5;
 
 module.exports = {
@@ -9,6 +10,7 @@ module.exports = {
     if (filter.keyword) {
       const keyword = filter.keyword;
       query.courseName = new RegExp(keyword, "gi");
+      query.status = Config.COURSE_STATUS.COMPLETED;
     }
     const options = {
       populate: [
@@ -25,10 +27,10 @@ module.exports = {
       limit: SEARCH_LIMIT
     };
     if (filter.sortBy) {
-      if (filter.sortBy == "ratingDesc") {
+      if (filter.sortBy === "ratingDesc") {
         options.sort = {ratingPoint: "desc"};
       }
-      if (filter.sortBy == "priceAsc") {
+      if (filter.sortBy === "priceAsc") {
         options.sort = {price: "asc"};
       }
     }
@@ -48,10 +50,11 @@ module.exports = {
       cateQuery.categoryName = new RegExp(keyword, "gi");
     }
     const categoriesQuery = await CategoryModel.paginate(cateQuery, {select: ["_id"]});
-    const cateIds = categoriesQuery.docs.reduce((result, cate) => result = [...result, cate._id], []);
+    const cateIds = categoriesQuery.docs.reduce((result, cate) => [...result, cate._id], []);
 
     const query = {};
     query.category = {$in: cateIds}
+    query.status = Config.COURSE_STATUS.COMPLETED;
     const options = {
       populate: [
         {
@@ -67,10 +70,10 @@ module.exports = {
       limit: SEARCH_LIMIT
     };
     if (filter.sortBy) {
-      if (filter.sortBy == "ratingDesc") {
+      if (filter.sortBy === "ratingDesc") {
         options.sort = {ratingPoint: "desc"};
       }
-      if (filter.sortBy == "priceAsc") {
+      if (filter.sortBy === "priceAsc") {
         options.sort = {price: "asc"};
       }
     }
