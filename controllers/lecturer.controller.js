@@ -225,5 +225,21 @@ module.exports = {
         error_message: "server Error"
       });
     }
+  },
+
+  getCourse: async (req, res) => {
+    const userId = req.accessTokenPayload.userId;
+    const courseId = req.params.courseId;
+
+    if (await LecturerService.checkTeachingCourse(userId, courseId)) {
+      const course = await CourseService.getCourseDetail(courseId);
+      return res.json(course);
+    } else {
+      return res.status(400).json({
+        error: "The course does not belong to the lecturer"
+      });
+    }
+
   }
+
 };

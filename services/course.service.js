@@ -198,7 +198,7 @@ module.exports = {
         arr.push(result[prop]);
       }
 
-      arr.sort(function (a, b) {
+      arr.sort(function(a, b) {
         if (a.count < b.count) {
           return 1;
         }
@@ -408,8 +408,57 @@ module.exports = {
       lessons: lessons.filter((les) => les.sectionId.equals(section._id))
     }));
     return newSections;
+  },
+
+  getCourseDetail: async (courseId) => {
+    try {
+      const course = await CourseModel.findById(courseId);
+      const sections = await sectionModel.find({ courseId: courseId }).exec();
+      const lessons = await lessonModel.find({ courseId: courseId }).exec();
+
+      const pCourse = JSON.parse(JSON.stringify(course));
+      let pSections = JSON.parse(JSON.stringify(sections));
+      const pLessons = JSON.parse(JSON.stringify(lessons));
+
+      pSections = pSections.map(section => ({ ...section, lessons: [] }));
+      pSections.forEach(section => {
+        pLessons.forEach(lesson => {
+          if (lesson.sectionId === section._id) {
+            section.lessons.push(lesson);
+          }
+        });
+      });
+      pCourse.sections = pSections;
+      return pCourse;
+    } catch (e) {
+      throw Error(e);
+    }
+  },
+
+  updateCourseBasicInfo: async (courseId, newInfo) => {
+    try {
+      return CourseModel.findByIdAndUpdate(courseId, newInfo, {
+        new: true
+      });
+    } catch (e) {
+      throw Error(e);
+    }
+  },
+
+  getCourseWithSections: async (courseId) => {
+    try {
+      const course = await CourseModel.findById(courseId);
+      const sections = await sectionModel.find({
+        courseId: courseId
+      });
+      return { ...JSON.parse(JSON.stringify(course)), sections };
+    } catch (e) {
+      throw Error(e);
+    }
   }
-};
+
+}
+;
 
 /**
  * get Course object member

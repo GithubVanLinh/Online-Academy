@@ -23,6 +23,7 @@ const newSectionSchema = require("../utils/schemas/new_section.schema.json");
 const updateDescriptionSchema = require("../utils/schemas/update_course_description.schema.json");
 const newLessonSchema = require("../utils/schemas/new_lesson.schema.json");
 const createLecturerSchema = require("../utils/schemas/lecturer.schema.json");
+const updateBasicCourseInfoSchema = require("../utils/schemas/update_course.schema.json");
 
 ajv.addSchema(registerSchema, "register_student");
 ajv.addSchema(updateSchema, "user");
@@ -40,5 +41,6 @@ ajv.addSchema(newSectionSchema, "new_section");
 ajv.addSchema(updateDescriptionSchema, "update_description");
 ajv.addSchema(newLessonSchema, "new_lesson");
 ajv.addSchema(createLecturerSchema, "create_lecturer");
+ajv.addSchema(updateBasicCourseInfoSchema, "update_basic_course_info");
 
 module.exports = ajv;

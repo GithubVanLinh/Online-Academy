@@ -13,11 +13,17 @@ const LessonController = require("../controllers/lesson.controller");
 // const SectionController = require("../controllers/section.controller");
 
 const auth = require("../middlewares/auth.mdw");
+const lecturerAuth = require("../middlewares/lecturerAuth.mdw");
 
 router.get("/", queryValidate.checkCategoryId, CourseController.getCourses);
 
 router.use("/:courseId", paramsValidate.checkCourseId);
 router.get("/:courseId", CourseController.getCourseByCourseId);
+router.patch("/:courseId",
+  lecturerAuth,
+  Validator.validateRequestBody("update_basic_course_info"),
+  CourseController.updateBasicInfo
+);
 router.delete("/:courseId", CourseController.removeCourse);
 router.get("/:courseId/sections", auth, CourseController.getCourseSections);
 router.get("/:courseId/unAuthSections", CourseController.getCourseSectionsUnAuth);

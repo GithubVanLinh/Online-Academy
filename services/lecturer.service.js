@@ -215,7 +215,24 @@ module.exports = {
   },
   mCheckUsernameExist,
   mCheckEmailExist,
-  mUpdateLecturerToDelete
+  mUpdateLecturerToDelete,
+
+  checkTeachingCourse: async (lecturerId, courseId) => {
+    try {
+      const lecturer = await LecturerModel.findById(lecturerId);
+      if (lecturer) {
+        const course = lecturer.teachingCourses.find(id => id === courseId);
+        if (course) {
+          return true;
+        }
+      }
+      return lecturer;
+    } catch (e) {
+      console.log(e);
+    }
+    return false;
+  }
+
 };
 
 /**

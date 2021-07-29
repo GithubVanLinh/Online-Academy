@@ -10,6 +10,7 @@ const Lesson = new mongoose.Schema({
   },
   sectionId: {
     type: mongoose.Types.ObjectId,
+    ref: Config.COLLECTION_NAME.SECTION,
     require: true
   },
   title: {
