@@ -315,7 +315,8 @@ module.exports = {
     }).exec();
     if (
       user === null ||
-      !bcrypt.compareSync(loginInfo.password, user.password)
+      !bcrypt.compareSync(loginInfo.password, user.password) ||
+      user.status !== CONST.STATUS_ACTIVE
     ) {
       return { authenticated: false };
     }

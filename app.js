@@ -15,7 +15,6 @@ app.use(cors());
 
 const server = http.createServer(app);
 
-app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("dev"));

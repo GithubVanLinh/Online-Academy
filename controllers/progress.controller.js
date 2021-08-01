@@ -16,7 +16,7 @@ module.exports = {
       const lesson = await LessonService.checkCousreIncludeLesson(courseId, lessonId);
       // check if lesson belongs to the course
       if (lesson) {
-        if (progress < 0 || progress > lesson.totalLength) {
+        if (progress < 0 || Math.round(progress) > Math.round(lesson.totalLength)) {
           error = "invalid progress";
         } else {
           // create or update progress
