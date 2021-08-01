@@ -268,13 +268,27 @@ module.exports = {
         ratingPoint,
         createdAt: Date.now()
       };
-      const course = await CourseModel.findByIdAndUpdate(
-        courseId,
-        { $push: { feedbacks: newFeedback } },
-        { new: true }
-      ).exec();
-      updateRatingPoint(course);
-      await course.save();
+      const course = await CourseModel.findById(courseId);
+      const indexToUpdate = haveFeedbackYet(course, userId)
+      if(indexToUpdate !== -1) {
+        const { feedbacks } = course;
+        feedbacks[indexToUpdate] = newFeedback;
+        const updatedCourse = await CourseModel.findByIdAndUpdate(
+          courseId,
+          {feedbacks},
+          {new: true}
+        ).exec();
+        updateRatingPoint(updatedCourse);
+        await updatedCourse.save();
+      } else {
+        const updatedCourse = await CourseModel.findByIdAndUpdate(
+          courseId,
+          { $push: { feedbacks: newFeedback } },
+          { new: true }
+        ).exec();
+        updateRatingPoint(updatedCourse);
+        await course.save();
+      }
       return newFeedback;
     }
     return null;
@@ -568,7 +582,8 @@ async function mGetCoursesByFilter(type, condition, page, sort) {
   switch (type) {
     case "category":
       const filter = {
-        category: condition
+        category: condition,
+        status: "COMPLETED"
       };
       const resl = await mGetCourses(page, filter, sort);
       return resl;
@@ -594,6 +609,23 @@ function updateRatingPoint(course) {
     Math.round((totalPoints / course.feedbacks.length) * 10) / 10;
 }
 
+/**
+ * Check if course already have feedback by userId
+ * @param {object} course
+ * @param  {string} userId
+ * @return {number}
+ */
+function haveFeedbackYet(course, userId) {
+  const { feedbacks } = course;
+  if (feedbacks.length) {
+    for (const index in feedbacks.slice(0).reverse()) {
+      if (feedbacks[index].userId.equals(userId)) {
+        return feedbacks.length - 1 - index;
+      }
+    }
+  }
+  return -1;
+}
 /**
  * remove all courses
  * @param {string} lecturerId id
