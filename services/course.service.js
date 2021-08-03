@@ -12,6 +12,11 @@ const fs = require("fs");
 // const userModel = require("../models/user.model");
 
 module.exports = {
+  reverseCourse: async (courseId) => {
+    return await CourseModel.findByIdAndUpdate(courseId, {
+      status: "INCOMPLETE"
+    });
+  },
   /**
    * get course by id
    * @param {string} courseId course id
@@ -198,7 +203,7 @@ module.exports = {
         arr.push(result[prop]);
       }
 
-      arr.sort(function(a, b) {
+      arr.sort(function (a, b) {
         if (a.count < b.count) {
           return 1;
         }
@@ -269,14 +274,14 @@ module.exports = {
         createdAt: Date.now()
       };
       const course = await CourseModel.findById(courseId);
-      const indexToUpdate = haveFeedbackYet(course, userId)
-      if(indexToUpdate !== -1) {
+      const indexToUpdate = haveFeedbackYet(course, userId);
+      if (indexToUpdate !== -1) {
         const { feedbacks } = course;
         feedbacks[indexToUpdate] = newFeedback;
         const updatedCourse = await CourseModel.findByIdAndUpdate(
           courseId,
-          {feedbacks},
-          {new: true}
+          { feedbacks },
+          { new: true }
         ).exec();
         updateRatingPoint(updatedCourse);
         await updatedCourse.save();
@@ -434,9 +439,9 @@ module.exports = {
       let pSections = JSON.parse(JSON.stringify(sections));
       const pLessons = JSON.parse(JSON.stringify(lessons));
 
-      pSections = pSections.map(section => ({ ...section, lessons: [] }));
-      pSections.forEach(section => {
-        pLessons.forEach(lesson => {
+      pSections = pSections.map((section) => ({ ...section, lessons: [] }));
+      pSections.forEach((section) => {
+        pLessons.forEach((lesson) => {
           if (lesson.sectionId === section._id) {
             section.lessons.push(lesson);
           }
@@ -470,9 +475,7 @@ module.exports = {
       throw Error(e);
     }
   }
-
-}
-;
+};
 
 /**
  * get Course object member
