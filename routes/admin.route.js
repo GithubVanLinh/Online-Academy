@@ -20,6 +20,8 @@ router.post(
 );
 // lecturer refresh accessToken
 router.post("/refresh/lecturer", LecturerController.refreshAcToken);
+// admin req new accessToken
+router.post("/refreshToken/", adminController.refreshAcToken);
 router.delete(
   "/courses/:courseId",
   paramsValidator.checkCourseId,
