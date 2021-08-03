@@ -2,6 +2,7 @@
 const LecturerService = require("../services/lecturer.service");
 const UserService = require("../services/user.service");
 const CourseService = require("../services/course.service");
+const lecturerService = require("../services/lecturer.service");
 
 module.exports = {
   login: async (req, res, next) => {
@@ -239,7 +240,19 @@ module.exports = {
         error: "The course does not belong to the lecturer"
       });
     }
+  },
 
+  reverseLecturer: async (req, res, next) => {
+    const { lecturerId } = req.params;
+    try {
+      await lecturerService.reverseLecturer(lecturerId);
+      res.status(200).json({
+        lecturerId: lecturerId
+      });
+    } catch (error) {
+      res.status(400).json({
+        error_message: "Error when reverse lecturer"
+      });
+    }
   }
-
 };

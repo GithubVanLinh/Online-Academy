@@ -9,6 +9,19 @@ const LessonService = require("../services/lesson.service");
 const ProgressService = require("../services/progress.service");
 
 module.exports = {
+  reverseCourse: async (req, res, next) => {
+    const courseId = req.params.courseId;
+    try {
+      await CourseService.reverseCourse(courseId);
+      res.status(200).json({
+        courseId: courseId
+      });
+    } catch (error) {
+      res.status(400).json({
+        error_message: "Error when reverse course"
+      });
+    }
+  },
   getCourseByCourseId: async (req, res, next) => {
     const courseId = req.params.courseId;
     const courseObject = await CourseService.getCourseByCourseId(courseId);
@@ -180,6 +193,5 @@ module.exports = {
         error: "The course does not belong to the lecturer"
       });
     }
-
   }
 };

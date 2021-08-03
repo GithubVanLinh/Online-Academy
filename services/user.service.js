@@ -19,6 +19,9 @@ const fs = require("fs");
 const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
+  reverseUser: async (id) => {
+    return await UserModel.findByIdAndUpdate(id, { status: "ACTIVE" });
+  },
   /**
    *
    * @param {String} password text password

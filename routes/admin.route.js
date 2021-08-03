@@ -12,6 +12,7 @@ const adminController = require("../controllers/admin.controller");
 const LecturerController = require("../controllers/lecturer.controller");
 const CourseController = require("../controllers/course.controller");
 const UserController = require("../controllers/user.controller");
+const categoryController = require("../controllers/category.controller");
 
 router.post(
   "/login",
@@ -25,7 +26,18 @@ router.delete(
   paramsValidator.checkCourseId,
   CourseController.removeCourse
 );
+
+router.patch(
+  "/courses/:courseId",
+  paramsValidator.checkCourseId,
+  CourseController.reverseCourse
+);
+
 router.get("/users", UserController.adminGetAllUser);
+
+router.get("/categories", categoryController.getCategories);
+
+router.patch("/categories/:categoryId", categoryController.reverseCategory);
 
 //  get student detail /users/:userId
 router.get(
@@ -39,6 +51,12 @@ router.delete(
   UserController.deleteUser
 );
 
+router.patch(
+  "/users/:userId",
+  paramsValidator.validateUserId,
+  UserController.reverseUser
+);
+
 router.get("/lecturers", LecturerController.getAllLecturer);
 
 router.post(
@@ -46,6 +64,8 @@ router.post(
   bodyValidator.validateRequestBody("create_lecturer"),
   LecturerController.createLecturer
 );
+
+router.patch("/lecturers/:lecturerId", LecturerController.reverseLecturer);
 
 router.get(
   "/lecturers/:lecturerId",

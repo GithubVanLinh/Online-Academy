@@ -3,6 +3,19 @@ const UserService = require("../services/user.service");
 const EnrollmentService = require("../services/enrollment.service");
 const ProgressService = require("../services/progress.service");
 module.exports = {
+  reverseUser: async (req, res, next) => {
+    const { userId } = req.params;
+    try {
+      await UserService.reverseUser(userId);
+      res.status(200).json({
+        userId: userId
+      });
+    } catch (error) {
+      res.status(400).json({
+        error_message: "Error when trying reverse user"
+      });
+    }
+  },
   getUser: async (req, res, next) => {
     const { userId } = req.params;
 
