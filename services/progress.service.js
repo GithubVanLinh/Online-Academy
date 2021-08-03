@@ -3,7 +3,7 @@ const ProgressModel = require("../models/progress.model");
 
 module.exports = {
   /**
-   * 
+   *
    * @param {String} userId id of user
    * @param {String} lessonId id of lesson
    * @param {Number} progress progress of lesson
@@ -18,7 +18,7 @@ module.exports = {
     const update = {
       progress: progress
     };
-    if (progress === lessonLength) {
+    if (Math.round(progress) === Math.round(lessonLength)) {
       update.isFinish = true;
     }
     const option = {
@@ -35,7 +35,7 @@ module.exports = {
   },
 
   /**
-   * 
+   *
    * @param {String} userId id of user
    * @param {String} lessonId id of lesson
    * @return {Object} progress
@@ -44,7 +44,7 @@ module.exports = {
     let progress = null;
     try {
       progress = await ProgressModel.findOne({
-        userId: userId, 
+        userId: userId,
         lessonId: lessonId
       }).exec();
     } catch (error) {
