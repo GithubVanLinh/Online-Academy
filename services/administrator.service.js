@@ -29,7 +29,7 @@ module.exports = {
       type: "admin"
     };
     const opts = {
-      expiresIn: 10 * 60 // seconds
+      expiresIn: 10 * 60// seconds
     };
     const accessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
     const refreshToken = randomstring.generate(80);
@@ -56,7 +56,7 @@ module.exports = {
         type: "admin"
       };
       const opts = {
-        expiresIn: 10 * 60 * 60 * 24 // seconds
+        expiresIn: 10 * 60// seconds
       };
       const newAccessToken = jwt.sign(
         payload,
