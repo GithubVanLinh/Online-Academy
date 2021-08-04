@@ -3,6 +3,9 @@ const categoryModel = require("../models/category.model");
 const enrollmentModel = require("../models/enrollment.model");
 
 module.exports = {
+  reverseCategory: async (id) => {
+    return await categoryModel.findByIdAndUpdate(id, { isDeleted: false });
+  },
   /**
    *
    * @return {Array} list category
@@ -10,7 +13,13 @@ module.exports = {
   getAll: async () => {
     return await categoryModel.find({});
   },
-
+  /**
+   *
+   * @return {Array} list category
+   */
+  getAllActiveCategory: async () => {
+    return await categoryModel.find({ isDeleted: false });
+  },
   getCategoryByCategoryId: async (categoryId) => {
     return await categoryModel.findById(categoryId);
   },
@@ -57,7 +66,7 @@ module.exports = {
     return await mCreateCategory(categoryInfo);
   },
 
-  deleteCategoryByCategoryId: async (categoryId) =>{
+  deleteCategoryByCategoryId: async (categoryId) => {
     const res = await mDeleteCategoryByCategoryId(categoryId);
     if (res) {
       return true;
@@ -99,7 +108,7 @@ async function mAddCategoryToDatabase(category) {
 /**
  * check if category is valid
  * @param {object} category category need check
- * @return {Promise<bool>} 
+ * @return {Promise<bool>}
  */
 async function mCheckCategory(category) {
   const res = await categoryModel.find({
@@ -108,7 +117,7 @@ async function mCheckCategory(category) {
     isDeleted: false
   });
   console.log("resl", res);
-  if (!res || res.length==0) {
+  if (!res || res.length == 0) {
     return true;
   }
   return false;
@@ -135,7 +144,7 @@ async function mUpdateCategoryByCategoryId(categoryId, categoryInfo) {
   const valid = await mCheckValidCategory(categoryInfo);
   console.log("valid", valid);
   if (valid) {
-    return await mUpdateCategory(categoryId, categoryInfo)
+    return await mUpdateCategory(categoryId, categoryInfo);
   } else {
     return null;
   }
@@ -146,14 +155,14 @@ async function mUpdateCategoryByCategoryId(categoryId, categoryInfo) {
  * @param {object} categoryInfo categoryName, level
  */
 async function mCheckValidCategory(categoryInfo) {
-  const {categoryName, level} = categoryInfo;
+  const { categoryName, level } = categoryInfo;
   const categories = await categoryModel.find({
     categoryName: categoryName,
     level: level
   });
 
   console.log("categories", categories);
-  if (categories && categories.length > 0){
+  if (categories && categories.length > 0) {
     return false;
   } else {
     return true;
@@ -165,8 +174,10 @@ async function mCheckValidCategory(categoryInfo) {
  * @param {string} categoryId id
  * @param {object} categoryInfo updateinfo
  */
-async function mUpdateCategory(categoryId, categoryInfo){
-  const res = await categoryModel.findByIdAndUpdate(categoryId, {...categoryInfo,
-  updatedDate: Date.now()});
-  return {...res, ...categoryInfo, updatedAt: Date.now()};
+async function mUpdateCategory(categoryId, categoryInfo) {
+  const res = await categoryModel.findByIdAndUpdate(categoryId, {
+    ...categoryInfo,
+    updatedDate: Date.now()
+  });
+  return { ...res, ...categoryInfo, updatedAt: Date.now() };
 }

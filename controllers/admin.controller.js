@@ -34,5 +34,16 @@ module.exports = {
     } else {
       return res.json(result);
     }
-  }
+  },
+  refreshAcToken: async (req, res) => {
+    const refreshInfo = req.body;
+    const result = await adminService.refreshAccessToken(refreshInfo);
+    if (!result) {
+      return res.status(400).json({
+        message: "Refresh token is revoked!"
+      });
+    } else {
+      return res.json(result);
+    }
+  },
 }

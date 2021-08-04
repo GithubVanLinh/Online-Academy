@@ -39,5 +39,50 @@ module.exports = {
       accessToken,
       refreshToken
     };
+  },
+  refreshAccessToken: async (refreshInfo) => {
+    const { accessToken, refreshToken } = refreshInfo;
+    const { userId } = jwt.verify(accessToken, process.env.NOT_A_SECRET_KEY, {
+      ignoreExpiration: true
+    });
+    const user = await isValidRfToken(userId, refreshToken);
+    if (user) {
+      const payload = {
+        userId: user._id,
+        username: user.username,
+        fullName: user.fullName,
+        email: user.email,
+        avatar: user.avatar,
+        type: "admin"
+      };
+      const opts = {
+        expiresIn: 10 * 60 * 60 * 24 // seconds
+      };
+      const newAccessToken = jwt.sign(
+        payload,
+        process.env.NOT_A_SECRET_KEY,
+        opts
+      );
+      return {
+        accessToken: newAccessToken
+      };
+    } else {
+      return null;
+    }
   }
 };
+
+/**
+ * Check valid rfToken by userId
+ * @param {string} userId userId
+ * @param {string} refreshToken refreshToken
+ * @return {bool}
+ */
+async function isValidRfToken(userId, refreshToken) {
+  const user = await adminModel.findById(userId).exec();
+  if (user.rfToken === refreshToken) {
+    return user;
+  } else {
+    return null;
+  }
+}

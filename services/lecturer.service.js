@@ -12,6 +12,9 @@ const Config = require("../configs/constraints");
 const salt = bcrypt.genSaltSync(10);
 
 module.exports = {
+  reverseLecturer: async (id) => {
+    return await LecturerModel.findByIdAndUpdate(id, { status: "ACTIVE" });
+  },
   logIn: async (loginInfo) => {
     const lecturer = await LecturerModel.findOne({
       username: loginInfo.username
@@ -221,7 +224,7 @@ module.exports = {
     try {
       const lecturer = await LecturerModel.findById(lecturerId);
       if (lecturer) {
-        const course = lecturer.teachingCourses.find(id => id === courseId);
+        const course = lecturer.teachingCourses.find((id) => id === courseId);
         if (course) {
           return true;
         }
@@ -232,7 +235,6 @@ module.exports = {
     }
     return false;
   }
-
 };
 
 /**
