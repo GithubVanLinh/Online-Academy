@@ -32,7 +32,7 @@ module.exports = {
         options.sort = { ratingPoint: "desc" };
       }
       if (filter.sortBy === "priceAsc") {
-        options.sort = { price: "asc" };
+        options.sort = { promotionalPrice: "asc" };
       }
     }
     try {
@@ -75,7 +75,7 @@ module.exports = {
         options.sort = { ratingPoint: "desc" };
       }
       if (filter.sortBy === "priceAsc") {
-        options.sort = { price: "asc" };
+        options.sort = { promotionalPrice: "asc" };
       }
     }
     try {
