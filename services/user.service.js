@@ -332,7 +332,7 @@ module.exports = {
       type: "student"
     };
     const opts = {
-      expiresIn: 10 * 60 * 60 * 24 // seconds
+      expiresIn: 10 * 60 // seconds
     };
     const accessToken = jwt.sign(payload, process.env.NOT_A_SECRET_KEY, opts);
 
@@ -361,7 +361,7 @@ module.exports = {
         type: "student"
       };
       const opts = {
-        expiresIn: 10 * 60 * 60 * 24 // seconds
+        expiresIn: 10 * 60 // seconds
       };
       const newAccessToken = jwt.sign(
         payload,

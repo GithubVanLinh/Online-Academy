@@ -7,14 +7,14 @@ const upload = require("../configs/multer.config");
 const Validator = require("../middlewares/validator.mdw");
 const LecturerController = require("../controllers/lecturer.controller");
 const paramValidation = require("../middlewares/paramscheck.mdw");
-const auth = require("../middlewares/auth.mdw");
+// const auth = require("../middlewares/auth.mdw");
 const lecturerAuth = require("../middlewares/lecturerAuth.mdw");
 
 router.get("/courses/:courseId", lecturerAuth, LecturerController.getCourse);
 
 router.use("/:lecturerId", paramValidation.validateLecturerId);
 
-router.get("/:lecturerId", auth, LecturerController.getLecturer);
+router.get("/:lecturerId", lecturerAuth, LecturerController.getLecturer);
 
 router.get("/:lecturerId/courses", LecturerController.getCourses);
 
