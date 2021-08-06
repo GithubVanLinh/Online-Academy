@@ -108,6 +108,7 @@ module.exports = {
           "ratedNumber",
           "courseImage",
           "price",
+          "feedbacks",
           "promotionalPrice"
         ]);
     } catch (error) {
@@ -148,7 +149,8 @@ module.exports = {
           "courseImage",
           "price",
           "promotionalPrice",
-          "view"
+          "view",
+          "feedbacks"
         ]);
       return courses;
     } catch (error) {
@@ -177,7 +179,8 @@ module.exports = {
             "ratedNumber",
             "courseImage",
             "price",
-            "promotionalPrice"
+            "promotionalPrice",
+            "feedbacks"
           ]
         });
 
@@ -239,6 +242,7 @@ module.exports = {
           "ratedNumber",
           "courseImage",
           "price",
+          "feedbacks",
           "promotionalPrice"
         ]);
 
