@@ -482,10 +482,10 @@ module.exports = {
 
   increaseSoldNumber: async (courseId, number) => {
     try {
-      await CourseModel.findOneAndUpdate(
-        { _id: courseId },
+      await CourseModel.findByIdAndUpdate(
+        courseId,
         { $inc: { soldNumber: number } }
-      );
+      ).exec();
     } catch (e) {
       throw Error(e);
     }
