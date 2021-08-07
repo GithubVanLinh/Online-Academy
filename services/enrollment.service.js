@@ -1,5 +1,6 @@
 "use strict";
 const EnrollmentModel = require("../models/enrollment.model");
+const CourseService = require("../services/course.service");
 
 module.exports = {
   /**
@@ -40,6 +41,7 @@ module.exports = {
           setDefaultsOnInsert: true
         }
       );
+      await CourseService.increaseSoldNumber(courseId, 1);
     } catch (error) {
       console.log(error);
     }

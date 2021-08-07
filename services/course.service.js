@@ -206,7 +206,7 @@ module.exports = {
         arr.push(result[prop]);
       }
 
-      arr.sort(function (a, b) {
+      arr.sort(function(a, b) {
         if (a.count < b.count) {
           return 1;
         }
@@ -478,6 +478,17 @@ module.exports = {
     } catch (e) {
       throw Error(e);
     }
+  },
+
+  increaseSoldNumber: async (courseId, number) => {
+    try {
+      await CourseModel.findOneAndUpdate(
+        { _id: courseId },
+        { $inc: { soldNumber: number } }
+      );
+    } catch (e) {
+      throw Error(e);
+    }
   }
 };
 
@@ -633,6 +644,7 @@ function haveFeedbackYet(course, userId) {
   }
   return -1;
 }
+
 /**
  * remove all courses
  * @param {string} lecturerId id
