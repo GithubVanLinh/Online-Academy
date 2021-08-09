@@ -84,7 +84,8 @@ const Course = new mongoose.Schema({
       // type: mongoose.Types.ObjectId,
       // ref: Config.COLLECTION_NAME.FEEDBACK
       userId: {
-        type: mongoose.Types.ObjectId
+        type: mongoose.Types.ObjectId,
+        unique: true
       },
       content: {
         type: String
@@ -93,7 +94,8 @@ const Course = new mongoose.Schema({
         type: Number
       },
       createdAt: {
-        type: Date
+        type: Date,
+        default: Date.now
       }
     }
   ],

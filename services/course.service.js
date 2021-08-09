@@ -271,33 +271,26 @@ module.exports = {
       .find({ userId: userId, courseId: courseId })
       .exec();
     if (haveEnrollment.length) {
+      const course = await CourseModel.findById(courseId);
+      const feedback = course.feedbacks.find(
+        feedback => feedback.userId.toString() === userId
+      );
       const newFeedback = {
-        userId,
-        content,
-        ratingPoint,
+        userId: userId,
+        content: content,
+        ratingPoint: ratingPoint,
         createdAt: Date.now()
       };
-      const course = await CourseModel.findById(courseId);
-      const indexToUpdate = haveFeedbackYet(course, userId);
-      if (indexToUpdate !== -1) {
-        const { feedbacks } = course;
-        feedbacks[indexToUpdate] = newFeedback;
-        const updatedCourse = await CourseModel.findByIdAndUpdate(
-          courseId,
-          { feedbacks },
-          { new: true }
-        ).exec();
-        updateRatingPoint(updatedCourse);
-        await updatedCourse.save();
+      if (feedback) {
+        feedback.content = content;
+        feedback.ratingPoint = ratingPoint;
+        feedback.createdAt = Date.now();
       } else {
-        const updatedCourse = await CourseModel.findByIdAndUpdate(
-          courseId,
-          { $push: { feedbacks: newFeedback } },
-          { new: true }
-        ).exec();
-        updateRatingPoint(updatedCourse);
-        await course.save();
+        course.feedbacks.push(newFeedback);
       }
+      course.ratedNumber = course.feedbacks.length;
+      updateRatingPoint(course);
+      await course.save();
       return newFeedback;
     }
     return null;
