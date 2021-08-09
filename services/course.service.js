@@ -52,6 +52,14 @@ module.exports = {
   getFeedbacksByCourseId: async (courseId) => {
     const resl = await mGetCourseByCourseId(courseId);
     const feedbacks = resl.feedbacks;
+    feedbacks.sort((firstEl, secondEl) => {
+      if (firstEl.createdAt > secondEl.createdAt) {
+        return -1;
+      } else if (firstEl.createdAt < secondEl.createdAt) {
+        return 1;
+      }
+      return 0;
+    });
     return feedbacks;
   },
 
