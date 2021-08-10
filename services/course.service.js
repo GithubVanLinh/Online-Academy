@@ -512,7 +512,13 @@ async function mGetCourseByCourseId(courseId) {
         "description"
       ]
     })
-    .populate("feedbacks")
+    .populate({
+      path: "feedbacks.userId",
+      select: [
+        "avatar",
+        "fullName"
+      ]
+    })
     .populate("category");
   return resl;
 }
@@ -628,23 +634,23 @@ function updateRatingPoint(course) {
     Math.round((totalPoints / course.feedbacks.length) * 10) / 10;
 }
 
-/**
- * Check if course already have feedback by userId
- * @param {object} course
- * @param  {string} userId
- * @return {number}
- */
-function haveFeedbackYet(course, userId) {
-  const { feedbacks } = course;
-  if (feedbacks.length) {
-    for (const index in feedbacks.slice(0).reverse()) {
-      if (feedbacks[index].userId.equals(userId)) {
-        return feedbacks.length - 1 - index;
-      }
-    }
-  }
-  return -1;
-}
+// /**
+//  * Check if course already have feedback by userId
+//  * @param {object} course
+//  * @param  {string} userId
+//  * @return {number}
+//  */
+// function haveFeedbackYet(course, userId) {
+//   const { feedbacks } = course;
+//   if (feedbacks.length) {
+//     for (const index in feedbacks.slice(0).reverse()) {
+//       if (feedbacks[index].userId.equals(userId)) {
+//         return feedbacks.length - 1 - index;
+//       }
+//     }
+//   }
+//   return -1;
+// }
 
 /**
  * remove all courses
