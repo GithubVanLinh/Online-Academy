@@ -7,7 +7,7 @@ module.exports = {
   /**
    *
    * @param {string} courseId id of course
-   * @param {string } lessonId id of leeson
+   * @param {string } lessonId id of lesson
    * @return {object} ret
    */
   checkCousreIncludeLesson: async (courseId, lessonId) => {
@@ -52,7 +52,8 @@ module.exports = {
   add: async (lessonInfo) => {
     let lesson = null;
     try {
-      if ((await getLessonByTitle(lessonInfo.title)) === null) {
+      const existsLesson = await getLessonByTitle(lessonInfo.title, lessonInfo.sectionId, lessonInfo.courseId);
+      if (existsLesson === null) {
         lesson = await LessonModel.create(lessonInfo);
         if (lesson) {
           await SectionService.modifyUpdatedTime(lessonInfo.sectionId);
@@ -89,16 +90,37 @@ async function mRemoveLessonByCourseId(courseId) {
 /**
  *
  * @param {string} title
+ * @param {string} sectionId
+ * @param {string} courseId
  * @return {Promise<object>}
  */
-async function getLessonByTitle(title) {
-  let lesson = null;
+async function getLessonByTitle(title, sectionId, courseId) {
   try {
-    lesson = await LessonModel.findOne({
-      title: title
+    return await LessonModel.findOne({
+      title: title, sectionId, courseId
     }).exec();
   } catch (err) {
     console.error(err);
+    return null;
   }
-  return lesson;
 }
+
+// /**
+//  * Check if lesson (title) already exists in the section of the course.
+//  *
+//  * @param {string} title
+//  * @param {string} sectionId
+//  * @param {string} courseId
+//  * @return {Promise<object>}
+//  * @private
+//  */
+// async function _didLessonExistsInSectionOfCourse(title, sectionId, courseId) {
+//   try {
+//     const lesson = await LessonModel.findOne({
+//       title, sectionId, courseId
+//     }).exec();
+//     return !!lesson;
+//   } catch (e) {
+//     throw Error(e);
+//   }
+// }
