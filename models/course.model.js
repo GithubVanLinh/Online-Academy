@@ -85,7 +85,8 @@ const Course = new mongoose.Schema({
       // ref: Config.COLLECTION_NAME.FEEDBACK
       userId: {
         type: mongoose.Types.ObjectId,
-        unique: true
+        unique: true,
+        ref: Config.COLLECTION_NAME.USER
       },
       content: {
         type: String
